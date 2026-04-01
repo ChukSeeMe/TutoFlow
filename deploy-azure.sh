@@ -76,18 +76,27 @@ echo "  ACR: $ACR_LOGIN_SERVER"
 # ── Step 4: PostgreSQL ────────────────────────────────────────────────────────
 echo ""
 echo "► Creating PostgreSQL Flexible Server (takes ~3 mins)..."
+if az postgres flexible-server show --resource-group "$RESOURCE_GROUP" --name "$POSTGRES_SERVER" &>/dev/null; then
+  echo "  PostgreSQL server already exists — skipping creation."
+else
 az postgres flexible-server create \
   --resource-group "$RESOURCE_GROUP" \
   --name "$POSTGRES_SERVER" \
   --location "$LOCATION" \
   --admin-user "$POSTGRES_USER" \
   --admin-password "$POSTGRES_PASSWORD" \
-  --database-name "$POSTGRES_DB" \
   --sku-name Standard_B1ms \
   --tier Burstable \
   --version 16 \
   --public-access 0.0.0.0 \
   --output table
+
+az postgres flexible-server db create \
+  --resource-group "$RESOURCE_GROUP" \
+  --server-name "$POSTGRES_SERVER" \
+  --database-name "$POSTGRES_DB" \
+  --output table
+fi
 
 POSTGRES_HOST="${POSTGRES_SERVER}.postgres.database.azure.com"
 DATABASE_URL="postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DB}?ssl=require"
