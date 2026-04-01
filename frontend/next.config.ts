@@ -33,6 +33,10 @@ const nextConfig: NextConfig = {
   output: "standalone",
   serverExternalPackages: [],
 
+  // TypeScript and ESLint errors are caught in CI — don't block the Docker build
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
+
   // Allow Unsplash and Google profile images
   images: {
     remotePatterns: [
