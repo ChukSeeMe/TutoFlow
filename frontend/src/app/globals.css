@@ -1,0 +1,330 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design token layer ─────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    /* Light mode — white cards on cool-gray body */
+    --bg:             237 239 248;
+    --bg-card:        255 255 255;
+    --bg-elevated:    248 249 254;
+    --bg-subtle:      225 227 242;
+
+    /* Light mode borders */
+    --border:         194 197 218;
+    --border-subtle:  214 217 234;
+
+    /* Light mode text — darkened for strong contrast */
+    --text:           12  12  22;    /* near-black */
+    --text-secondary: 52  54  78;    /* dark blue-gray — was 82 84 108 */
+    --text-tertiary:  96  98 122;    /* medium — was 140 142 165 */
+
+    /* Accent */
+    --brand:          99 102 241;
+    --brand-muted:    238 242 255;
+
+    /* Radius tokens */
+    --radius-sm:  0.5rem;
+    --radius:     0.75rem;
+    --radius-lg:  1rem;
+    --radius-xl:  1.25rem;
+    --radius-2xl: 1.5rem;
+  }
+
+  .dark {
+    --bg:             10  10  16;
+    --bg-card:        18  18  28;
+    --bg-elevated:    26  26  38;
+    --bg-subtle:      34  34  50;
+
+    --border:         255 255 255;
+    --border-subtle:  255 255 255;
+
+    --text:           242 242 250;
+    --text-secondary: 158 160 180;
+    --text-tertiary:  108 110 130;
+
+    --brand:          99 102 241;
+    --brand-muted:    28  26  72;
+  }
+
+  *, *::before, *::after {
+    border-color: rgb(var(--border) / 0.10);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  html.transitioning *,
+  html.transitioning *::before,
+  html.transitioning *::after {
+    transition:
+      background-color 220ms ease,
+      border-color     220ms ease,
+      color            220ms ease,
+      box-shadow       220ms ease,
+      opacity          220ms ease !important;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.08) 0%, transparent 70%);
+    color: rgb(var(--text));
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+    transition: background-color 220ms ease, color 220ms ease;
+  }
+
+  ::selection {
+    background-color: rgba(99, 102, 241, 0.20);
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(99, 102, 241, 0.65);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Component utilities ─────────────────────────────────────────────────── */
+@layer utilities {
+  .card-surface {
+    background-color: #ffffff;
+  }
+  .dark .card-surface {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+  }
+
+  .glass {
+    background-color: rgb(var(--bg-card));
+    border: 1px solid rgb(var(--border) / 0.12);
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.06), 0 1px 4px 0 rgba(0,0,0,0.04);
+  }
+  .dark .glass {
+    background-color: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 8px 40px 0 rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.07);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glow-brand   { box-shadow: 0 0 28px -4px rgba(99,102,241,0.55); }
+  .glow-rose    { box-shadow: 0 0 28px -4px rgba(244,63,94,0.45); }
+  .glow-emerald { box-shadow: 0 0 28px -4px rgba(16,185,129,0.45); }
+
+  .border-gradient {
+    position: relative;
+  }
+  .border-gradient::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.2));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgb(var(--bg-elevated)) 0%,
+      rgb(var(--bg-subtle))   50%,
+      rgb(var(--bg-elevated)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.4s linear infinite;
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99,102,241,0.2) transparent;
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  .noise::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.025;
+  }
+
+  /* ── Animated background blobs — defined here as stubs only ──────────── */
+  /* (actual animation rules live outside @layer below) */
+
+  /* ── Scroll-reveal ────────────────────────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark body mesh */
+.dark body {
+  background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.14) 0%, transparent 70%);
+}
+
+/* ── Blob definitions (outside @layer so they are never purged or overridden) */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  will-change: transform;
+}
+.blob-1 {
+  filter: blur(100px);
+  animation: float1 9s ease-in-out infinite;
+}
+.blob-2 {
+  filter: blur(90px);
+  animation: float2 11s ease-in-out infinite;
+}
+.blob-3 {
+  filter: blur(110px);
+  animation: float3 13s ease-in-out infinite;
+}
+
+/* ── Animated dot grid background ─────────────────────────────────────────── */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(99,102,241,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  animation: grid-drift 20s linear infinite;
+}
+.dark .bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(99,102,241,0.18) 1px, transparent 1px);
+}
+
+/* ── Blob float keyframes ──────────────────────────────────────────────────── */
+@keyframes float1 {
+  0%,  100% { transform: translate(0,    0)    scale(1);    }
+  25%        { transform: translate(20px, -30px) scale(1.04); }
+  50%        { transform: translate(-10px, 20px) scale(0.96); }
+  75%        { transform: translate(15px,  10px) scale(1.02); }
+}
+@keyframes float2 {
+  0%,  100% { transform: translate(0,    0)    scale(1);    }
+  33%        { transform: translate(-25px, 20px) scale(1.03); }
+  66%        { transform: translate(18px, -15px) scale(0.97); }
+}
+@keyframes float3 {
+  0%,  100% { transform: translate(0, 0) scale(1); }
+  50%        { transform: translate(-20px, -20px) scale(1.05); }
+}
+
+/* Grid drift for dot background */
+@keyframes grid-drift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 28px 28px; }
+}
+
+/* ── Light mode overrides ──────────────────────────────────────────────────── */
+:not(.dark) .bg-gray-50       { background-color: rgb(237 239 248); }
+:not(.dark) .bg-gray-100      { background-color: rgb(225 227 242); }
+:not(.dark) .hover\:bg-gray-50:hover  { background-color: rgb(225 227 242); }
+:not(.dark) .hover\:bg-gray-100:hover { background-color: rgb(212 215 232); }
+
+:not(.dark) input,
+:not(.dark) select,
+:not(.dark) textarea { background-color: rgb(252 252 255); }
+
+:not(.dark) .border-gray-200  { border-color: rgb(194 197 218); }
+:not(.dark) .border-gray-300  { border-color: rgb(178 181 206); }
+:not(.dark) .border-gray-100  { border-color: rgb(214 217 234); }
+:not(.dark) .divide-gray-100 > * + * { border-color: rgb(214 217 234); }
+:not(.dark) .divide-gray-200 > * + * { border-color: rgb(194 197 218); }
+
+/* Stronger text contrast in light mode */
+:not(.dark) .text-gray-500    { color: rgb(82 84 108); }
+:not(.dark) .text-gray-400    { color: rgb(96 98 122); }
+
+/* ── Dark mode overrides ───────────────────────────────────────────────────── */
+
+/* Surfaces */
+.dark .bg-white        { background-color: rgb(18 18 28); }
+.dark .bg-gray-50      { background-color: rgb(26 26 38); }
+.dark .bg-gray-100     { background-color: rgb(34 34 50); }
+.dark .hover\:bg-gray-50:hover  { background-color: rgba(255,255,255,0.03); }
+.dark .hover\:bg-gray-100:hover { background-color: rgba(255,255,255,0.05); }
+
+/* ── Universal dark mode select / dropdown fix ──────────────────────────── */
+/* Covers ALL select elements — regardless of which class they use */
+.dark select {
+  background-color: rgb(26 26 38) !important;
+  color: rgb(228 228 240) !important;
+  border-color: rgba(255,255,255,0.10) !important;
+  color-scheme: dark;
+}
+.dark select option {
+  background-color: rgb(26 26 38);
+  color: rgb(228 228 240);
+}
+/* Custom-styled select used in admin/tutor pages with --bg-card variable */
+.dark select[class*="bg-[rgb"] {
+  background-color: rgb(18 18 28) !important;
+}
+
+/* Form inputs */
+.dark input.bg-white,
+.dark select.bg-white,
+.dark textarea.bg-white { background-color: rgb(30 30 44); color: rgb(228 228 240); }
+
+/* Generic inputs */
+.dark input:not([class*="bg-"]),
+.dark textarea:not([class*="bg-"]) {
+  background-color: rgb(26 26 38);
+  color: rgb(228 228 240);
+}
+
+/* Borders */
+.dark .border-gray-200  { border-color: rgba(255,255,255,0.07); }
+.dark .border-gray-300  { border-color: rgba(255,255,255,0.10); }
+.dark .border-gray-100  { border-color: rgba(255,255,255,0.05); }
+.dark .divide-gray-100 > * + *  { border-color: rgba(255,255,255,0.05); }
+.dark .divide-gray-200 > * + *  { border-color: rgba(255,255,255,0.07); }
+
+/* Text */
+.dark .text-gray-900   { color: rgb(242 242 250); }
+.dark .text-gray-800   { color: rgb(222 223 238); }
+.dark .text-gray-700   { color: rgb(200 202 220); }
+.dark .text-gray-600   { color: rgb(158 160 180); }
+.dark .text-gray-500   { color: rgb(108 110 130); }
+.dark .text-gray-400   { color: rgb(82  84 104); }
+.dark .text-gray-300   { color: rgb(62  64  84); }
+
+/* Shadows */
+.dark .shadow-xl { box-shadow: 0 8px 40px 0 rgba(0,0,0,0.7), 0 2px 8px 0 rgba(0,0,0,0.5); }
+.dark .shadow-lg { box-shadow: 0 6px 28px 0 rgba(0,0,0,0.6), 0 2px 6px 0 rgba(0,0,0,0.4); }
+.dark .shadow-sm { box-shadow: 0 2px 10px 0 rgba(0,0,0,0.45); }
