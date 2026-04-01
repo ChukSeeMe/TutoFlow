@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
@@ -334,7 +335,7 @@ function StatCard({
 }: {
   label: string;
   value: number | string;
-  icon: ({ className }: { className?: string }) => ReturnType<typeof motion.div>;
+  icon: React.ComponentType<{ className?: string }>;
   href: string;
   glow: GlowColor;
   sub?: string;

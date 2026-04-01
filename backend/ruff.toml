@@ -1,0 +1,8 @@
+[lint]
+select = ["E", "W", "F"]
+ignore = [
+    "E501",   # line too long — handled by formatter
+    "E712",   # avoid equality comparisons to True/False — valid SQLAlchemy ORM syntax
+    "F821",   # undefined name — false positives on SQLAlchemy string forward references
+    "F841",   # local variable assigned but never used — acceptable in exception handlers
+]

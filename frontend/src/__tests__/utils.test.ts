@@ -19,7 +19,7 @@ describe("masteryLabel", () => {
 
 describe("masteryColour", () => {
   it("returns a CSS class string for each status", () => {
-    const statuses = [
+    const statuses: MasteryStatus[] = [
       "not_started", "taught", "practising", "developing",
       "secure", "needs_reteach", "exceeded",
     ];
