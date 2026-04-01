@@ -1,0 +1,98 @@
+name: Deploy to Azure
+
+on:
+  workflow_dispatch:  # Manual trigger from GitHub UI
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".github/workflows/ci.yml"
+
+env:
+  RESOURCE_GROUP: tutorflow-rg
+  ACR_NAME: ${{ secrets.ACR_NAME }}
+  BACKEND_APP: tutorflow-backend
+  FRONTEND_APP: tutorflow-frontend
+
+jobs:
+  build-and-deploy:
+    name: "Build & Deploy"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get ACR login server
+        id: acr
+        run: |
+          ACR_LOGIN_SERVER=$(az acr show --name ${{ secrets.ACR_NAME }} --query loginServer -o tsv)
+          echo "login_server=$ACR_LOGIN_SERVER" >> $GITHUB_OUTPUT
+          ACR_PASSWORD=$(az acr credential show --name ${{ secrets.ACR_NAME }} --query "passwords[0].value" -o tsv)
+          echo "password=$ACR_PASSWORD" >> $GITHUB_OUTPUT
+
+      - name: Login to ACR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ steps.acr.outputs.login_server }}
+          username: ${{ secrets.ACR_NAME }}
+          password: ${{ steps.acr.outputs.password }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.acr.outputs.login_server }}/tutorflow-backend:latest
+          platforms: linux/amd64
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.acr.outputs.login_server }}/tutorflow-frontend:latest
+          platforms: linux/amd64
+          build-args: |
+            NEXT_PUBLIC_API_URL=/api/backend
+
+      - name: Update backend Container App
+        run: |
+          az containerapp update \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.BACKEND_APP }} \
+            --image ${{ steps.acr.outputs.login_server }}/tutorflow-backend:latest \
+            --set-env-vars \
+              "SECRET_KEY=${{ secrets.SECRET_KEY }}" \
+              "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" \
+              "UNSPLASH_ACCESS_KEY=${{ secrets.UNSPLASH_ACCESS_KEY }}" \
+              "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
+
+      - name: Update frontend Container App
+        run: |
+          az containerapp update \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.FRONTEND_APP }} \
+            --image ${{ steps.acr.outputs.login_server }}/tutorflow-frontend:latest \
+            --set-env-vars \
+              "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
+              "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
+              "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+              "AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }}" \
+              "AZURE_AD_CLIENT_SECRET=${{ secrets.AZURE_AD_CLIENT_SECRET }}" \
+              "AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }}"
+
+      - name: Get live URL
+        run: |
+          URL=$(az containerapp show \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.FRONTEND_APP }} \
+            --query "properties.configuration.ingress.fqdn" -o tsv)
+          echo ""
+          echo "✅ Deployment complete!"
+          echo "🌐 Live URL: https://$URL"

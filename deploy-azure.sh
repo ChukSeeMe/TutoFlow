@@ -77,23 +77,20 @@ ACR_PASSWORD=$(az acr credential show --name "$ACR_NAME" --query "passwords[0].v
 
 echo "  ACR Login Server: $ACR_LOGIN_SERVER"
 
-# ── Step 4: Build & push Docker images (using ACR cloud build — no Docker needed) ──
+# ── Step 4: Create placeholder images in ACR (real images built via GitHub Actions) ──
 echo ""
-echo "► Building backend image in Azure (this takes ~3-5 minutes)..."
-az acr build \
-  --registry "$ACR_NAME" \
-  --image "tutorflow-backend:latest" \
-  --platform linux/amd64 \
-  ./backend
+echo "► Pulling and pushing placeholder image to ACR (real app images come from GitHub Actions)..."
+az acr import \
+  --name "$ACR_NAME" \
+  --source docker.io/library/nginx:alpine \
+  --image tutorflow-backend:latest \
+  --force 2>/dev/null || true
 
-echo ""
-echo "► Building frontend image in Azure (this takes ~5-8 minutes)..."
-az acr build \
-  --registry "$ACR_NAME" \
-  --image "tutorflow-frontend:latest" \
-  --platform linux/amd64 \
-  --build-arg NEXT_PUBLIC_API_URL=/api/backend \
-  ./frontend
+az acr import \
+  --name "$ACR_NAME" \
+  --source docker.io/library/nginx:alpine \
+  --image tutorflow-frontend:latest \
+  --force 2>/dev/null || true
 
 # ── Step 5: Create PostgreSQL Flexible Server ─────────────────────────────────
 echo ""
