@@ -12,9 +12,6 @@ env:
   RESOURCE_GROUP: tutorflow-rg
   BACKEND_APP: tutorflow-backend
   FRONTEND_APP: tutorflow-frontend
-  REGISTRY: ghcr.io
-  IMAGE_BACKEND: ghcr.io/${{ github.repository_owner }}/tutorflow-backend
-  IMAGE_FRONTEND: ghcr.io/${{ github.repository_owner }}/tutorflow-frontend
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
@@ -28,6 +25,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
+
+      - name: Set lowercase image names
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          echo "IMAGE_BACKEND=ghcr.io/${OWNER}/tutorflow-backend" >> $GITHUB_ENV
+          echo "IMAGE_FRONTEND=ghcr.io/${OWNER}/tutorflow-frontend" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3.4.0
