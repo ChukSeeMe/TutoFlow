@@ -10,20 +10,22 @@ ACR_NAME="tutorflowacr"
 APP_NAME_BACKEND="tutorflow-backend"
 APP_NAME_FRONTEND="tutorflow-frontend"
 
-echo "► Getting ACR credentials..."
 ACR_LOGIN_SERVER=$(az acr show --name "$ACR_NAME" --query loginServer --output tsv)
-ACR_PASSWORD=$(az acr credential show --name "$ACR_NAME" --query "passwords[0].value" --output tsv)
 
-echo "► Logging in to ACR..."
-echo "$ACR_PASSWORD" | docker login "$ACR_LOGIN_SERVER" --username "$ACR_NAME" --password-stdin
+echo "► Building backend in Azure ACR..."
+az acr build \
+  --registry "$ACR_NAME" \
+  --image "tutorflow-backend:latest" \
+  --platform linux/amd64 \
+  ./backend
 
-echo "► Building & pushing backend..."
-docker build --platform linux/amd64 -t "$ACR_LOGIN_SERVER/tutorflow-backend:latest" ./backend
-docker push "$ACR_LOGIN_SERVER/tutorflow-backend:latest"
-
-echo "► Building & pushing frontend..."
-docker build --platform linux/amd64 -t "$ACR_LOGIN_SERVER/tutorflow-frontend:latest" ./frontend
-docker push "$ACR_LOGIN_SERVER/tutorflow-frontend:latest"
+echo "► Building frontend in Azure ACR..."
+az acr build \
+  --registry "$ACR_NAME" \
+  --image "tutorflow-frontend:latest" \
+  --platform linux/amd64 \
+  --build-arg NEXT_PUBLIC_API_URL=/api/backend \
+  ./frontend
 
 echo "► Updating Container Apps..."
 az containerapp update --resource-group "$RESOURCE_GROUP" --name "$APP_NAME_BACKEND" \
