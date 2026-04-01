@@ -62,15 +62,27 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set ghcr.io registry credentials on Container Apps
+        run: |
+          az containerapp registry set \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.BACKEND_APP }} \
+            --server ghcr.io \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }}
+          az containerapp registry set \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.FRONTEND_APP }} \
+            --server ghcr.io \
+            --username ${{ github.actor }} \
+            --password ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update backend Container App
         run: |
           az containerapp update \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name ${{ env.BACKEND_APP }} \
             --image ${{ env.IMAGE_BACKEND }}:latest \
-            --registry-server ghcr.io \
-            --registry-username ${{ github.actor }} \
-            --registry-password ${{ secrets.GITHUB_TOKEN }} \
             --set-env-vars \
               "SECRET_KEY=${{ secrets.SECRET_KEY }}" \
               "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" \
@@ -83,9 +95,6 @@ jobs:
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name ${{ env.FRONTEND_APP }} \
             --image ${{ env.IMAGE_FRONTEND }}:latest \
-            --registry-server ghcr.io \
-            --registry-username ${{ github.actor }} \
-            --registry-password ${{ secrets.GITHUB_TOKEN }} \
             --set-env-vars \
               "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
               "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
