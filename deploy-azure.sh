@@ -183,9 +183,6 @@ else
       "SMTP_PASSWORD=${SMTP_PASSWORD:-}" \
       "SMTP_FROM_NAME=${SMTP_FROM_NAME:-TutorFlow}" \
       "SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@tutorflow.co.uk}" \
-    --registry-server "ghcr.io" \
-    --registry-username "$GITHUB_OWNER" \
-    --registry-password "${GHCR_TOKEN:-}" \
     --output table
 fi
 
@@ -216,9 +213,6 @@ else
       "AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID:-}" \
       "AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET:-}" \
       "AZURE_AD_TENANT_ID=${AZURE_AD_TENANT_ID:-common}" \
-    --registry-server "ghcr.io" \
-    --registry-username "$GITHUB_OWNER" \
-    --registry-password "${GHCR_TOKEN:-}" \
     --output table
 fi
 
