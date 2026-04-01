@@ -7,9 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  # ── Backend ──────────────────────────────────────────────────────────────────
+  # Backend tests
   backend-test:
-    name: Backend — pytest
+    name: "Backend - pytest"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,14 +30,15 @@ jobs:
 
       - name: Run tests
         env:
-          DATABASE_URL: sqlite+aiosqlite:///:memory:
-          SECRET_KEY: test-secret-key-ci-only-not-for-production
-          ENVIRONMENT: testing
-          ANTHROPIC_API_KEY: ""
+          DATABASE_URL: "sqlite+aiosqlite:///:memory:"
+          SECRET_KEY: "test-secret-key-ci-only-not-for-production"
+          ENVIRONMENT: "testing"
+          ANTHROPIC_API_KEY: "dummy"
         run: pytest tests/ -v --tb=short
 
+  # Backend lint
   backend-lint:
-    name: Backend — ruff lint
+    name: "Backend - ruff lint"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -59,9 +60,9 @@ jobs:
       - name: Lint with ruff
         run: ruff check app/ --select E,W,F --ignore E501
 
-  # ── Frontend ─────────────────────────────────────────────────────────────────
+  # Frontend type check
   frontend-typecheck:
-    name: Frontend — TypeScript
+    name: "Frontend - TypeScript"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -83,8 +84,9 @@ jobs:
       - name: Type-check
         run: npx tsc --noEmit
 
+  # Frontend tests
   frontend-test:
-    name: Frontend — Vitest
+    name: "Frontend - Vitest"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -106,9 +108,9 @@ jobs:
       - name: Run Vitest
         run: npx vitest run
 
-  # ── Docker build check ────────────────────────────────────────────────────────
+  # Docker build check
   docker-build:
-    name: Docker — build backend image
+    name: "Docker - build backend image"
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
