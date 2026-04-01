@@ -53,14 +53,21 @@ echo "► Creating resource group..."
 az group create --name "$RESOURCE_GROUP" --location "$LOCATION" --output table
 
 # ── Step 3: Container Registry ───────────────────────────────────────────────
+# NOTE: az acr create triggers ACR Tasks internally which is blocked on this subscription.
+# If the registry already exists we skip creation and just read its credentials.
 echo ""
-echo "► Creating Azure Container Registry..."
-az acr create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$ACR_NAME" \
-  --sku Basic \
-  --admin-enabled true \
-  --output table
+echo "► Checking Azure Container Registry..."
+if az acr show --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" &>/dev/null; then
+  echo "  ACR already exists — skipping creation."
+else
+  echo "  Registry not found. Creating (no Tasks used)..."
+  az acr create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$ACR_NAME" \
+    --sku Basic \
+    --admin-enabled true \
+    --output table
+fi
 
 ACR_LOGIN_SERVER=$(az acr show --name "$ACR_NAME" --query loginServer --output tsv)
 ACR_PASSWORD=$(az acr credential show --name "$ACR_NAME" --query "passwords[0].value" --output tsv)
@@ -126,66 +133,85 @@ az containerapp env storage set \
   --access-mode ReadWrite \
   --output table
 
+# ── GitHub repo owner (for ghcr.io image names) ──────────────────────────────
+GITHUB_OWNER="chukseeme"   # lowercase — ghcr.io requires lowercase
+IMAGE_BACKEND="ghcr.io/${GITHUB_OWNER}/tutorflow-backend:latest"
+IMAGE_FRONTEND="ghcr.io/${GITHUB_OWNER}/tutorflow-frontend:latest"
+
 # ── Step 7: Deploy backend Container App (placeholder image) ─────────────────
 echo ""
-echo "► Creating backend Container App..."
-az containerapp create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$APP_NAME_BACKEND" \
-  --environment "$ENVIRONMENT_NAME" \
-  --image "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" \
-  --target-port 80 \
-  --ingress internal \
-  --min-replicas 1 \
-  --max-replicas 3 \
-  --cpu 0.5 \
-  --memory 1.0Gi \
-  --env-vars \
-    "DATABASE_URL=$DATABASE_URL" \
-    "SECRET_KEY=$SECRET_KEY" \
-    "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
-    "UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY:-}" \
-    "ENVIRONMENT=production" \
-    "LOG_LEVEL=INFO" \
-    "ALGORITHM=HS256" \
-    "ACCESS_TOKEN_EXPIRE_MINUTES=30" \
-    "REFRESH_TOKEN_EXPIRE_DAYS=7" \
-    "AI_MODEL=${AI_MODEL:-claude-opus-4-6}" \
-    "AI_MAX_TOKENS=${AI_MAX_TOKENS:-4096}" \
-    "REPORTS_DIR=/app/reports" \
-    "SMTP_HOST=${SMTP_HOST:-}" \
-    "SMTP_PORT=${SMTP_PORT:-587}" \
-    "SMTP_USERNAME=${SMTP_USERNAME:-}" \
-    "SMTP_PASSWORD=${SMTP_PASSWORD:-}" \
-    "SMTP_FROM_NAME=${SMTP_FROM_NAME:-TutorFlow}" \
-    "SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@tutorflow.co.uk}" \
-  --output table
+if az containerapp show --resource-group "$RESOURCE_GROUP" --name "$APP_NAME_BACKEND" &>/dev/null; then
+  echo "► Backend Container App already exists — skipping creation."
+else
+  echo "► Creating backend Container App..."
+  az containerapp create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$APP_NAME_BACKEND" \
+    --environment "$ENVIRONMENT_NAME" \
+    --image "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" \
+    --target-port 80 \
+    --ingress internal \
+    --min-replicas 1 \
+    --max-replicas 3 \
+    --cpu 0.5 \
+    --memory 1.0Gi \
+    --env-vars \
+      "DATABASE_URL=$DATABASE_URL" \
+      "SECRET_KEY=$SECRET_KEY" \
+      "ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY" \
+      "UNSPLASH_ACCESS_KEY=${UNSPLASH_ACCESS_KEY:-}" \
+      "ENVIRONMENT=production" \
+      "LOG_LEVEL=INFO" \
+      "ALGORITHM=HS256" \
+      "ACCESS_TOKEN_EXPIRE_MINUTES=30" \
+      "REFRESH_TOKEN_EXPIRE_DAYS=7" \
+      "AI_MODEL=${AI_MODEL:-claude-opus-4-6}" \
+      "AI_MAX_TOKENS=${AI_MAX_TOKENS:-4096}" \
+      "REPORTS_DIR=/app/reports" \
+      "SMTP_HOST=${SMTP_HOST:-}" \
+      "SMTP_PORT=${SMTP_PORT:-587}" \
+      "SMTP_USERNAME=${SMTP_USERNAME:-}" \
+      "SMTP_PASSWORD=${SMTP_PASSWORD:-}" \
+      "SMTP_FROM_NAME=${SMTP_FROM_NAME:-TutorFlow}" \
+      "SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@tutorflow.co.uk}" \
+    --registry-server "ghcr.io" \
+    --registry-username "$GITHUB_OWNER" \
+    --registry-password "${GHCR_TOKEN:-}" \
+    --output table
+fi
 
 # ── Step 8: Deploy frontend Container App (placeholder image) ─────────────────
 echo ""
-echo "► Creating frontend Container App..."
-az containerapp create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$APP_NAME_FRONTEND" \
-  --environment "$ENVIRONMENT_NAME" \
-  --image "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" \
-  --target-port 80 \
-  --ingress external \
-  --min-replicas 1 \
-  --max-replicas 3 \
-  --cpu 0.5 \
-  --memory 1.0Gi \
-  --env-vars \
-    "NODE_ENV=production" \
-    "NEXT_PUBLIC_API_URL=/api/backend" \
-    "BACKEND_INTERNAL_URL=http://${APP_NAME_BACKEND}:8000" \
-    "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" \
-    "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}" \
-    "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}" \
-    "AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID:-}" \
-    "AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET:-}" \
-    "AZURE_AD_TENANT_ID=${AZURE_AD_TENANT_ID:-common}" \
-  --output table
+if az containerapp show --resource-group "$RESOURCE_GROUP" --name "$APP_NAME_FRONTEND" &>/dev/null; then
+  echo "► Frontend Container App already exists — skipping creation."
+else
+  echo "► Creating frontend Container App..."
+  az containerapp create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$APP_NAME_FRONTEND" \
+    --environment "$ENVIRONMENT_NAME" \
+    --image "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest" \
+    --target-port 80 \
+    --ingress external \
+    --min-replicas 1 \
+    --max-replicas 3 \
+    --cpu 0.5 \
+    --memory 1.0Gi \
+    --env-vars \
+      "NODE_ENV=production" \
+      "NEXT_PUBLIC_API_URL=/api/backend" \
+      "BACKEND_INTERNAL_URL=http://${APP_NAME_BACKEND}:8000" \
+      "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" \
+      "GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}" \
+      "GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}" \
+      "AZURE_AD_CLIENT_ID=${AZURE_AD_CLIENT_ID:-}" \
+      "AZURE_AD_CLIENT_SECRET=${AZURE_AD_CLIENT_SECRET:-}" \
+      "AZURE_AD_TENANT_ID=${AZURE_AD_TENANT_ID:-common}" \
+    --registry-server "ghcr.io" \
+    --registry-username "$GITHUB_OWNER" \
+    --registry-password "${GHCR_TOKEN:-}" \
+    --output table
+fi
 
 # ── Get live URL and update CORS ──────────────────────────────────────────────
 FRONTEND_URL=$(az containerapp show \
@@ -214,18 +240,15 @@ echo "  Infrastructure ready!"
 echo "=========================================="
 echo ""
 echo "  App URL (placeholder):  $FRONTEND_HTTPS"
-echo "  ACR Login Server:       $ACR_LOGIN_SERVER"
-echo "  ACR Password:           $ACR_PASSWORD"
 echo "  DB Host:                $POSTGRES_HOST"
 echo ""
 echo "  !! NEXT STEP: Add these to GitHub Secrets !!"
 echo "  Go to: https://github.com/ChukSeeMe/TutoFlow/settings/secrets/actions"
 echo ""
 echo "  AZURE_CREDENTIALS  => run: az ad sp create-for-rbac --name tutorflow-deploy --role contributor --scopes /subscriptions/\$(az account show --query id -o tsv)/resourceGroups/$RESOURCE_GROUP --sdk-auth"
-echo "  ACR_NAME           => $ACR_NAME"
-echo "  ACR_LOGIN_SERVER   => $ACR_LOGIN_SERVER"
-echo "  ACR_PASSWORD       => $ACR_PASSWORD"
+echo "  GHCR_TOKEN         => a GitHub Personal Access Token with 'write:packages' scope"
+echo "                        Create at: https://github.com/settings/tokens/new"
 echo ""
+echo "  Images will be pushed to ghcr.io (GitHub Container Registry) — no ACR Tasks needed."
 echo "  Then go to GitHub Actions and run 'Deploy to Azure' workflow."
-echo "  That will build the real images and deploy your app."
 echo ""
