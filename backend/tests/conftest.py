@@ -32,7 +32,7 @@ TestingSessionLocal = async_sessionmaker(
 )
 
 
-@pytest_asyncio.fixture(scope="session", autouse=True)
+@pytest_asyncio.fixture(autouse=True)
 async def create_tables():
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
