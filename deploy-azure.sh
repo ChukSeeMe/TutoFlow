@@ -104,13 +104,23 @@ echo "  DB host: $POSTGRES_HOST"
 
 # ── Step 5: Storage for reports ───────────────────────────────────────────────
 echo ""
-echo "► Creating storage account..."
-STORAGE_ACCOUNT="tutorflowfiles$(shuf -i 10000-99999 -n 1)"
-az storage account create \
+echo "► Checking storage account..."
+EXISTING_STORAGE=$(az storage account list \
   --resource-group "$RESOURCE_GROUP" \
-  --name "$STORAGE_ACCOUNT" \
-  --sku Standard_LRS \
-  --output table
+  --query "[0].name" --output tsv 2>/dev/null || true)
+
+if [ -n "$EXISTING_STORAGE" ]; then
+  echo "  Storage account already exists: $EXISTING_STORAGE — reusing."
+  STORAGE_ACCOUNT="$EXISTING_STORAGE"
+else
+  STORAGE_ACCOUNT="tutorflowfiles$(shuf -i 10000-99999 -n 1)"
+  echo "  Creating storage account $STORAGE_ACCOUNT..."
+  az storage account create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$STORAGE_ACCOUNT" \
+    --sku Standard_LRS \
+    --output table
+fi
 
 STORAGE_KEY=$(az storage account keys list \
   --resource-group "$RESOURCE_GROUP" \
@@ -121,26 +131,35 @@ az storage share create \
   --name "reports" \
   --account-name "$STORAGE_ACCOUNT" \
   --account-key "$STORAGE_KEY" \
-  --output table
+  --output table 2>/dev/null || echo "  File share already exists — skipping."
 
 # ── Step 6: Container Apps Environment ───────────────────────────────────────
 echo ""
-echo "► Creating Container Apps Environment..."
-az containerapp env create \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$ENVIRONMENT_NAME" \
-  --location "$LOCATION" \
-  --output table
+echo "► Checking Container Apps Environment..."
+if az containerapp env show --resource-group "$RESOURCE_GROUP" --name "$ENVIRONMENT_NAME" &>/dev/null; then
+  echo "  Environment already exists — skipping creation."
+else
+  echo "  Creating Container Apps Environment..."
+  az containerapp env create \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$ENVIRONMENT_NAME" \
+    --location "$LOCATION" \
+    --output table
+fi
 
-az containerapp env storage set \
-  --resource-group "$RESOURCE_GROUP" \
-  --name "$ENVIRONMENT_NAME" \
-  --storage-name "reports-storage" \
-  --azure-file-account-name "$STORAGE_ACCOUNT" \
-  --azure-file-account-key "$STORAGE_KEY" \
-  --azure-file-share-name "reports" \
-  --access-mode ReadWrite \
-  --output table
+if az containerapp env storage show --resource-group "$RESOURCE_GROUP" --name "$ENVIRONMENT_NAME" --storage-name "reports-storage" &>/dev/null; then
+  echo "  Storage mount already exists — skipping."
+else
+  az containerapp env storage set \
+    --resource-group "$RESOURCE_GROUP" \
+    --name "$ENVIRONMENT_NAME" \
+    --storage-name "reports-storage" \
+    --azure-file-account-name "$STORAGE_ACCOUNT" \
+    --azure-file-account-key "$STORAGE_KEY" \
+    --azure-file-share-name "reports" \
+    --access-mode ReadWrite \
+    --output table
+fi
 
 # ── GitHub repo owner (for ghcr.io image names) ──────────────────────────────
 GITHUB_OWNER="chukseeme"   # lowercase — ghcr.io requires lowercase
