@@ -40,10 +40,12 @@ export default function NewStudentPage() {
   async function onSubmit(data: FormData) {
     setApiError(null);
     try {
-      const res = await studentsApi.create({
-        ...data,
-        date_of_birth: data.date_of_birth || null,
-      });
+      // Strip empty strings — backend expects null for unset optional enums/fields
+      const payload = Object.fromEntries(
+        Object.entries({ ...data, date_of_birth: data.date_of_birth || null })
+          .map(([k, v]) => [k, v === "" ? null : v])
+      );
+      const res = await studentsApi.create(payload);
       router.push(`/students/${res.data.id}`);
     } catch (err: unknown) {
       const message =
