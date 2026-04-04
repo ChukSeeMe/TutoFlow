@@ -46,7 +46,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as typeof error.config & { _retry?: boolean };
-    const isAuthEndpoint = originalRequest.url?.startsWith("/auth/");
+    const isAuthEndpoint = originalRequest.url?.includes("/auth/");
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (isRefreshing) {
         return new Promise((resolve) => {
@@ -98,27 +98,27 @@ export const authApi = {
 
 export const studentsApi = {
   list: () => api.get("/students/"),
-  get: (id: number) => api.get(`/students/${id}`),
+  get: (id: number) => api.get(`/students/${id}/`),
   create: (data: object) => api.post("/students/", data),
-  update: (id: number, data: object) => api.patch(`/students/${id}`, data),
-  deactivate: (id: number) => api.delete(`/students/${id}`),
-  getSend: (id: number) => api.get(`/students/${id}/send`),
-  updateSend: (id: number, data: object) => api.patch(`/students/${id}/send`, data),
+  update: (id: number, data: object) => api.patch(`/students/${id}/`, data),
+  deactivate: (id: number) => api.delete(`/students/${id}/`),
+  getSend: (id: number) => api.get(`/students/${id}/send/`),
+  updateSend: (id: number, data: object) => api.patch(`/students/${id}/send/`, data),
 };
 
 export const curriculumApi = {
-  subjects: () => api.get("/curriculum/subjects"),
+  subjects: () => api.get("/curriculum/subjects/"),
   topics: (subjectId: number, filters?: { year_group?: string; key_stage?: string }) =>
-    api.get(`/curriculum/subjects/${subjectId}/topics`, { params: filters }),
-  topic: (topicId: number) => api.get(`/curriculum/topics/${topicId}`),
+    api.get(`/curriculum/subjects/${subjectId}/topics/`, { params: filters }),
+  topic: (topicId: number) => api.get(`/curriculum/topics/${topicId}/`),
 };
 
 export const lessonsApi = {
-  generate: (data: object) => api.post("/lessons/generate", data),
+  generate: (data: object) => api.post("/lessons/generate/", data),
   list: (studentId?: number) =>
     api.get("/lessons/", { params: studentId ? { student_id: studentId } : {} }),
-  get: (id: number) => api.get(`/lessons/${id}`),
-  update: (id: number, data: object) => api.patch(`/lessons/${id}`, data),
+  get: (id: number) => api.get(`/lessons/${id}/`),
+  update: (id: number, data: object) => api.patch(`/lessons/${id}/`, data),
   create: (data: object) => api.post("/lessons/", data),
 };
 
@@ -126,101 +126,101 @@ export const sessionsApi = {
   create: (data: object) => api.post("/sessions/", data),
   list: (studentId?: number) =>
     api.get("/sessions/", { params: studentId ? { student_id: studentId } : {} }),
-  get: (id: number) => api.get(`/sessions/${id}`),
-  update: (id: number, data: object) => api.patch(`/sessions/${id}`, data),
-  insights: (id: number) => api.get(`/sessions/${id}/insights`),
+  get: (id: number) => api.get(`/sessions/${id}/`),
+  update: (id: number, data: object) => api.patch(`/sessions/${id}/`, data),
+  insights: (id: number) => api.get(`/sessions/${id}/insights/`),
 };
 
 export const assessmentsApi = {
-  generate: (data: object) => api.post("/assessments/generate", data),
-  get: (id: number) => api.get(`/assessments/${id}`),
-  submitAttempt: (data: object) => api.post("/assessments/attempts", data),
+  generate: (data: object) => api.post("/assessments/generate/", data),
+  get: (id: number) => api.get(`/assessments/${id}/`),
+  submitAttempt: (data: object) => api.post("/assessments/attempts/", data),
 };
 
 export const progressApi = {
-  get: (studentId: number) => api.get(`/progress/${studentId}`),
+  get: (studentId: number) => api.get(`/progress/${studentId}/`),
   override: (studentId: number, data: object) =>
-    api.post(`/progress/${studentId}/override`, data),
+    api.post(`/progress/${studentId}/override/`, data),
 };
 
 export const analyticsApi = {
-  studentSummary: (studentId: number) => api.get(`/analytics/${studentId}/summary`),
-  interventionsDashboard: () => api.get("/analytics/interventions/dashboard"),
-  insights: () => api.get("/analytics/insights"),
+  studentSummary: (studentId: number) => api.get(`/analytics/${studentId}/summary/`),
+  interventionsDashboard: () => api.get("/analytics/interventions/dashboard/"),
+  insights: () => api.get("/analytics/insights/"),
 };
 
 export const reportsApi = {
-  generate: (data: object) => api.post("/reports/generate", data),
+  generate: (data: object) => api.post("/reports/generate/", data),
   list: (studentId?: number) =>
     api.get("/reports/", { params: studentId ? { student_id: studentId } : {} }),
-  get: (id: number) => api.get(`/reports/${id}`),
+  get: (id: number) => api.get(`/reports/${id}/`),
   approve: (id: number, finalText: string) =>
-    api.post(`/reports/${id}/approve`, { final_text: finalText }),
+    api.post(`/reports/${id}/approve/`, { final_text: finalText }),
   downloadPdf: (id: number) =>
-    api.get(`/reports/${id}/pdf`, { responseType: "blob" }),
+    api.get(`/reports/${id}/pdf/`, { responseType: "blob" }),
 };
 
 export const homeworkApi = {
-  generate: (data: object) => api.post("/homework/generate", data),
-  list: (studentId: number) => api.get(`/homework/${studentId}`),
-  update: (id: number, data: object) => api.patch(`/homework/${id}`, data),
+  generate: (data: object) => api.post("/homework/generate/", data),
+  list: (studentId: number) => api.get(`/homework/${studentId}/`),
+  update: (id: number, data: object) => api.patch(`/homework/${id}/`, data),
 };
 
 export const observationsApi = {
   create: (data: object) => api.post("/observations/", data),
   list: (studentId: number, filters?: object) =>
-    api.get(`/observations/${studentId}`, { params: filters }),
+    api.get(`/observations/${studentId}/`, { params: filters }),
 };
 
 export const parentsApi = {
   create: (data: object) => api.post("/parents/", data),
   list: () => api.get("/parents/"),
-  get: (id: number) => api.get(`/parents/${id}`),
-  update: (id: number, data: object) => api.patch(`/parents/${id}`, data),
+  get: (id: number) => api.get(`/parents/${id}/`),
+  update: (id: number, data: object) => api.patch(`/parents/${id}/`, data),
   linkStudent: (parentId: number, studentId: number, data: object) =>
-    api.post(`/parents/${parentId}/link/${studentId}`, data),
+    api.post(`/parents/${parentId}/link/${studentId}/`, data),
   unlinkStudent: (parentId: number, studentId: number) =>
-    api.delete(`/parents/${parentId}/link/${studentId}`),
+    api.delete(`/parents/${parentId}/link/${studentId}/`),
   // Parent-facing
-  myChildren: () => api.get("/parents/my/children"),
-  myTimeline: () => api.get("/parents/my/timeline"),
-  mySessions: () => api.get("/parents/my/sessions"),
-  myMessages: () => api.get("/parents/my/messages"),
+  myChildren: () => api.get("/parents/my/children/"),
+  myTimeline: () => api.get("/parents/my/timeline/"),
+  mySessions: () => api.get("/parents/my/sessions/"),
+  myMessages: () => api.get("/parents/my/messages/"),
   sendMessage: (data: { student_id: number; subject: string; body: string }) =>
-    api.post("/parents/my/messages", data),
-  myInvoice: () => api.get("/parents/my/invoice"),
+    api.post("/parents/my/messages/", data),
+  myInvoice: () => api.get("/parents/my/invoice/"),
 };
 
 export const usersApi = {
-  me: () => api.get("/users/me"),
-  myProfile: () => api.get("/users/me/profile"),
-  updateProfile: (data: object) => api.patch("/users/me/profile", data),
+  me: () => api.get("/users/me/"),
+  myProfile: () => api.get("/users/me/profile/"),
+  updateProfile: (data: object) => api.patch("/users/me/profile/", data),
 };
 
 export const studentPortalApi = {
-  dashboard: () => api.get("/student/dashboard"),
-  homework: () => api.get("/student/homework"),
-  submitHomework: (id: number) => api.patch(`/student/homework/${id}/submit`),
-  progress: () => api.get("/student/progress"),
-  getAssessment: (id: number) => api.get(`/student/assessments/${id}`),
+  dashboard: () => api.get("/student/dashboard/"),
+  homework: () => api.get("/student/homework/"),
+  submitHomework: (id: number) => api.patch(`/student/homework/${id}/submit/`),
+  progress: () => api.get("/student/progress/"),
+  getAssessment: (id: number) => api.get(`/student/assessments/${id}/`),
   submitAttempt: (assessmentId: number, data: object) =>
-    api.post(`/student/assessments/${assessmentId}/attempt`, data),
+    api.post(`/student/assessments/${assessmentId}/attempt/`, data),
 };
 
 export const reflectionsApi = {
   create: (data: object) => api.post("/reflections/", data),
-  mine: () => api.get("/reflections/mine"),
+  mine: () => api.get("/reflections/mine/"),
   listForStudent: (studentId: number) =>
-    api.get(`/reflections/student/${studentId}`),
+    api.get(`/reflections/student/${studentId}/`),
 };
 
 export const resourcesApi = {
-  generate: (data: object) => api.post("/resources/generate", data),
+  generate: (data: object) => api.post("/resources/generate/", data),
 };
 
 // Extend analyticsApi with the interventions endpoint
 export const analyticsApiExtended = {
-  interventionsDashboard: () => api.get("/analytics/interventions/dashboard"),
+  interventionsDashboard: () => api.get("/analytics/interventions/dashboard/"),
 };
 
 export interface AuditParams {
@@ -235,27 +235,27 @@ export interface AuditParams {
 }
 
 export const adminApi = {
-  stats:    () => api.get("/admin/stats"),
-  insights: () => api.get("/admin/insights"),
-  health:   () => api.get("/admin/health"),
+  stats:    () => api.get("/admin/stats/"),
+  insights: () => api.get("/admin/insights/"),
+  health:   () => api.get("/admin/health/"),
   users: (params?: { role?: string; search?: string; limit?: number; offset?: number }) =>
-    api.get("/admin/users", { params }),
+    api.get("/admin/users/", { params }),
   updateUser: (id: number, data: { is_active?: boolean; role?: string }) =>
-    api.patch(`/admin/users/${id}`, data),
+    api.patch(`/admin/users/${id}/`, data),
 
   // Audit — paginated with full filters
   audit: (params?: AuditParams) =>
-    api.get("/admin/audit", { params }),
+    api.get("/admin/audit/", { params }),
 
   // Export full filtered set as CSV (arraybuffer so we can make a Blob)
   auditExportCSV: (params?: Omit<AuditParams, "page" | "limit">) =>
-    api.get("/admin/audit/export/csv", { params, responseType: "blob" }),
+    api.get("/admin/audit/export/csv/", { params, responseType: "blob" }),
 
   // Export full filtered set as PDF
   auditExportPDF: (params?: Omit<AuditParams, "page" | "limit">) =>
-    api.get("/admin/audit/export/pdf", { params, responseType: "blob" }),
+    api.get("/admin/audit/export/pdf/", { params, responseType: "blob" }),
 
   // GDPR compliance export — student-specific audit trail as PDF
   auditCompliancePDF: (studentId: number) =>
-    api.get(`/admin/audit/compliance/${studentId}`, { responseType: "blob" }),
+    api.get(`/admin/audit/compliance/${studentId}/`, { responseType: "blob" }),
 };
