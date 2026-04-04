@@ -8,12 +8,12 @@ from app.models.student import Student
 from app.models.user import User
 from app.schemas.reflection import ReflectionCreate, ReflectionOut
 from app.core.dependencies import require_student, require_tutor
-from app.core.exceptions import ForbiddenError, NotFoundError
+from app.core.exceptions import ForbiddenError
 
 router = APIRouter(prefix="/reflections", tags=["reflections"])
 
 
-@router.post("/", response_model=ReflectionOut, status_code=201)
+@router.post("", response_model=ReflectionOut, status_code=201)
 async def create_reflection(
     payload: ReflectionCreate,
     current_user: User = Depends(require_student),

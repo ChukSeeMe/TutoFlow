@@ -9,7 +9,7 @@ from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.tutor import Tutor
 from app.models.audit import AuditLog
-from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, RefreshRequest, OAuthCallbackRequest
+from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, OAuthCallbackRequest
 from app.core.security import (
     hash_password, verify_password,
     create_access_token, create_refresh_token, decode_token,

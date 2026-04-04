@@ -49,7 +49,7 @@ async def generate(
     return LessonPlanResponse.model_validate(lesson_plan)
 
 
-@router.post("/", response_model=LessonPlanResponse, status_code=201)
+@router.post("", response_model=LessonPlanResponse, status_code=201)
 async def create_lesson_plan(
     request: Request,
     payload: LessonPlanCreate,
@@ -76,7 +76,7 @@ async def create_lesson_plan(
     return LessonPlanResponse.model_validate(plan)
 
 
-@router.get("/", response_model=list[LessonPlanSummary])
+@router.get("", response_model=list[LessonPlanSummary])
 async def list_lesson_plans(
     student_id: int | None = None,
     current_user: User = Depends(require_tutor),

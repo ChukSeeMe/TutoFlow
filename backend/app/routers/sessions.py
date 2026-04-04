@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from app.database import get_db
 from app.models.user import User
-from app.models.session import LessonSession, SessionStatus, AttendanceStatus
+from app.models.session import LessonSession, AttendanceStatus
 from app.models.lesson import LessonPlan
 from app.models.student import Student
 from app.models.tutor import Tutor
@@ -25,7 +25,7 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
     return tutor
 
 
-@router.post("/", response_model=SessionResponse, status_code=201)
+@router.post("", response_model=SessionResponse, status_code=201)
 async def create_session(
     request: Request,
     payload: SessionCreate,
@@ -51,7 +51,7 @@ async def create_session(
     return SessionResponse.model_validate(session)
 
 
-@router.get("/", response_model=list[SessionResponse])
+@router.get("", response_model=list[SessionResponse])
 async def list_sessions(
     student_id: int | None = None,
     current_user: User = Depends(require_tutor),

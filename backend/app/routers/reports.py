@@ -41,7 +41,7 @@ async def generate(
     return ReportResponse.model_validate(report)
 
 
-@router.get("/", response_model=list[ReportResponse])
+@router.get("", response_model=list[ReportResponse])
 async def list_reports(
     student_id: int | None = None,
     current_user: User = Depends(require_tutor),

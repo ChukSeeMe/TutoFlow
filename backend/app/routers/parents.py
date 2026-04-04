@@ -10,10 +10,10 @@ Privacy boundary: parents can only see their linked child's approved data.
 import secrets
 from datetime import datetime, timezone
 from typing import Any
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, or_, desc
+from sqlalchemy import select, func, or_, desc
 
 from app.database import get_db
 from app.models.user import User, UserRole
@@ -31,7 +31,7 @@ from app.schemas.parent import (
     ParentWithStudentsResponse, LinkStudentRequest, ChildSummaryResponse,
 )
 from app.core.security import hash_password
-from app.core.dependencies import require_tutor, require_parent, get_current_user
+from app.core.dependencies import require_tutor, require_parent
 from app.core.exceptions import NotFoundError, ForbiddenError, ConflictError
 
 router = APIRouter(prefix="/parents", tags=["parents"])
@@ -47,7 +47,7 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
 
 # ── Tutor-facing endpoints ─────────────────────────────────────────────────────
 
-@router.post("/", response_model=ParentResponse, status_code=201)
+@router.post("", response_model=ParentResponse, status_code=201)
 async def create_parent(
     request: Request,
     payload: ParentCreate,
@@ -113,7 +113,7 @@ async def create_parent(
     return response_dict
 
 
-@router.get("/", response_model=list[ParentWithStudentsResponse])
+@router.get("", response_model=list[ParentWithStudentsResponse])
 async def list_parents(
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),

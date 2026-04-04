@@ -40,6 +40,8 @@ app = FastAPI(
     # Hide docs in production
     docs_url="/docs" if not settings.is_production else None,
     redoc_url="/redoc" if not settings.is_production else None,
+    # No slash redirects — all routes defined without trailing slash
+    redirect_slashes=False,
 )
 
 # ── Rate limiting ──────────────────────────────────────────────────────────────

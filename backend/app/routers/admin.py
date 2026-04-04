@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from sqlalchemy import and_, or_, select, func, desc, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_db, engine
+from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.audit import AuditLog
 from app.models.session import LessonSession, SessionStatus, AttendanceStatus

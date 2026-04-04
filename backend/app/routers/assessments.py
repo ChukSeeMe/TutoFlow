@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from app.database import get_db
 from app.models.user import User
-from app.models.assessment import Assessment, AssessmentAttempt
+from app.models.assessment import Assessment
 from app.models.tutor import Tutor
 from app.schemas.assessment import (
     AssessmentCreate, AssessmentGenerateRequest, AttemptCreate,
@@ -37,7 +37,7 @@ async def generate(
     return AssessmentResponse.model_validate(assessment)
 
 
-@router.post("/", response_model=AssessmentResponse, status_code=201)
+@router.post("", response_model=AssessmentResponse, status_code=201)
 async def create_assessment(
     payload: AssessmentCreate,
     current_user: User = Depends(require_tutor),

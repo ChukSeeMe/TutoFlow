@@ -23,7 +23,7 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
     return tutor
 
 
-@router.get("/", response_model=list[StudentResponse])
+@router.get("", response_model=list[StudentResponse])
 async def list_students(
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),
@@ -46,7 +46,7 @@ async def list_students(
     ]
 
 
-@router.post("/", response_model=StudentDetailResponse, status_code=201)
+@router.post("", response_model=StudentDetailResponse, status_code=201)
 async def create_student(
     request: Request,
     payload: StudentCreate,

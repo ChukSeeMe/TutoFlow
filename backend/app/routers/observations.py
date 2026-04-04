@@ -8,7 +8,7 @@ from app.models.observation import ObservationNote
 from app.models.tutor import Tutor
 from app.schemas.observation import ObservationCreate, ObservationResponse
 from app.core.dependencies import require_tutor
-from app.core.exceptions import NotFoundError, ForbiddenError
+from app.core.exceptions import ForbiddenError
 
 router = APIRouter(prefix="/observations", tags=["observations"])
 
@@ -21,7 +21,7 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
     return tutor
 
 
-@router.post("/", response_model=ObservationResponse, status_code=201)
+@router.post("", response_model=ObservationResponse, status_code=201)
 async def create_observation(
     payload: ObservationCreate,
     current_user: User = Depends(require_tutor),

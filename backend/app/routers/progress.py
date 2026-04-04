@@ -8,7 +8,7 @@ from app.models.progress import ProgressRecord
 from app.models.student import Student
 from app.models.tutor import Tutor
 from app.models.curriculum import Topic, Subject
-from app.schemas.progress import ProgressRecordResponse, ProgressOverrideRequest, MasteryMapResponse
+from app.schemas.progress import ProgressRecordResponse, ProgressOverrideRequest
 from app.services.progress_service import get_student_mastery_map
 from app.core.dependencies import require_tutor
 from app.core.exceptions import NotFoundError, ForbiddenError

@@ -91,7 +91,7 @@ async def generate_homework(
     return HomeworkResponse.model_validate(task)
 
 
-@router.post("/", response_model=HomeworkResponse, status_code=201)
+@router.post("", response_model=HomeworkResponse, status_code=201)
 async def create_homework(
     payload: HomeworkCreate,
     current_user: User = Depends(require_tutor),

@@ -1,17 +1,15 @@
 from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
-from typing import Optional
+from sqlalchemy import select
 from pydantic import BaseModel
 
 from app.database import get_db
 from app.models.user import User
 from app.models.tutor import Tutor
-from app.models.student import Student, KeyStage
-from app.models.session import LessonSession, SessionStatus, AttendanceStatus
+from app.models.student import Student
+from app.models.session import LessonSession, SessionStatus
 from app.models.progress import ProgressRecord
-from app.models.student import MasteryStatus
 from app.schemas.analytics import StudentAnalyticsSummary
 from app.services.recommendation_service import get_student_analytics
 from app.core.dependencies import require_tutor

@@ -10,15 +10,13 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.user import User
 from app.models.student import Student
-from app.models.session import LessonSession, SessionStatus
-from app.models.lesson import LessonPlan
+from app.models.session import LessonSession
 from app.models.homework import HomeworkTask, HomeworkStatus
 from app.models.progress import ProgressRecord
-from app.models.assessment import Assessment, AssessmentAttempt
+from app.models.assessment import Assessment
 from app.models.curriculum import Topic, Subject
 from app.models.student import MasteryStatus
 from app.schemas.progress import ProgressRecordResponse
-from app.schemas.session import SessionResponse
 from app.schemas.homework import HomeworkResponse
 from app.schemas.assessment import AssessmentResponse, AttemptResponse, AttemptCreate
 from app.services.assessment_service import score_attempt
