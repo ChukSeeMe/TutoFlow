@@ -40,9 +40,8 @@ app = FastAPI(
     # Hide docs in production
     docs_url="/docs" if not settings.is_production else None,
     redoc_url="/redoc" if not settings.is_production else None,
-    # Disable automatic slash redirects — they drop the Authorization header
-    # when followed by Node.js fetch in the frontend proxy.
-    redirect_slashes=False,
+    # Keep redirect_slashes=True (default) — the proxy handles 307 redirects
+    # manually to preserve the Authorization header.
 )
 
 # ── Rate limiting ──────────────────────────────────────────────────────────────
