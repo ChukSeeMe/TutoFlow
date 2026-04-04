@@ -20,7 +20,9 @@ export const useAuthStore = create<AuthState>()(
 
       setAuth: (token, role) => {
         setAccessToken(token);
-        set({ accessToken: token, role, isAuthenticated: true });
+        // Normalise to lowercase — backend returns uppercase (TUTOR, ADMIN, etc.)
+        const normalisedRole = (role as string).toLowerCase() as UserRole;
+        set({ accessToken: token, role: normalisedRole, isAuthenticated: true });
       },
 
       clearAuth: () => {
@@ -39,6 +41,9 @@ export const useAuthStore = create<AuthState>()(
       onRehydrateStorage: () => (state) => {
         if (state?.accessToken) {
           setAccessToken(state.accessToken);
+        }
+        if (state?.role) {
+          state.role = (state.role as string).toLowerCase() as UserRole;
         }
       },
     }
