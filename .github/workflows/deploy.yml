@@ -70,6 +70,16 @@ jobs:
               "UNSPLASH_ACCESS_KEY=${{ secrets.UNSPLASH_ACCESS_KEY }}" \
               "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}"
 
+      - name: Get frontend FQDN
+        id: fqdn
+        run: |
+          URL=$(az containerapp show \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --name ${{ env.FRONTEND_APP }} \
+            --query "properties.configuration.ingress.fqdn" -o tsv)
+          echo "url=https://$URL" >> $GITHUB_OUTPUT
+          echo "Frontend URL: https://$URL"
+
       - name: Update frontend Container App
         run: |
           az containerapp update \
@@ -78,16 +88,14 @@ jobs:
             --image ${{ env.IMAGE_FRONTEND }}:latest \
             --set-env-vars \
               "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
+              "NEXTAUTH_URL=${{ steps.fqdn.outputs.url }}" \
               "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
               "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
               "AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }}" \
               "AZURE_AD_CLIENT_SECRET=${{ secrets.AZURE_AD_CLIENT_SECRET }}" \
-              "AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }}"
+              "AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }}" \
+              "BACKEND_INTERNAL_URL=http://tutorflow-backend"
 
       - name: Get live URL
         run: |
-          URL=$(az containerapp show \
-            --resource-group ${{ env.RESOURCE_GROUP }} \
-            --name ${{ env.FRONTEND_APP }} \
-            --query "properties.configuration.ingress.fqdn" -o tsv)
-          echo "Live URL: https://$URL"
+          echo "Live URL: ${{ steps.fqdn.outputs.url }}"

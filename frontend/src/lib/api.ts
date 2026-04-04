@@ -68,8 +68,12 @@ api.interceptors.response.use(
         refreshQueue = [];
         return api(originalRequest);
       } catch {
-        // Refresh failed — clear auth and redirect to login
+        // Refresh failed — clear all auth state and redirect to login
         setAccessToken(null);
+        // Clear Zustand store via dynamic import to avoid circular dependency
+        import("@/stores/auth").then(({ useAuthStore }) => {
+          useAuthStore.getState().clearAuth();
+        });
         if (typeof window !== "undefined") {
           window.location.href = "/login";
         }

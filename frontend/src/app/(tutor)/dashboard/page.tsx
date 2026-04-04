@@ -375,12 +375,12 @@ function todayLabel() {
 // ── Dashboard ────────────────────────────────────────────────────────────────
 
 export default function TutorDashboard() {
-  const { data: students = [], isLoading: studentsLoading } = useQuery<Student[]>({
+  const { data: students = [], isLoading: studentsLoading, isError: studentsError } = useQuery<Student[]>({
     queryKey: ["students"],
     queryFn: () => studentsApi.list().then((r) => r.data),
   });
 
-  const { data: sessions = [], isLoading: sessionsLoading } = useQuery<LessonSession[]>({
+  const { data: sessions = [], isLoading: sessionsLoading, isError: sessionsError } = useQuery<LessonSession[]>({
     queryKey: ["sessions"],
     queryFn: () => sessionsApi.list().then((r) => r.data),
   });
@@ -391,6 +391,7 @@ export default function TutorDashboard() {
   });
 
   const isLoading = studentsLoading || sessionsLoading;
+  const isError = studentsError && sessionsError;
 
   const now = new Date();
   const thisMonth = now.getMonth();
@@ -450,6 +451,26 @@ export default function TutorDashboard() {
       })) ?? [];
 
   const alertCount = flaggedStudents.length;
+
+  if (isError) {
+    return (
+      <div className="p-6 lg:p-8 max-w-[1400px] mx-auto">
+        <div className="rounded-2xl border border-red-200 dark:border-red-500/20 bg-red-50 dark:bg-red-500/10 p-8 text-center space-y-3">
+          <AlertTriangle className="h-8 w-8 text-red-500 mx-auto" />
+          <p className="text-sm font-semibold text-red-700 dark:text-red-400">Unable to load dashboard</p>
+          <p className="text-xs text-red-600 dark:text-red-500">
+            Could not connect to the server. Please refresh the page or try again in a moment.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-2 px-4 py-2 text-xs font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors"
+          >
+            Reload page
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

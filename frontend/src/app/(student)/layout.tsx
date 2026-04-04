@@ -31,6 +31,8 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
       router.replace("/dashboard");
     } else if (role === "parent") {
       router.replace("/parent/dashboard");
+    } else if (role === "admin") {
+      router.replace("/admin/dashboard");
     }
   }, [mounted, isAuthenticated, role, router]);
 
