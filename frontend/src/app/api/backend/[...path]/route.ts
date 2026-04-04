@@ -4,10 +4,11 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
 
-  // Next.js strips trailing slashes from catch-all params — re-add them so
-  // FastAPI routes match exactly and never need to issue a redirect.
-  const trailingSlash = req.nextUrl.pathname.endsWith("/") ? "/" : "";
-  const url = `${backend}/${path.join("/")}${trailingSlash}${req.nextUrl.search ?? ""}`;
+  // Always append trailing slash — FastAPI routes are defined with trailing
+  // slashes. Next.js strips trailing slashes before the proxy runs (browser
+  // redirect), so api.ts calls have no trailing slash. We add it here so
+  // FastAPI receives the exact route with no redirect needed.
+  const url = `${backend}/${path.join("/")}/${req.nextUrl.search ?? ""}`;
 
   // Strip hop-by-hop headers that must not be forwarded to an upstream HTTP/2 server.
   const HOP_BY_HOP = new Set([
