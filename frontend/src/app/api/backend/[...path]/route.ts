@@ -4,11 +4,12 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
 
-  // Always append trailing slash — FastAPI routes are defined with trailing
-  // slashes. Next.js strips trailing slashes before the proxy runs (browser
-  // redirect), so api.ts calls have no trailing slash. We add it here so
-  // FastAPI receives the exact route with no redirect needed.
-  const url = `${backend}/${path.join("/")}/${req.nextUrl.search ?? ""}`;
+  // api.ts sends paths WITHOUT trailing slashes (Next.js redirects them away
+  // before reaching the proxy). FastAPI's redirect_slashes=True issues a 307
+  // for /students -> /students/. With redirect:"follow", Node.js follows that
+  // redirect server-to-server, preserving the Authorization header (unlike the
+  // browser which drops it on cross-origin redirects).
+  const url = `${backend}/${path.join("/")}${req.nextUrl.search ?? ""}`;
 
   // Strip hop-by-hop headers that must not be forwarded to an upstream HTTP/2 server.
   const HOP_BY_HOP = new Set([
