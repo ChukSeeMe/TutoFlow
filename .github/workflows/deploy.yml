@@ -23,10 +23,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4.2.2
 
-      - name: Set lowercase image names
+      - name: Set image names with SHA tag
         run: |
-          echo "IMAGE_BACKEND=${{ secrets.REGISTRY_LOGIN_SERVER }}/tutorflow-backend" >> $GITHUB_ENV
-          echo "IMAGE_FRONTEND=${{ secrets.REGISTRY_LOGIN_SERVER }}/tutorflow-frontend" >> $GITHUB_ENV
+          SHA="${{ github.sha }}"
+          SHORT="${SHA::8}"
+          echo "IMAGE_BACKEND=${{ secrets.REGISTRY_LOGIN_SERVER }}/tutorflow-backend:${SHORT}" >> $GITHUB_ENV
+          echo "IMAGE_FRONTEND=${{ secrets.REGISTRY_LOGIN_SERVER }}/tutorflow-frontend:${SHORT}" >> $GITHUB_ENV
 
       - name: Login to ACR
         uses: docker/login-action@v3.4.0
@@ -40,7 +42,7 @@ jobs:
         with:
           context: ./backend
           push: true
-          tags: ${{ env.IMAGE_BACKEND }}:latest
+          tags: ${{ env.IMAGE_BACKEND }}
           platforms: linux/amd64
 
       - name: Build and push frontend image
@@ -48,7 +50,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: ${{ env.IMAGE_FRONTEND }}:latest
+          tags: ${{ env.IMAGE_FRONTEND }}
           platforms: linux/amd64
           build-args: |
             NEXT_PUBLIC_API_URL=/api/backend
@@ -63,7 +65,7 @@ jobs:
           az containerapp update \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name ${{ env.BACKEND_APP }} \
-            --image ${{ env.IMAGE_BACKEND }}:latest \
+            --image ${{ env.IMAGE_BACKEND }} \
             --set-env-vars \
               "SECRET_KEY=${{ secrets.SECRET_KEY }}" \
               "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" \
@@ -85,7 +87,7 @@ jobs:
           az containerapp update \
             --resource-group ${{ env.RESOURCE_GROUP }} \
             --name ${{ env.FRONTEND_APP }} \
-            --image ${{ env.IMAGE_FRONTEND }}:latest \
+            --image ${{ env.IMAGE_FRONTEND }} \
             --set-env-vars \
               "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
               "NEXTAUTH_URL=${{ steps.fqdn.outputs.url }}" \
