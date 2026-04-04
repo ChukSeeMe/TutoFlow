@@ -6,9 +6,12 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   const { path } = await ctx.params;
   const url = `${backend}/${path.join("/")}${req.nextUrl.search ?? ""}`;
 
-  // Forward all headers except host
+  // Forward headers, stripping hop-by-hop headers that must not be proxied.
+  // Forwarding "connection: keep-alive" to an upstream HTTPS fetch causes
+  // Node.js undici to fail with "fetch failed" on POST/PATCH/DELETE requests.
+  const HOP_BY_HOP = new Set(["host", "connection", "keep-alive", "te", "trailer", "transfer-encoding", "upgrade", "proxy-authorization", "proxy-authenticate"]);
   const headers: Record<string, string> = {};
-  req.headers.forEach((v, k) => { if (k !== "host") headers[k] = v; });
+  req.headers.forEach((v, k) => { if (!HOP_BY_HOP.has(k)) headers[k] = v; });
 
   // Read body once upfront (GET/HEAD have no body)
   const body = ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer();

@@ -30,20 +30,22 @@ export function getAccessToken(): string | null {
   return accessToken;
 }
 
+// Eagerly bootstrap the token from sessionStorage the moment this module loads.
+// This runs before any React component mounts, eliminating the race condition
+// where React Query fires before Zustand's onRehydrateStorage sets the token.
+if (typeof window !== "undefined") {
+  try {
+    const raw = sessionStorage.getItem("tutorflow-auth");
+    if (raw) {
+      const persisted = JSON.parse(raw);
+      const token = persisted?.state?.accessToken ?? null;
+      if (token) setAccessToken(token);
+    }
+  } catch {}
+}
+
 // ── Request interceptor — attach access token ─────────────────────────────────
 api.interceptors.request.use((config) => {
-  // If the module-level token isn't set yet (e.g. page reload before Zustand
-  // rehydration fires setAccessToken), fall back to reading sessionStorage directly.
-  if (!accessToken && typeof window !== "undefined") {
-    try {
-      const raw = sessionStorage.getItem("tutorflow-auth");
-      if (raw) {
-        const stored = JSON.parse(raw);
-        const token = stored?.state?.accessToken ?? null;
-        if (token) setAccessToken(token);
-      }
-    } catch {}
-  }
   if (accessToken && !config.headers["Authorization"]) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
