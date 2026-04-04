@@ -1,52 +1,38 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
-  // Read env var per-request — guarantees runtime value in standalone mode
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
-  // Next.js strips trailing slashes from catch-all params, so we must
-  // re-detect and preserve the trailing slash from the original request URL.
-  const hasTrailingSlash = req.nextUrl.pathname.endsWith("/");
-  const joined = path.join("/");
-  const url = `${backend}/${joined}${hasTrailingSlash ? "/" : ""}${req.nextUrl.search ?? ""}`;
 
-  // Forward headers, stripping hop-by-hop headers that must not be proxied.
-  // Forwarding "connection: keep-alive" to an upstream HTTPS fetch causes
-  // Node.js undici to fail with "fetch failed" on POST/PATCH/DELETE requests.
-  const HOP_BY_HOP = new Set(["host", "connection", "keep-alive", "te", "trailer", "transfer-encoding", "upgrade", "proxy-authorization", "proxy-authenticate"]);
+  // Next.js strips trailing slashes from catch-all params — re-add them so
+  // FastAPI routes match exactly and never need to issue a redirect.
+  const trailingSlash = req.nextUrl.pathname.endsWith("/") ? "/" : "";
+  const url = `${backend}/${path.join("/")}${trailingSlash}${req.nextUrl.search ?? ""}`;
+
+  // Strip hop-by-hop headers that must not be forwarded to an upstream HTTP/2 server.
+  const HOP_BY_HOP = new Set([
+    "host", "connection", "keep-alive", "te", "trailer",
+    "transfer-encoding", "upgrade", "proxy-authorization", "proxy-authenticate",
+  ]);
   const headers: Record<string, string> = {};
   req.headers.forEach((v, k) => { if (!HOP_BY_HOP.has(k)) headers[k] = v; });
 
-  // Read body once upfront (GET/HEAD have no body)
   const body = ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer();
 
-  async function doFetch(targetUrl: string): Promise<Response> {
-    return fetch(targetUrl, {
+  try {
+    // Use follow (default) so Node.js handles any residual redirects automatically.
+    // The URL already has the correct trailing slash so FastAPI won't redirect.
+    const upstream = await fetch(url, {
       method: req.method,
       headers,
       body,
-      // Never auto-follow — Node.js drops Authorization on redirect
-      redirect: "manual",
+      redirect: "follow",
     });
-  }
-
-  try {
-    let upstream = await doFetch(url);
-
-    // FastAPI redirects /foo → /foo/ (or vice versa) and Node.js drops the
-    // Authorization header when following redirects. Re-issue manually.
-    if ([301, 302, 307, 308].includes(upstream.status)) {
-      const location = upstream.headers.get("location");
-      if (location) {
-        const redirectUrl = location.startsWith("http")
-          ? location
-          : `${backend}${location}`;
-        upstream = await doFetch(redirectUrl);
-      }
-    }
 
     const outHeaders: Record<string, string> = {};
-    upstream.headers.forEach((v, k) => { if (k !== "transfer-encoding") outHeaders[k] = v; });
+    upstream.headers.forEach((v, k) => {
+      if (k !== "transfer-encoding") outHeaders[k] = v;
+    });
 
     return new NextResponse(upstream.body, {
       status: upstream.status,
