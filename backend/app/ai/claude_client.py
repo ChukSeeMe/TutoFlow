@@ -43,8 +43,11 @@ async def call_claude(
         content = message.content[0]
         if content.type != "text":
             raise AIServiceError("Unexpected AI response format")
+        text = content.text.strip()
+        if not text:
+            raise AIServiceError("AI returned an empty response. Please try again.")
         log.info("claude_call_success", tokens_used=message.usage.output_tokens)
-        return content.text
+        return text
     except anthropic.APIConnectionError as e:
         log.error("claude_connection_error", error=str(e))
         raise AIServiceError("Could not connect to AI service. Please try again.")
