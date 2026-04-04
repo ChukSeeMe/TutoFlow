@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.models.lesson import LessonPlan, LessonType, DifficultyLevel
+from app.models.lesson import LessonPlan
 from app.models.curriculum import Subject, Topic
 from app.models.student import Student
-from app.schemas.lesson import LessonGenerateRequest, LessonPlanCreate
+from app.schemas.lesson import LessonGenerateRequest
 from app.ai.claude_client import call_claude
 from app.ai.prompts import LESSON_PLAN_SYSTEM, lesson_plan_prompt
 from app.ai.output_parsers import extract_json, validate_lesson_plan
@@ -77,8 +77,8 @@ async def generate_lesson_plan(
         content = extract_json(raw_response)
         content = validate_lesson_plan(content)
     except ValueError as e:
-        log.error("lesson_plan_parse_error", error=str(e))
-        raise AIServiceError("Could not parse lesson plan from AI. Please try again.")
+        log.error("lesson_plan_parse_error", error=str(e), raw_response=raw_response[:500])
+        raise AIServiceError(f"Could not parse lesson plan from AI: {e}. Please try again.")
 
     # Fetch a topic-relevant image (non-blocking — fails silently if key not set)
     image_url = await fetch_topic_image(topic.name, subject.name)

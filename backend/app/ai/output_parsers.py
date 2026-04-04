@@ -29,15 +29,26 @@ def extract_json(text: str) -> Any:
 
 def validate_lesson_plan(data: dict) -> dict:
     """Validate and normalise lesson plan JSON from AI."""
-    required_keys = [
-        "title", "learning_objectives", "success_criteria",
-        "starter_activity", "teacher_explanation", "worked_examples",
-        "guided_practice", "independent_tasks", "differentiated_tasks",
-        "exit_ticket", "homework_suggestion", "parent_summary_draft",
-    ]
-    for key in required_keys:
+    # Only require title — all other keys get sensible defaults if missing
+    if "title" not in data:
+        data["title"] = "Lesson Plan"
+    list_keys = ("learning_objectives", "success_criteria", "scaffolded_support",
+                 "challenge_tasks", "assessment_opportunities", "materials_needed")
+    dict_keys = ("starter_activity", "teacher_explanation", "guided_practice",
+                 "independent_tasks", "differentiated_tasks", "exit_ticket",
+                 "homework_suggestion", "prior_knowledge_check")
+    for key in list_keys:
         if key not in data:
-            data[key] = [] if key in ("learning_objectives", "success_criteria") else {}
+            data[key] = []
+    for key in dict_keys:
+        if key not in data:
+            data[key] = {}
+    if "worked_examples" not in data:
+        data["worked_examples"] = []
+    if "parent_summary_draft" not in data:
+        data["parent_summary_draft"] = ""
+    if "misconceptions" not in data:
+        data["misconceptions"] = []
     return data
 
 
