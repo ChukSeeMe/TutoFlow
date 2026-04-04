@@ -94,7 +94,7 @@ jobs:
               "AZURE_AD_CLIENT_ID=${{ secrets.AZURE_AD_CLIENT_ID }}" \
               "AZURE_AD_CLIENT_SECRET=${{ secrets.AZURE_AD_CLIENT_SECRET }}" \
               "AZURE_AD_TENANT_ID=${{ secrets.AZURE_AD_TENANT_ID }}" \
-              "BACKEND_INTERNAL_URL=http://tutorflow-backend"
+              "BACKEND_INTERNAL_URL=https://tutorflow-backend.whitesea-c505a8c9.uksouth.azurecontainerapps.io"
 
       - name: Get live URL
         run: |
