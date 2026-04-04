@@ -22,7 +22,7 @@ export default function OAuthComplete() {
 
     if (status === "authenticated" && session?.tutorflowToken && session?.tutorflowRole) {
       setAuth(session.tutorflowToken, session.tutorflowRole as UserRole);
-      const role = session.tutorflowRole;
+      const role = (session.tutorflowRole as string).toLowerCase();
       if (role === "tutor")        router.replace("/dashboard");
       else if (role === "student") router.replace("/student/dashboard");
       else if (role === "parent")  router.replace("/parent/dashboard");

@@ -51,10 +51,11 @@ export default function LoginPage() {
       const res = await authApi.login(data.email, data.password);
       const tokens: AuthTokens = res.data;
       setAuth(tokens.access_token, tokens.role);
-      if (tokens.role === "tutor")        router.push("/dashboard");
-      else if (tokens.role === "student") router.push("/student/dashboard");
-      else if (tokens.role === "parent")  router.push("/parent/dashboard");
-      else if (tokens.role === "admin")   router.push("/admin/dashboard");
+      const role = (tokens.role as string).toLowerCase();
+      if (role === "tutor")        router.push("/dashboard");
+      else if (role === "student") router.push("/student/dashboard");
+      else if (role === "parent")  router.push("/parent/dashboard");
+      else if (role === "admin")   router.push("/admin/dashboard");
     } catch (err: unknown) {
       const detail =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
