@@ -1,9 +1,11 @@
 /**
  * Runtime proxy for /api/backend/* → BACKEND_INTERNAL_URL/*
  *
- * next.config.ts rewrites are compiled at build time in standalone mode,
- * so BACKEND_INTERNAL_URL cannot be injected at runtime via rewrites.
- * This API route reads the env var fresh on every request.
+ * next.config rewrites() are evaluated at build time in standalone mode —
+ * BACKEND_INTERNAL_URL is not available then. This API route reads it
+ * fresh on every request (true runtime env var access).
+ *
+ * Note: Next.js 15 makes params a Promise — must be awaited.
  */
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -11,34 +13,33 @@ const BACKEND = (
   process.env.BACKEND_INTERNAL_URL || "http://backend:8000"
 ).replace(/\/$/, "");
 
-async function proxy(req: NextRequest, params: { path: string[] }) {
-  const path = params.path.join("/");
+async function proxy(
+  req: NextRequest,
+  { params }: { params: Promise<{ path: string[] }> }
+) {
+  const { path } = await params;
+  const pathStr = path.join("/");
   const search = req.nextUrl.search ?? "";
-  const url = `${BACKEND}/${path}${search}`;
+  const url = `${BACKEND}/${pathStr}${search}`;
 
   const headers = new Headers();
   req.headers.forEach((value, key) => {
-    // Don't forward host header — backend sees its own host
     if (key.toLowerCase() !== "host") {
       headers.set(key, value);
     }
   });
 
-  const body =
-    req.method === "GET" || req.method === "HEAD" ? undefined : req.body;
+  const hasBody = req.method !== "GET" && req.method !== "HEAD";
 
   try {
     const res = await fetch(url, {
       method: req.method,
       headers,
-      body,
-      // @ts-expect-error — Node.js fetch supports duplex
-      duplex: "half",
+      body: hasBody ? await req.arrayBuffer() : undefined,
     });
 
     const resHeaders = new Headers();
     res.headers.forEach((value, key) => {
-      // Don't forward transfer-encoding — Next.js handles it
       if (key.toLowerCase() !== "transfer-encoding") {
         resHeaders.set(key, value);
       }
@@ -58,18 +59,18 @@ async function proxy(req: NextRequest, params: { path: string[] }) {
   }
 }
 
-export async function GET(req: NextRequest, { params }: { params: { path: string[] } }) {
-  return proxy(req, params);
+export async function GET(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
+  return proxy(req, ctx);
 }
-export async function POST(req: NextRequest, { params }: { params: { path: string[] } }) {
-  return proxy(req, params);
+export async function POST(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
+  return proxy(req, ctx);
 }
-export async function PUT(req: NextRequest, { params }: { params: { path: string[] } }) {
-  return proxy(req, params);
+export async function PUT(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
+  return proxy(req, ctx);
 }
-export async function PATCH(req: NextRequest, { params }: { params: { path: string[] } }) {
-  return proxy(req, params);
+export async function PATCH(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
+  return proxy(req, ctx);
 }
-export async function DELETE(req: NextRequest, { params }: { params: { path: string[] } }) {
-  return proxy(req, params);
+export async function DELETE(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
+  return proxy(req, ctx);
 }
