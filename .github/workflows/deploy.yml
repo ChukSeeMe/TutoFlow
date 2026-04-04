@@ -44,6 +44,7 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_BACKEND }}
           platforms: linux/amd64
+          no-cache: true
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
@@ -52,6 +53,7 @@ jobs:
           push: true
           tags: ${{ env.IMAGE_FRONTEND }}
           platforms: linux/amd64
+          no-cache: true
           build-args: |
             NEXT_PUBLIC_API_URL=/api/backend
 
