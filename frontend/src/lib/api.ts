@@ -32,6 +32,18 @@ export function getAccessToken(): string | null {
 
 // ── Request interceptor — attach access token ─────────────────────────────────
 api.interceptors.request.use((config) => {
+  // If the module-level token isn't set yet (e.g. page reload before Zustand
+  // rehydration fires setAccessToken), fall back to reading sessionStorage directly.
+  if (!accessToken && typeof window !== "undefined") {
+    try {
+      const raw = sessionStorage.getItem("tutorflow-auth");
+      if (raw) {
+        const stored = JSON.parse(raw);
+        const token = stored?.state?.accessToken ?? null;
+        if (token) setAccessToken(token);
+      }
+    } catch {}
+  }
   if (accessToken && !config.headers["Authorization"]) {
     config.headers["Authorization"] = `Bearer ${accessToken}`;
   }
@@ -66,6 +78,11 @@ api.interceptors.response.use(
         setAccessToken(newToken);
         refreshQueue.forEach((cb) => cb(newToken));
         refreshQueue = [];
+        // Explicitly set the new token on the retry config so the request
+        // interceptor doesn't skip it because a (stale) header already exists.
+        if (originalRequest.headers) {
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
+        }
         return api(originalRequest);
       } catch {
         // Refresh failed — clear all auth state and redirect to login
