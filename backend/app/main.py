@@ -40,8 +40,9 @@ app = FastAPI(
     # Hide docs in production
     docs_url="/docs" if not settings.is_production else None,
     redoc_url="/redoc" if not settings.is_production else None,
-    # Keep redirect_slashes=True (default) — the proxy handles 307 redirects
-    # manually to preserve the Authorization header.
+    # Disable automatic slash redirects — the proxy preserves trailing slashes
+    # from the original request, so routes must match exactly.
+    redirect_slashes=False,
 )
 
 # ── Rate limiting ──────────────────────────────────────────────────────────────

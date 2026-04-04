@@ -4,7 +4,11 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   // Read env var per-request — guarantees runtime value in standalone mode
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
-  const url = `${backend}/${path.join("/")}${req.nextUrl.search ?? ""}`;
+  // Next.js strips trailing slashes from catch-all params, so we must
+  // re-detect and preserve the trailing slash from the original request URL.
+  const hasTrailingSlash = req.nextUrl.pathname.endsWith("/");
+  const joined = path.join("/");
+  const url = `${backend}/${joined}${hasTrailingSlash ? "/" : ""}${req.nextUrl.search ?? ""}`;
 
   // Forward headers, stripping hop-by-hop headers that must not be proxied.
   // Forwarding "connection: keep-alive" to an upstream HTTPS fetch causes
