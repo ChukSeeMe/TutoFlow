@@ -4,7 +4,9 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   // Read env var per-request — guarantees runtime value in standalone mode
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
-  const url = `${backend}/${path.join("/")}${req.nextUrl.search ?? ""}`;
+  // Next.js strips trailing slashes from catch-all params, but FastAPI requires them.
+  // Always append "/" to avoid 307 redirects that drop the Authorization header.
+  const url = `${backend}/${path.join("/")}/${req.nextUrl.search ?? ""}`;
 
   // Forward all headers except host
   const headers: Record<string, string> = {};
