@@ -4,20 +4,39 @@ async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }
   // Read env var per-request — guarantees runtime value in standalone mode
   const backend = (process.env.BACKEND_INTERNAL_URL || "http://backend:8000").replace(/\/$/, "");
   const { path } = await ctx.params;
-  // Next.js strips trailing slashes from catch-all params, but FastAPI requires them.
-  // Always append "/" to avoid 307 redirects that drop the Authorization header.
-  const url = `${backend}/${path.join("/")}/${req.nextUrl.search ?? ""}`;
+  const url = `${backend}/${path.join("/")}${req.nextUrl.search ?? ""}`;
 
   // Forward all headers except host
   const headers: Record<string, string> = {};
   req.headers.forEach((v, k) => { if (k !== "host") headers[k] = v; });
 
-  try {
-    const upstream = await fetch(url, {
+  // Read body once upfront (GET/HEAD have no body)
+  const body = ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer();
+
+  async function doFetch(targetUrl: string): Promise<Response> {
+    return fetch(targetUrl, {
       method: req.method,
       headers,
-      body: ["GET", "HEAD"].includes(req.method) ? undefined : await req.arrayBuffer(),
+      body,
+      // Never auto-follow — Node.js drops Authorization on redirect
+      redirect: "manual",
     });
+  }
+
+  try {
+    let upstream = await doFetch(url);
+
+    // FastAPI redirects /foo → /foo/ (or vice versa) and Node.js drops the
+    // Authorization header when following redirects. Re-issue manually.
+    if ([301, 302, 307, 308].includes(upstream.status)) {
+      const location = upstream.headers.get("location");
+      if (location) {
+        const redirectUrl = location.startsWith("http")
+          ? location
+          : `${backend}${location}`;
+        upstream = await doFetch(redirectUrl);
+      }
+    }
 
     const outHeaders: Record<string, string> = {};
     upstream.headers.forEach((v, k) => { if (k !== "transfer-encoding") outHeaders[k] = v; });
