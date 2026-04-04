@@ -67,11 +67,11 @@ async def test_register_duplicate_email(client: AsyncClient, tutor_user):
 
 @pytest.mark.asyncio
 async def test_protected_route_requires_auth(client: AsyncClient):
-    resp = await client.get("/students/")
+    resp = await client.get("/students")
     assert resp.status_code == 401
 
 
 @pytest.mark.asyncio
 async def test_protected_route_with_token(client: AsyncClient, auth_headers):
-    resp = await client.get("/students/", headers=auth_headers)
+    resp = await client.get("/students", headers=auth_headers)
     assert resp.status_code == 200

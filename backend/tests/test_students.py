@@ -5,7 +5,7 @@ from httpx import AsyncClient
 
 @pytest.mark.asyncio
 async def test_list_students_empty(client: AsyncClient, auth_headers):
-    resp = await client.get("/students/", headers=auth_headers)
+    resp = await client.get("/students", headers=auth_headers)
     assert resp.status_code == 200
     # May have students from fixtures but should be a list
     assert isinstance(resp.json(), list)
@@ -14,7 +14,7 @@ async def test_list_students_empty(client: AsyncClient, auth_headers):
 @pytest.mark.asyncio
 async def test_create_student(client: AsyncClient, auth_headers):
     resp = await client.post(
-        "/students/",
+        "/students",
         headers=auth_headers,
         json={
             "first_name": "Chloe",
@@ -63,7 +63,7 @@ async def test_update_student(client: AsyncClient, auth_headers, student_record)
 @pytest.mark.asyncio
 async def test_create_student_requires_auth(client: AsyncClient):
     resp = await client.post(
-        "/students/",
+        "/students",
         json={"first_name": "Test", "last_name": "Student"},
     )
     assert resp.status_code == 401
