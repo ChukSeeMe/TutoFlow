@@ -49,8 +49,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
-        headers: securityHeaders,
+        // HTML pages must not be cached — prevents stale chunk references after deploy
+        source: "/((?!_next/static|_next/image|favicon).*)",
+        headers: [
+          ...securityHeaders,
+          { key: "Cache-Control", value: "no-store, must-revalidate" },
+        ],
+      },
+      {
+        // Static assets can be cached long-term (they have content hashes in filenames)
+        source: "/_next/static/(.*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
       },
     ];
   },
