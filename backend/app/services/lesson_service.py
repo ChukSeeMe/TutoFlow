@@ -102,9 +102,14 @@ async def generate_lesson_plan(
         ai_generated=True,
         tutor_approved=False,
     )
-    db.add(lesson_plan)
-    await db.commit()
-    await db.refresh(lesson_plan)
+    try:
+        db.add(lesson_plan)
+        await db.commit()
+        await db.refresh(lesson_plan)
+    except Exception as db_err:
+        await db.rollback()
+        log.error("lesson_plan_db_save_error", error=str(db_err))
+        raise AIServiceError(f"Database error saving lesson plan: {db_err}")
     return lesson_plan
 
 

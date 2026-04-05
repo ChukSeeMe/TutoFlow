@@ -1,5 +1,5 @@
 import anthropic
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 from app.config import settings
 from app.core.exceptions import AIServiceError
 import structlog
@@ -18,9 +18,12 @@ def get_claude_client() -> anthropic.AsyncAnthropic:
     return _client
 
 
+# Only retry on transient errors (connection issues, rate limits).
+# AIServiceError (HTTPException) and APIStatusError are NOT retried.
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
+    retry=retry_if_exception_type((anthropic.APIConnectionError, anthropic.RateLimitError)),
     reraise=True,
 )
 async def call_claude(
@@ -40,43 +43,52 @@ async def call_claude(
             system=system_prompt,
             messages=[{"role": "user", "content": user_prompt}],
         )
-        content = message.content[0]
-        log.info(
-            "claude_raw_response",
-            content_type=content.type,
-            stop_reason=message.stop_reason,
-            usage=str(message.usage),
-        )
-        if content.type != "text":
-            raise AIServiceError("Unexpected AI response format")
-        text = content.text.strip()
-        log.info(
-            "claude_response_text",
-            length=len(text),
-            stop_reason=message.stop_reason,
-            tokens_used=message.usage.output_tokens,
-            full_response=text,
-        )
-        if not text:
-            raise AIServiceError("AI returned an empty response. Please try again.")
-        if message.stop_reason == "max_tokens":
-            log.error(
-                "claude_response_truncated",
-                tokens_used=message.usage.output_tokens,
-                max_tokens=max_tokens or settings.ai_max_tokens,
-                response_tail=text[-200:],
-            )
-            raise AIServiceError(
-                "AI response was cut off before completing. "
-                "Try a shorter lesson duration or fewer sections."
-            )
-        return text
     except anthropic.APIConnectionError as e:
         log.error("claude_connection_error", error=str(e))
-        raise AIServiceError("Could not connect to AI service. Please try again.")
+        raise  # tenacity will retry
     except anthropic.RateLimitError as e:
         log.warning("claude_rate_limit", error=str(e))
-        raise AIServiceError("AI service rate limit reached. Please wait a moment.")
+        raise  # tenacity will retry
     except anthropic.APIStatusError as e:
         log.error("claude_api_error", status=e.status_code, error=str(e))
         raise AIServiceError(f"AI service error: {e.message}")
+
+    log.info(
+        "claude_raw_response",
+        stop_reason=message.stop_reason,
+        usage=str(message.usage),
+    )
+
+    if not message.content:
+        log.error("claude_empty_content", stop_reason=message.stop_reason)
+        raise AIServiceError("AI returned no content. Please try again.")
+
+    content = message.content[0]
+    if content.type != "text":
+        raise AIServiceError("Unexpected AI response format")
+
+    text = content.text.strip()
+
+    if not text:
+        log.error("claude_empty_text", stop_reason=message.stop_reason)
+        raise AIServiceError("AI returned an empty response. Please try again.")
+
+    if message.stop_reason == "max_tokens":
+        log.error(
+            "claude_response_truncated",
+            tokens_used=message.usage.output_tokens,
+            max_tokens=max_tokens or settings.ai_max_tokens,
+            response_tail=text[-300:],
+        )
+        raise AIServiceError(
+            "AI response was cut off before completing. "
+            "Try a shorter lesson duration or fewer sections."
+        )
+
+    log.info(
+        "claude_call_success",
+        tokens_used=message.usage.output_tokens,
+        response_length=len(text),
+        response_preview=text[:300],
+    )
+    return text
