@@ -41,14 +41,35 @@ async def call_claude(
             messages=[{"role": "user", "content": user_prompt}],
         )
         content = message.content[0]
-        log.info("claude_raw_response", content_type=content.type, stop_reason=message.stop_reason, usage=str(message.usage))
+        log.info(
+            "claude_raw_response",
+            content_type=content.type,
+            stop_reason=message.stop_reason,
+            usage=str(message.usage),
+        )
         if content.type != "text":
             raise AIServiceError("Unexpected AI response format")
         text = content.text.strip()
-        log.info("claude_response_text", length=len(text), preview=text[:200])
+        log.info(
+            "claude_response_text",
+            length=len(text),
+            stop_reason=message.stop_reason,
+            tokens_used=message.usage.output_tokens,
+            full_response=text,
+        )
         if not text:
             raise AIServiceError("AI returned an empty response. Please try again.")
-        log.info("claude_call_success", tokens_used=message.usage.output_tokens)
+        if message.stop_reason == "max_tokens":
+            log.error(
+                "claude_response_truncated",
+                tokens_used=message.usage.output_tokens,
+                max_tokens=max_tokens or settings.ai_max_tokens,
+                response_tail=text[-200:],
+            )
+            raise AIServiceError(
+                "AI response was cut off before completing. "
+                "Try a shorter lesson duration or fewer sections."
+            )
         return text
     except anthropic.APIConnectionError as e:
         log.error("claude_connection_error", error=str(e))

@@ -77,7 +77,7 @@ async def generate_lesson_plan(
         content = extract_json(raw_response)
         content = validate_lesson_plan(content)
     except ValueError as e:
-        log.error("lesson_plan_parse_error", error=str(e), raw_response=raw_response[:500])
+        log.error("lesson_plan_parse_error", error=str(e), raw_response=raw_response)
         raise AIServiceError(f"Could not parse lesson plan from AI: {e}. Please try again.")
 
     # Fetch a topic-relevant image (non-blocking — fails silently if key not set)
