@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     # ── AI ────────────────────────────────────────────────────────────────────
     anthropic_api_key: str = ""
     ai_model: str = "claude-opus-4-6"
-    ai_max_tokens: int = 4096
+    ai_max_tokens: int = 8192
 
     # ── Images (Unsplash) ─────────────────────────────────────────────────────
     unsplash_access_key: str = ""

@@ -6,25 +6,35 @@ from typing import Any
 def extract_json(text: str) -> Any:
     """
     Extract and parse JSON from an AI response.
-    Handles cases where the model wraps JSON in markdown code blocks.
+    Handles markdown code fences (with or without closing fence),
+    and truncated responses.
     """
-    # Strip markdown code fences if present
     text = text.strip()
-    fence_match = re.search(r"```(?:json)?\s*([\s\S]*?)```", text)
-    if fence_match:
-        text = fence_match.group(1).strip()
+
+    # Strip opening code fence (closing fence may be absent if response was truncated)
+    fence_open = re.match(r"```(?:json)?\s*", text)
+    if fence_open:
+        text = text[fence_open.end():]
+        # Remove closing fence if present
+        text = re.sub(r"\s*```\s*$", "", text).strip()
+
+    # Find the first { and attempt to parse from there
+    brace_start = text.find("{")
+    if brace_start == -1:
+        raise ValueError(f"Could not parse AI response as JSON: no JSON object found")
+    text = text[brace_start:]
 
     try:
         return json.loads(text)
-    except json.JSONDecodeError as e:
-        # Attempt to find the first complete JSON object
-        brace_start = text.find("{")
-        if brace_start != -1:
+    except json.JSONDecodeError:
+        # Response may be truncated — find the last complete key-value by
+        # trimming from the end until we get valid JSON
+        for end in range(len(text), 0, -1):
             try:
-                return json.loads(text[brace_start:])
+                return json.loads(text[:end])
             except json.JSONDecodeError:
-                pass
-        raise ValueError(f"Could not parse AI response as JSON: {e}") from e
+                continue
+        raise ValueError(f"Could not parse AI response as JSON: response appears truncated")
 
 
 def validate_lesson_plan(data: dict) -> dict:
