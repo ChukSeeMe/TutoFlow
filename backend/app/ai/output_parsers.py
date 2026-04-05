@@ -21,7 +21,7 @@ def extract_json(text: str) -> Any:
     # Find the first { and attempt to parse from there
     brace_start = text.find("{")
     if brace_start == -1:
-        raise ValueError(f"Could not parse AI response as JSON: no JSON object found")
+        raise ValueError("Could not parse AI response as JSON: no JSON object found")
     text = text[brace_start:]
 
     try:
@@ -34,7 +34,7 @@ def extract_json(text: str) -> Any:
                 return json.loads(text[:end])
             except json.JSONDecodeError:
                 continue
-        raise ValueError(f"Could not parse AI response as JSON: response appears truncated")
+        raise ValueError("Could not parse AI response as JSON: response appears truncated")
 
 
 def validate_lesson_plan(data: dict) -> dict:
