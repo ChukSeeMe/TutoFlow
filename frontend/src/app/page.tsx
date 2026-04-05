@@ -1491,41 +1491,79 @@ export default function Home() {
       {/* ══════════════════════════════════════════════════════════════
           FOOTER — matching image style
       ══════════════════════════════════════════════════════════════ */}
-      <footer className="mt-20 border-t border-white/[0.055]">
-        <div className="mx-auto max-w-6xl px-6 py-10">
-          <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-            <div className="flex flex-col items-center gap-1 md:items-start">
-              <div className="flex items-center gap-2.5">
+      <footer className="mt-20 border-t border-white/[0.07]">
+        <div className="mx-auto max-w-6xl px-6 pt-12 pb-8">
+
+          {/* ── Main grid ── */}
+          <div className="grid grid-cols-2 gap-10 md:grid-cols-4 mb-12">
+
+            {/* Brand column */}
+            <div className="col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2.5 mb-3">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
                   <Brain className="h-3.5 w-3.5 text-white" />
                 </div>
                 <span className="text-sm font-bold text-white">TutorFlow</span>
               </div>
-              <p className="text-xs text-gray-600">© {new Date().getFullYear()} TutorFlow Inc.</p>
+              <p className="text-xs text-gray-500 leading-relaxed mb-4">
+                The UK&apos;s tutoring operating system. AI-powered lesson planning, progress tracking, and parent communication — all in one place.
+              </p>
+              <div className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="text-[10px] text-gray-600">GDPR compliant · UK hosted</span>
+              </div>
             </div>
 
-            <nav className="flex flex-wrap justify-center gap-6 text-sm text-gray-500">
-              {[
-                { label: "Features", href: "#features" },
-                { label: "Portals",  href: "#portals"  },
-                { label: "Contact",  href: "/contact"  },
-                { label: "Sign in",  href: "/login"    },
-              ].map(({ label, href }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  className="transition-colors hover:text-gray-300"
-                  whileHover={{ y: -1 }}
-                >
-                  {label}
-                </motion.a>
-              ))}
-            </nav>
+            {/* Product */}
+            <FooterCol title="Product" links={[
+              { label: "Features",    href: "#features"    },
+              { label: "Portals",     href: "#portals"     },
+              { label: "How it works",href: "#how-it-works"},
+              { label: "Pricing",     href: "/login"       },
+              { label: "Sign in",     href: "/login"       },
+              { label: "Get started", href: "/login"       },
+            ]} />
 
-            <p className="text-xs text-gray-600">All rights reserved.</p>
+            {/* Support */}
+            <FooterCol title="Support" links={[
+              { label: "Contact us",  href: "/contact"  },
+              { label: "FAQ",         href: "#faq"      },
+              { label: "hello@tutorflow.co.uk", href: "mailto:hello@tutorflow.co.uk" },
+            ]} />
+
+            {/* Legal */}
+            <FooterCol title="Legal" links={[
+              { label: "Terms of Use",   href: "/terms"   },
+              { label: "Privacy Policy", href: "/privacy" },
+              { label: "Cookie Policy",  href: "/cookies" },
+              { label: "legal@tutorflow.co.uk", href: "mailto:legal@tutorflow.co.uk" },
+            ]} />
+          </div>
+
+          {/* ── Bottom bar ── */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-[11px] text-gray-600">
+            <p>© {new Date().getFullYear()} TutorFlow Ltd. Registered in England &amp; Wales. All rights reserved.</p>
+            <p>Governed by the laws of England &amp; Wales · ICO registered · UK GDPR compliant</p>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function FooterCol({ title, links }: { title: string; links: { label: string; href: string }[] }) {
+  return (
+    <div>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-500">{title}</p>
+      <ul className="space-y-2">
+        {links.map(({ label, href }) => (
+          <li key={label}>
+            <Link href={href} className="text-xs text-gray-500 transition-colors hover:text-gray-300">
+              {label}
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
