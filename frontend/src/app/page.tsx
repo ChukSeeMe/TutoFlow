@@ -295,9 +295,9 @@ function DashboardMockup() {
         transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
         style={{ willChange: "transform" }}
       >
-        {/* Browser chrome + window */}
+        {/* Browser chrome + window — dark-surface keeps all inner text white */}
         <div
-          className="relative overflow-hidden rounded-2xl"
+          className="relative overflow-hidden rounded-2xl dark-surface"
           style={{
             border: "1px solid rgba(168,85,247,0.28)",
             boxShadow: [
@@ -818,7 +818,7 @@ export default function Home() {
       data-hp=""
       className="min-h-screen overflow-x-hidden transition-colors duration-300"
       style={{
-        background: isDark ? "#07071A" : "#ffffff",
+        background: isDark ? "#07071A" : "#D9D5D4",
         color:      isDark ? "#F2F2FA" : "#0C0C16",
       }}
     >
@@ -947,7 +947,7 @@ export default function Home() {
         style={{
           backdropFilter: "blur(24px) saturate(180%)",
           WebkitBackdropFilter: "blur(24px) saturate(180%)",
-          background: isDark ? "rgba(7,7,26,0.72)" : "rgba(255,255,255,0.88)",
+          background: isDark ? "rgba(7,7,26,0.72)" : "rgba(217,213,212,0.92)",
           borderBottom: isDark ? "1px solid rgba(255,255,255,0.055)" : "1px solid rgba(0,0,0,0.08)",
           transition: "background 0.3s, border-color 0.3s",
         }}
@@ -1002,7 +1002,7 @@ export default function Home() {
             </Link>
             <Link href="/login">
               <motion.span
-                className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold text-white"
+                className="keep-white inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold text-white"
                 style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)", boxShadow: "0 0 22px -4px rgba(192,38,211,0.55)" }}
                 whileHover={{ scale: 1.05, boxShadow: "0 0 32px -4px rgba(192,38,211,0.75)" }}
                 whileTap={{ scale: 0.96 }}
@@ -1060,7 +1060,7 @@ export default function Home() {
           <motion.div variants={heroItem} className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <Link href="/login">
               <motion.span
-                className="inline-flex items-center gap-2 rounded-full px-9 py-3.5 text-sm font-semibold text-white"
+                className="keep-white inline-flex items-center gap-2 rounded-full px-9 py-3.5 text-sm font-semibold text-white"
                 style={{
                   background: "linear-gradient(135deg,#7C3AED,#C026D3)",
                   boxShadow: "0 0 44px -8px rgba(192,38,211,0.7), 0 0 88px -16px rgba(124,58,237,0.45)",
@@ -1146,7 +1146,7 @@ export default function Home() {
         <Reveal className="mt-10 text-center">
           <Link href="/login">
             <motion.span
-              className="inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white"
+              className="keep-white inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white"
               style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)", boxShadow: "0 0 40px -8px rgba(192,38,211,0.6)" }}
               whileHover={{ scale: 1.05, boxShadow: "0 0 60px -8px rgba(192,38,211,0.82)" }}
               whileTap={{ scale: 0.97 }}
@@ -1315,7 +1315,7 @@ export default function Home() {
               <p className="mb-5 text-sm leading-relaxed text-gray-300">&ldquo;{text}&rdquo;</p>
               <div className="flex items-center gap-3">
                 <div
-                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                  className="dark-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
                   style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}
                 >
                   {name.split(" ").map((n) => n[0]).join("")}

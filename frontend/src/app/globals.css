@@ -250,19 +250,53 @@
   100% { background-position: 28px 28px; }
 }
 
-/* ── Homepage light-mode heading & text overrides ─────────────────────────── */
-/* Applied when html does NOT have .dark class and the element is inside [data-hp] */
+/* ── Homepage light-mode text overrides ────────────────────────────────────── */
+/* Background: #D9D5D4 (warm light gray). All near-white text must flip dark.   */
+
+/* 1. Headings */
 html:not(.dark) [data-hp] h1,
 html:not(.dark) [data-hp] h2,
-html:not(.dark) [data-hp] h3 {
+html:not(.dark) [data-hp] h3,
+html:not(.dark) [data-hp] h4 {
   color: rgb(var(--text)) !important;
 }
-html:not(.dark) [data-hp] .hp-muted {
+
+/* 2. White & near-white body text → near-black */
+html:not(.dark) [data-hp] .text-white:not(.keep-white),
+html:not(.dark) [data-hp] [class*="text-white/"]:not(.keep-white) {
+  color: rgb(var(--text)) !important;
+}
+
+/* 3. Light-gray text → readable dark */
+html:not(.dark) [data-hp] .text-gray-100,
+html:not(.dark) [data-hp] .text-gray-200,
+html:not(.dark) [data-hp] .text-gray-300 {
   color: rgb(var(--text-secondary)) !important;
 }
-/* Keep text-white on elements with their own dark background (buttons, mockup, cards) */
-html:not(.dark) [data-hp] .keep-white {
+
+/* 4. Restore ALL colors inside dark-surface containers (mockup, coloured avatars) */
+html:not(.dark) [data-hp] .dark-surface,
+html:not(.dark) [data-hp] .dark-surface h1,
+html:not(.dark) [data-hp] .dark-surface h2,
+html:not(.dark) [data-hp] .dark-surface h3,
+html:not(.dark) [data-hp] .dark-surface h4,
+html:not(.dark) [data-hp] .dark-surface .text-white,
+html:not(.dark) [data-hp] .dark-surface [class*="text-white/"],
+html:not(.dark) [data-hp] .dark-surface .text-gray-100,
+html:not(.dark) [data-hp] .dark-surface .text-gray-200,
+html:not(.dark) [data-hp] .dark-surface .text-gray-300 {
+  color: revert !important;
+}
+
+/* 5. Gradient-bg buttons pinned to white text */
+html:not(.dark) [data-hp] .keep-white,
+html:not(.dark) [data-hp] .keep-white * {
   color: white !important;
+}
+
+/* 6. Muted helper class */
+html:not(.dark) [data-hp] .hp-muted {
+  color: rgb(var(--text-secondary)) !important;
 }
 
 /* ── Light mode overrides ──────────────────────────────────────────────────── */
