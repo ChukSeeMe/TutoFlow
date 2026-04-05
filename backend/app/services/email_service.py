@@ -4,7 +4,6 @@ All calls are fire-and-forget — email failures never break API responses.
 If SMTP is not configured (dev default), emails are logged and skipped.
 """
 import asyncio
-import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 

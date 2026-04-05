@@ -3,7 +3,6 @@ PDF report generation using WeasyPrint + Jinja2.
 Reports are generated server-side and stored on disk.
 Only the tutor and linked parent can download a report.
 """
-import os
 import uuid
 from pathlib import Path
 from jinja2 import Environment, BaseLoader

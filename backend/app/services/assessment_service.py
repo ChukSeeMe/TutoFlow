@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from app.models.assessment import Assessment, AssessmentAttempt, AssessmentType
+from app.models.assessment import Assessment, AssessmentAttempt
 from app.models.curriculum import Topic, Subject
 from app.schemas.assessment import AssessmentGenerateRequest, AttemptCreate
 from app.ai.claude_client import call_claude

@@ -2,8 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 from app.models.progress import ProgressRecord
 from app.models.assessment import AssessmentAttempt, Assessment
-from app.models.curriculum import Topic
-from app.models.student import MasteryStatus
 from app.analytics.mastery_calculator import compute_mastery_status
 import structlog
 

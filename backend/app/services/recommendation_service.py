@@ -1,15 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
-from datetime import datetime, timedelta, timezone
+from sqlalchemy import select, func
 
 from app.models.session import LessonSession, AttendanceStatus, SessionStatus
-from app.models.assessment import AssessmentAttempt, Assessment
+from app.models.assessment import AssessmentAttempt
 from app.models.progress import ProgressRecord
 from app.models.homework import HomeworkTask, HomeworkStatus
 from app.models.observation import ObservationNote
 from app.models.student import Student
 from app.models.curriculum import Topic, Subject
-from app.analytics.recommendation_engine import generate_recommendations, RecommendationResult
+from app.analytics.recommendation_engine import generate_recommendations
 from app.schemas.analytics import StudentAnalyticsSummary, Recommendation
 
 

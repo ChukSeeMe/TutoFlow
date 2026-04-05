@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from sqlalchemy import DateTime, ForeignKey, Float, Integer, Boolean, String, Enum as SAEnum, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, Float, Integer, Boolean, Enum as SAEnum, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 from app.models.student import MasteryStatus

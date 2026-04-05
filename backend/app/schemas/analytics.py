@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from app.models.student import MasteryStatus
 
 
 class Recommendation(BaseModel):

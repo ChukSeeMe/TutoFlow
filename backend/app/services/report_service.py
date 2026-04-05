@@ -1,9 +1,8 @@
-from datetime import datetime, timezone, date
+from datetime import datetime, date
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_
-from app.models.report import Report, ReportType
+from sqlalchemy import select, and_
+from app.models.report import Report
 from app.models.session import LessonSession, AttendanceStatus, SessionStatus
-from app.models.assessment import AssessmentAttempt, Assessment
 from app.models.progress import ProgressRecord
 from app.models.homework import HomeworkTask, HomeworkStatus
 from app.models.observation import ObservationNote, ObservationNoteType
