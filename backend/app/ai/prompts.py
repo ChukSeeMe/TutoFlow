@@ -10,12 +10,20 @@ Privacy rules enforced here:
 
 
 LESSON_PLAN_SYSTEM = """
-You are an expert UK secondary school curriculum designer and experienced teacher.
-You produce structured, high-quality lesson plans for one-to-one and small group tutoring sessions.
-You follow the England National Curriculum and know GCSE and A-Level specifications well.
-Your lesson plans are practical, differentiated, and teacher-facing.
-You never make medical diagnoses or harmful inferences about students.
-You always return your response as valid JSON matching the schema provided.
+You are an expert UK secondary school curriculum planner with deep knowledge of the
+National Curriculum, AQA, Edexcel, and OCR specifications.
+
+Return ONLY the JSON object. No markdown fences, no preamble, no explanation outside the JSON.
+
+Rules:
+- All content must align with UK National Curriculum standards
+- Use UK spelling throughout (e.g. "recognise", "practise", "colour")
+- Keep each section's content field under 150 words
+- Include a maximum of 2 worked examples
+- Include a maximum of 4 practice questions
+- activity_type must be one of: explain | practice | discuss | assess
+- If support_needs_context is provided, reflect scaffolding strategies in differentiation.support
+- If prior_knowledge is provided, reference it in the first section's teacher_notes
 """.strip()
 
 
@@ -34,94 +42,80 @@ def lesson_plan_prompt(
 ) -> str:
     send_section = ""
     if send_context:
-        send_section = f"\nLearning support context (pedagogical strategies only): {send_context}"
+        send_section = f"\nsupport_needs_context: {send_context}"
 
     prior_section = ""
     if prior_knowledge:
-        prior_section = f"\nPrior knowledge: {prior_knowledge}"
+        prior_section = f"\nprior_knowledge: {prior_knowledge}"
 
     notes_section = ""
     if additional_notes:
-        notes_section = f"\nAdditional tutor notes: {additional_notes}"
+        notes_section = f"\nadditional_notes: {additional_notes}"
 
     return f"""
-Create a detailed one-to-one tutoring lesson plan with the following parameters:
+Generate a lesson plan for one-to-one tutoring with these parameters:
 
-Subject: {subject}
-Topic: {topic}
-Year Group: {year_group}
-Key Stage: {key_stage}
-Lesson Type: {lesson_type}
-Duration: {duration_minutes} minutes
-Difficulty Level: {difficulty_level}
-Learning Objective: {learning_objective}{send_section}{prior_section}{notes_section}
+subject: {subject}
+topic: {topic}
+year_group: {year_group}
+key_stage: {key_stage}
+lesson_type: {lesson_type}
+duration_minutes: {duration_minutes}
+difficulty: {difficulty_level}
+objective: {learning_objective}{send_section}{prior_section}{notes_section}
 
-Return a JSON object with EXACTLY this structure:
+Return a JSON object matching this schema exactly:
 {{
-  "title": "string — specific lesson title",
-  "learning_objectives": ["string", ...],
-  "success_criteria": ["Student can...", ...],
-  "prior_knowledge_check": {{
-    "questions": ["string", ...],
-    "purpose": "string"
-  }},
-  "starter_activity": {{
-    "title": "string",
-    "description": "string",
-    "duration_minutes": number,
-    "purpose": "string"
-  }},
-  "teacher_explanation": {{
-    "outline": ["string — key teaching point", ...],
-    "key_vocabulary": ["string", ...],
-    "teaching_notes": "string"
-  }},
+  "title": "string",
+  "subject": "{subject}",
+  "topic": "{topic}",
+  "year_group": "{year_group}",
+  "duration_mins": {duration_minutes},
+  "difficulty": "{difficulty_level}",
+  "objective": "string",
+  "curriculum_links": ["string"],
+  "sections": [
+    {{
+      "title": "string",
+      "duration_mins": number,
+      "content": "string (max 150 words)",
+      "teacher_notes": "string",
+      "activity_type": "explain | practice | discuss | assess"
+    }}
+  ],
   "worked_examples": [
     {{
       "problem": "string",
-      "solution_steps": ["string", ...],
-      "teaching_point": "string"
+      "solution": "string",
+      "steps": ["string"]
     }}
   ],
-  "guided_practice": {{
-    "tasks": ["string", ...],
-    "scaffolding": "string",
-    "duration_minutes": number
-  }},
-  "independent_tasks": {{
-    "tasks": ["string", ...],
-    "duration_minutes": number
-  }},
-  "differentiated_tasks": {{
-    "foundation": ["string", ...],
-    "core": ["string", ...],
-    "higher": ["string", ...],
-    "extension": ["string", ...]
-  }},
-  "scaffolded_support": ["string — specific scaffold strategies", ...],
-  "challenge_tasks": ["string", ...],
-  "misconceptions": [
+  "practice_questions": [
     {{
-      "misconception": "string",
-      "how_to_address": "string"
+      "question": "string",
+      "answer": "string",
+      "marks": number,
+      "difficulty": "foundation | core | extension"
     }}
   ],
-  "assessment_opportunities": ["string", ...],
-  "exit_ticket": {{
-    "questions": ["string", ...],
-    "purpose": "string"
+  "key_vocabulary": [
+    {{
+      "term": "string",
+      "definition": "string"
+    }}
+  ],
+  "homework": {{
+    "task": "string",
+    "instructions": "string",
+    "estimated_time_mins": number
   }},
-  "homework_suggestion": {{
-    "title": "string",
-    "description": "string",
-    "estimated_time_minutes": number
-  }},
-  "parent_summary_draft": "string — friendly plain-English summary for parents, 2-3 sentences",
-  "materials_needed": ["string", ...]
+  "assessment_criteria": ["string"],
+  "differentiation": {{
+    "support": "string",
+    "core": "string",
+    "extension": "string"
+  }}
 }}
-
-Be specific, practical, and appropriately challenging for the year group.
-All content must be England curriculum-aligned.
 """.strip()
 
 

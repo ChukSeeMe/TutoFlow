@@ -9,9 +9,9 @@ from app.models.tutor import Tutor
 from app.models.audit import AuditLog
 from app.schemas.lesson import (
     LessonGenerateRequest, LessonPlanCreate, LessonPlanUpdate,
-    LessonPlanResponse, LessonPlanSummary,
+    LessonPlanResponse, LessonPlanSummary, LessonVisualResponse,
 )
-from app.services.lesson_service import generate_lesson_plan
+from app.services.lesson_service import generate_lesson_plan, generate_lesson_visual
 from app.core.dependencies import require_tutor
 from app.core.exceptions import NotFoundError, ForbiddenError
 
@@ -106,6 +106,45 @@ async def get_lesson_plan(
     if not plan:
         raise NotFoundError("Lesson plan not found")
     return LessonPlanResponse.model_validate(plan)
+
+
+@router.post("/{plan_id}/generate-visual", response_model=LessonVisualResponse)
+async def generate_visual(
+    plan_id: int,
+    current_user: User = Depends(require_tutor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate an interactive HTML visual for a lesson plan (separate from plan generation)."""
+    tutor = await _get_tutor(current_user, db)
+    plan = await generate_lesson_visual(plan_id, tutor.id, db)
+    return LessonVisualResponse(
+        lesson_id=plan.id,
+        visual_status=plan.visual_status,
+        visual_html=plan.visual_html,
+        visual_generated_at=plan.visual_generated_at,
+    )
+
+
+@router.get("/{plan_id}/visual", response_model=LessonVisualResponse)
+async def get_visual(
+    plan_id: int,
+    current_user: User = Depends(require_tutor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Fetch the current visual status and HTML for a lesson plan."""
+    tutor = await _get_tutor(current_user, db)
+    result = await db.execute(
+        select(LessonPlan).where(LessonPlan.id == plan_id, LessonPlan.tutor_id == tutor.id)
+    )
+    plan = result.scalar_one_or_none()
+    if not plan:
+        raise NotFoundError("Lesson plan not found")
+    return LessonVisualResponse(
+        lesson_id=plan.id,
+        visual_status=plan.visual_status,
+        visual_html=plan.visual_html,
+        visual_generated_at=plan.visual_generated_at,
+    )
 
 
 @router.patch("/{plan_id}", response_model=LessonPlanResponse)

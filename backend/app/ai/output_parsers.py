@@ -39,26 +39,20 @@ def extract_json(text: str) -> Any:
 
 def validate_lesson_plan(data: dict) -> dict:
     """Validate and normalise lesson plan JSON from AI."""
-    # Only require title — all other keys get sensible defaults if missing
     if "title" not in data:
         data["title"] = "Lesson Plan"
-    list_keys = ("learning_objectives", "success_criteria", "scaffolded_support",
-                 "challenge_tasks", "assessment_opportunities", "materials_needed")
-    dict_keys = ("starter_activity", "teacher_explanation", "guided_practice",
-                 "independent_tasks", "differentiated_tasks", "exit_ticket",
-                 "homework_suggestion", "prior_knowledge_check")
+    list_keys = ("sections", "worked_examples", "practice_questions",
+                 "key_vocabulary", "curriculum_links", "assessment_criteria")
     for key in list_keys:
-        if key not in data:
+        if key not in data or not isinstance(data[key], list):
             data[key] = []
-    for key in dict_keys:
-        if key not in data:
-            data[key] = {}
-    if "worked_examples" not in data:
-        data["worked_examples"] = []
-    if "parent_summary_draft" not in data:
-        data["parent_summary_draft"] = ""
-    if "misconceptions" not in data:
-        data["misconceptions"] = []
+    # Enforce maximums from the prompt
+    data["worked_examples"] = data["worked_examples"][:2]
+    data["practice_questions"] = data["practice_questions"][:4]
+    if "homework" not in data or not isinstance(data["homework"], dict):
+        data["homework"] = {}
+    if "differentiation" not in data or not isinstance(data["differentiation"], dict):
+        data["differentiation"] = {}
     return data
 
 

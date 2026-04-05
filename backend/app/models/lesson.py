@@ -48,6 +48,12 @@ class LessonPlan(Base):
     ai_generated: Mapped[bool] = mapped_column(Boolean, default=False)
     tutor_approved: Mapped[bool] = mapped_column(Boolean, default=False)
 
+    # Interactive visual (HTML) generated on-demand after lesson plan approval
+    visual_html: Mapped[str | None] = mapped_column(Text, nullable=True)
+    visual_status: Mapped[str] = mapped_column(String(20), nullable=False, default="none")
+    # visual_status values: "none" | "generating" | "ready" | "failed"
+    visual_generated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )

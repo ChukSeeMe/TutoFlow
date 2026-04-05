@@ -139,6 +139,8 @@ export const lessonsApi = {
   get: (id: number) => api.get(`/lessons/${id}`),
   update: (id: number, data: object) => api.patch(`/lessons/${id}`, data),
   create: (data: object) => api.post("/lessons", data),
+  generateVisual: (id: number) => api.post(`/lessons/${id}/generate-visual`),
+  getVisual: (id: number) => api.get(`/lessons/${id}/visual`),
 };
 
 export const sessionsApi = {

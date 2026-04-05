@@ -75,6 +75,8 @@ export type LessonType =
 
 export type DifficultyLevel = "foundation" | "core" | "higher" | "extension";
 
+export type VisualStatus = "none" | "generating" | "ready" | "failed";
+
 export interface LessonPlan {
   id: number;
   tutor_id: number;
@@ -88,8 +90,18 @@ export interface LessonPlan {
   content_json: Record<string, unknown>;
   ai_generated: boolean;
   tutor_approved: boolean;
+  visual_status: VisualStatus;
+  visual_html?: string | null;
+  visual_generated_at?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface LessonVisualResponse {
+  lesson_id: number;
+  visual_status: VisualStatus;
+  visual_html?: string | null;
+  visual_generated_at?: string | null;
 }
 
 // ── Session ───────────────────────────────────────────────────────────────────

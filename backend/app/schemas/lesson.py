@@ -52,10 +52,20 @@ class LessonPlanResponse(BaseModel):
     content_json: dict
     ai_generated: bool
     tutor_approved: bool
+    visual_status: str = "none"
+    visual_html: Optional[str] = None
+    visual_generated_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class LessonVisualResponse(BaseModel):
+    lesson_id: int
+    visual_status: str
+    visual_html: Optional[str] = None
+    visual_generated_at: Optional[datetime] = None
 
 
 class LessonPlanSummary(BaseModel):
