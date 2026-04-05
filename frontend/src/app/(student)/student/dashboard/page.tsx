@@ -6,6 +6,7 @@ import type { StudentDashboardData, HomeworkStatus } from "@/types";
 import { formatDate, formatDatetime } from "@/lib/utils";
 import { BookOpen, CheckCircle, Calendar, ClipboardList, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { StudentNightScene } from "@/components/ui/PortalScenes";
 
 const statusColour: Record<HomeworkStatus, string> = {
   set: "bg-blue-100 text-blue-700",
@@ -57,11 +58,20 @@ export default function StudentDashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">
-          Welcome back{data.student_name ? `, ${data.student_name.split(" ")[0]}` : ""}!
-        </h1>
-        {data.year_group && <p className="text-gray-500 text-sm mt-1">{data.year_group}</p>}
+
+      {/* ── Hero scene banner ────────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-2xl shadow-lg">
+        <StudentNightScene className="w-full" />
+        {/* Overlay text */}
+        <div className="absolute inset-0 flex flex-col justify-end p-5 bg-gradient-to-t from-[#07071a]/80 via-[#07071a]/20 to-transparent">
+          <p className="text-white/60 text-xs font-medium tracking-widest uppercase mb-1">Your learning journey</p>
+          <h1 className="text-2xl font-extrabold text-white leading-tight">
+            Welcome back{data.student_name ? `, ${data.student_name.split(" ")[0]}` : ""}!
+          </h1>
+          {data.year_group && (
+            <p className="text-indigo-300 text-sm mt-1">{data.year_group}</p>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3">

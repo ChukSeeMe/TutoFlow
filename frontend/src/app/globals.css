@@ -250,6 +250,21 @@
   100% { background-position: 28px 28px; }
 }
 
+/* ── Homepage light-mode heading & text overrides ─────────────────────────── */
+/* Applied when html does NOT have .dark class and the element is inside [data-hp] */
+html:not(.dark) [data-hp] h1,
+html:not(.dark) [data-hp] h2,
+html:not(.dark) [data-hp] h3 {
+  color: rgb(var(--text)) !important;
+}
+html:not(.dark) [data-hp] .hp-muted {
+  color: rgb(var(--text-secondary)) !important;
+}
+/* Keep text-white on elements with their own dark background (buttons, mockup, cards) */
+html:not(.dark) [data-hp] .keep-white {
+  color: white !important;
+}
+
 /* ── Light mode overrides ──────────────────────────────────────────────────── */
 :not(.dark) .bg-gray-50       { background-color: rgb(237 239 248); }
 :not(.dark) .bg-gray-100      { background-color: rgb(225 227 242); }

@@ -17,6 +17,7 @@ import { getInitials } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { usersApi } from "@/lib/api";
 import type { TutorProfile } from "@/types";
+import { TutorPlanningScene } from "@/components/ui/PortalScenes";
 
 // ── Navigation structure ────────────────────────────────────────────────────
 
@@ -165,6 +166,15 @@ export function TutorSidebar() {
         <span className="font-bold text-sm tracking-tight text-gray-900 dark:text-zinc-50">
           TutorFlow
         </span>
+      </div>
+
+      {/* ── Scene illustration ────────────────────────────────────────────── */}
+      <div className="relative overflow-hidden mx-3 mt-3 rounded-xl flex-shrink-0">
+        <TutorPlanningScene className="w-full" />
+        <div className="absolute inset-0 flex flex-col justify-end p-3 bg-gradient-to-t from-[#0d0726]/90 via-[#0d0726]/30 to-transparent rounded-xl">
+          <p className="text-white/50 text-[9px] font-semibold uppercase tracking-widest">Tutor workspace</p>
+          <p className="text-white text-xs font-bold leading-tight mt-0.5">Plan. Teach. Inspire.</p>
+        </div>
       </div>
 
       {/* ── Navigation ────────────────────────────────────────────────────── */}

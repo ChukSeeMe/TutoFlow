@@ -9,6 +9,7 @@ import {
   MessageSquare, Receipt, FileText, ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
+import { ParentReviewScene } from "@/components/ui/PortalScenes";
 
 function ChildCard({ child }: { child: ChildSummary }) {
   const attendancePct = child.attendance_rate != null
@@ -101,11 +102,17 @@ export default function ParentDashboard() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">Parent Overview</h1>
-        <p className="text-gray-500 dark:text-zinc-500 text-sm mt-1">
-          Your child&apos;s progress, approved and shared by their tutor.
-        </p>
+
+      {/* ── Hero scene banner ─────────────────────────────────────────── */}
+      <div className="relative overflow-hidden rounded-2xl shadow-lg">
+        <ParentReviewScene className="w-full" />
+        <div className="absolute inset-0 flex flex-col justify-end p-5 bg-gradient-to-t from-[#04091a]/85 via-[#04091a]/20 to-transparent">
+          <p className="text-white/55 text-xs font-medium tracking-widest uppercase mb-1">Family portal</p>
+          <h1 className="text-2xl font-extrabold text-white leading-tight">Parent Overview</h1>
+          <p className="text-sky-300 text-sm mt-1">
+            Your child&apos;s progress, approved and shared by their tutor.
+          </p>
+        </div>
       </div>
 
       {isLoading && (
