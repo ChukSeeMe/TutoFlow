@@ -1,8 +1,8 @@
 import { Scale, AlertCircle } from "lucide-react";
 
 export const metadata = {
-  title: "Terms of Use — TutorFlow",
-  description: "TutorFlow Terms of Use — the legal agreement governing your use of the TutorFlow platform.",
+  title: "Terms of Use — Teach Harbour",
+  description: "Teach Harbour Terms of Use — the legal agreement governing your use of the Teach Harbour platform.",
 };
 
 const LAST_UPDATED = "1 April 2025";
@@ -29,13 +29,13 @@ export default function TermsPage() {
       <div className="mb-8 flex gap-3 rounded-xl border border-amber-500/25 bg-amber-50 dark:bg-amber-500/10 p-4">
         <AlertCircle className="h-5 w-5 flex-shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
         <p className="text-sm text-amber-800 dark:text-amber-300">
-          Please read these Terms carefully before using TutorFlow. By creating an account or using our services you agree to be bound by these Terms. If you do not agree, you must not use TutorFlow.
+          Please read these Terms carefully before using Teach Harbour. By creating an account or using our services you agree to be bound by these Terms. If you do not agree, you must not use Teach Harbour.
         </p>
       </div>
 
       <Section id="1" title="1. Who We Are">
-        <p>TutorFlow Ltd ("<strong>TutorFlow</strong>", "<strong>we</strong>", "<strong>us</strong>" or "<strong>our</strong>") is a company registered in England and Wales. Our registered office is in London, United Kingdom. We operate the tutoring management platform available at <strong>tutorflow.co.uk</strong> (the "<strong>Platform</strong>").</p>
-        <p>Questions about these Terms should be sent to <a href="mailto:legal@tutorflow.co.uk">legal@tutorflow.co.uk</a>.</p>
+        <p>Teach Harbour Ltd ("<strong>Teach Harbour</strong>", "<strong>we</strong>", "<strong>us</strong>" or "<strong>our</strong>") is a company registered in England and Wales. Our registered office is in London, United Kingdom. We operate the tutoring management platform available at <strong>teachharbour.co.uk</strong> (the "<strong>Platform</strong>").</p>
+        <p>Questions about these Terms should be sent to <a href="mailto:legal@teachharbour.co.uk">legal@teachharbour.co.uk</a>.</p>
       </Section>
 
       <Section id="2" title="2. Definitions">
@@ -59,7 +59,7 @@ export default function TermsPage() {
 
       <Section id="4" title="4. Account Registration and Security">
         <p>You must provide accurate, current, and complete information when creating an Account and keep it up to date. You are responsible for maintaining the confidentiality of your login credentials and for all activity that occurs under your Account.</p>
-        <p>You must notify us immediately at <a href="mailto:support@tutorflow.co.uk">support@tutorflow.co.uk</a> if you suspect any unauthorised use of your Account. We are not liable for any loss resulting from unauthorised access to your Account caused by your failure to keep credentials secure.</p>
+        <p>You must notify us immediately at <a href="mailto:support@teachharbour.co.uk">support@teachharbour.co.uk</a> if you suspect any unauthorised use of your Account. We are not liable for any loss resulting from unauthorised access to your Account caused by your failure to keep credentials secure.</p>
         <p>You may not create more than one Account per person, transfer your Account to another person, or use another person's Account without their consent.</p>
       </Section>
 
@@ -82,13 +82,13 @@ export default function TermsPage() {
       </Section>
 
       <Section id="7" title="7. AI Features">
-        <p>TutorFlow provides AI-powered tools to assist Tutors with lesson planning, homework generation, and progress report drafting (collectively, "<strong>AI Features</strong>"). These tools are designed to augment, not replace, professional tutor judgement.</p>
-        <p>All outputs from AI Features must be reviewed and approved by the Tutor before use. TutorFlow does not warrant that AI-generated Content is accurate, complete, appropriate for a particular student, or aligned to any specific examination board's requirements.</p>
+        <p>Teach Harbour provides AI-powered tools to assist Tutors with lesson planning, homework generation, and progress report drafting (collectively, "<strong>AI Features</strong>"). These tools are designed to augment, not replace, professional tutor judgement.</p>
+        <p>All outputs from AI Features must be reviewed and approved by the Tutor before use. Teach Harbour does not warrant that AI-generated Content is accurate, complete, appropriate for a particular student, or aligned to any specific examination board's requirements.</p>
         <p>You are solely responsible for any Content you use, adapt, share, or send based on AI Feature outputs. Curriculum alignment, factual accuracy, and suitability remain the Tutor's professional responsibility.</p>
       </Section>
 
       <Section id="8" title="8. Intellectual Property">
-        <p><strong>Our IP.</strong> The Platform, including its design, software, branding, and all TutorFlow-created content, is owned by TutorFlow Ltd and protected by copyright, trademark, and other intellectual property laws. Nothing in these Terms transfers any ownership of our IP to you.</p>
+        <p><strong>Our IP.</strong> The Platform, including its design, software, branding, and all Teach Harbour-created content, is owned by Teach Harbour Ltd and protected by copyright, trademark, and other intellectual property laws. Nothing in these Terms transfers any ownership of our IP to you.</p>
         <p><strong>Your Content.</strong> You retain ownership of Content you upload to the Platform. By uploading Content you grant us a worldwide, royalty-free licence to host, store, and display that Content solely to provide the Platform to you.</p>
         <p><strong>AI Outputs.</strong> To the extent AI Feature outputs are capable of copyright protection, we assign any such rights to you. We retain a licence to use anonymised, aggregated data derived from AI interactions to improve our models and services.</p>
       </Section>
@@ -101,12 +101,12 @@ export default function TermsPage() {
       </Section>
 
       <Section id="10" title="10. Data Protection">
-        <p>TutorFlow processes personal data in accordance with UK GDPR and the Data Protection Act 2018. Please read our <a href="/privacy">Privacy Policy</a> and <a href="/cookies">Cookie Policy</a> for full details.</p>
-        <p>Tutors act as independent Data Controllers in respect of their Students' and Parents' data. TutorFlow acts as a Data Processor on your behalf. Our Data Processing terms form part of this agreement and are available on request.</p>
+        <p>Teach Harbour processes personal data in accordance with UK GDPR and the Data Protection Act 2018. Please read our <a href="/privacy">Privacy Policy</a> and <a href="/cookies">Cookie Policy</a> for full details.</p>
+        <p>Tutors act as independent Data Controllers in respect of their Students' and Parents' data. Teach Harbour acts as a Data Processor on your behalf. Our Data Processing terms form part of this agreement and are available on request.</p>
       </Section>
 
       <Section id="11" title="11. Safeguarding">
-        <p>TutorFlow is committed to child safety. Tutors are responsible for complying with all applicable safeguarding legislation, including the Children Act 1989 and the Education Act 2011, and for holding appropriate DBS certificates where required.</p>
+        <p>Teach Harbour is committed to child safety. Tutors are responsible for complying with all applicable safeguarding legislation, including the Children Act 1989 and the Education Act 2011, and for holding appropriate DBS certificates where required.</p>
         <p>Any safeguarding concern you become aware of through use of the Platform should be reported to the relevant local safeguarding authority. You must not use the Platform to document or communicate details of safeguarding incidents beyond what is strictly necessary.</p>
       </Section>
 
@@ -122,7 +122,7 @@ export default function TermsPage() {
       </Section>
 
       <Section id="14" title="14. Termination">
-        <p>You may close your Account at any time via Account Settings. We may suspend or terminate your Account immediately if: (a) you breach these Terms materially; (b) we are required to do so by law; (c) continued access would create risk for TutorFlow, other users, or third parties.</p>
+        <p>You may close your Account at any time via Account Settings. We may suspend or terminate your Account immediately if: (a) you breach these Terms materially; (b) we are required to do so by law; (c) continued access would create risk for Teach Harbour, other users, or third parties.</p>
         <p>On termination, your licence to use the Platform ends. We will retain your data in accordance with our Privacy Policy and applicable law. You may request an export of your data before closing your Account.</p>
       </Section>
 
@@ -133,15 +133,15 @@ export default function TermsPage() {
 
       <Section id="16" title="16. Governing Law and Disputes">
         <p>These Terms are governed by the laws of England and Wales. Any dispute arising from or related to these Terms or the Platform shall be subject to the exclusive jurisdiction of the courts of England and Wales, unless you are a consumer in another part of the UK, in which case you may have additional rights.</p>
-        <p>We encourage you to contact us at <a href="mailto:legal@tutorflow.co.uk">legal@tutorflow.co.uk</a> before commencing any formal legal proceedings. Many disputes can be resolved quickly and informally.</p>
+        <p>We encourage you to contact us at <a href="mailto:legal@teachharbour.co.uk">legal@teachharbour.co.uk</a> before commencing any formal legal proceedings. Many disputes can be resolved quickly and informally.</p>
       </Section>
 
       <Section id="17" title="17. Contact Us">
         <p>For questions about these Terms, please contact:</p>
         <div className="not-prose rounded-xl border border-[rgb(var(--border)/0.15)] bg-[rgb(var(--bg-card))] p-5 text-sm">
-          <p className="font-semibold text-[rgb(var(--text))] mb-2">TutorFlow Ltd — Legal Team</p>
-          <p className="text-[rgb(var(--text-secondary))]">Email: <a href="mailto:legal@tutorflow.co.uk" className="text-brand-500 hover:underline">legal@tutorflow.co.uk</a></p>
-          <p className="text-[rgb(var(--text-secondary))]">Post: Legal Department, TutorFlow Ltd, London, United Kingdom</p>
+          <p className="font-semibold text-[rgb(var(--text))] mb-2">Teach Harbour Ltd — Legal Team</p>
+          <p className="text-[rgb(var(--text-secondary))]">Email: <a href="mailto:legal@teachharbour.co.uk" className="text-brand-500 hover:underline">legal@teachharbour.co.uk</a></p>
+          <p className="text-[rgb(var(--text-secondary))]">Post: Legal Department, Teach Harbour Ltd, London, United Kingdom</p>
         </div>
       </Section>
 

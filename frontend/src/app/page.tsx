@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * TutorFlow — Home Page
+ * Teach Harbour — Home Page
  * Visual reference: deep dark navy bg, large morphing purple/fuchsia blob shapes,
  * floating dashboard mockup with 3D-style icons, violet→fuchsia gradient text,
  * glassmorphic feature cards with coloured borders, pill CTA with glow.
@@ -67,11 +67,11 @@ const scrollCard: Variants = {
 ═══════════════════════════════════════════════════════════════════════════ */
 
 const FAQS = [
-  { q: "Who is TutorFlow designed for?",        a: "TutorFlow is built for UK-based tutors — from sole traders to small tutoring businesses. It covers KS1 through A-Level across all major subjects." },
-  { q: "Is my data safe and GDPR compliant?",   a: "Yes. TutorFlow is hosted in the UK/EU with privacy-first principles. Student data is encrypted at rest, access is role-restricted, and you can export or delete data at any time." },
+  { q: "Who is Teach Harbour designed for?",        a: "Teach Harbour is built for UK-based tutors — from sole traders to small tutoring businesses. It covers KS1 through A-Level across all major subjects." },
+  { q: "Is my data safe and GDPR compliant?",   a: "Yes. Teach Harbour is hosted in the UK/EU with privacy-first principles. Student data is encrypted at rest, access is role-restricted, and you can export or delete data at any time." },
   { q: "Do I need to pay extra for AI features?",a: "AI lesson planning, homework generation, and report writing are included in all plans. No hidden per-usage fees." },
   { q: "Can parents and students access their own portal?", a: "Yes. Each user gets a dedicated portal. Students can view homework and track progress. Parents can read session summaries and download reports." },
-  { q: "What curriculum does TutorFlow support?",a: "Aligned to the English National Curriculum from KS1 through KS5, including GCSE and A-Level for major UK exam boards." },
+  { q: "What curriculum does Teach Harbour support?",a: "Aligned to the English National Curriculum from KS1 through KS5, including GCSE and A-Level for major UK exam boards." },
   { q: "Can I try it before committing?",        a: "Get in touch via our contact page and we'll set up a guided demo at a time that suits you." },
 ];
 
@@ -91,9 +91,9 @@ const STEPS = [
 ];
 
 const TESTIMONIALS = [
-  { name: "Sarah M.", role: "Maths & Science Tutor",    loc: "London",     text: "TutorFlow has completely transformed how I run my tutoring business. The AI lesson plans alone save me hours every week, and the parent reports are genuinely impressive.", stars: 5 },
+  { name: "Sarah M.", role: "Maths & Science Tutor",    loc: "London",     text: "Teach Harbour has completely transformed how I run my tutoring business. The AI lesson plans alone save me hours every week, and the parent reports are genuinely impressive.", stars: 5 },
   { name: "James K.", role: "English & History Tutor",  loc: "Manchester", text: "The student progress tracking is exceptional. I can see at a glance which topics need more work before exams — something I could never do manually.", stars: 5 },
-  { name: "Priya D.", role: "Chemistry & Biology Tutor",loc: "Birmingham", text: "Parents love the automated updates. I've had three new referrals just from parents sharing the professional reports TutorFlow generates.", stars: 5 },
+  { name: "Priya D.", role: "Chemistry & Biology Tutor",loc: "Birmingham", text: "Parents love the automated updates. I've had three new referrals just from parents sharing the professional reports Teach Harbour generates.", stars: 5 },
 ];
 
 const STATS = [
@@ -315,7 +315,7 @@ function DashboardMockup() {
             ))}
             <div className="mx-auto flex items-center gap-2 rounded-md bg-white/[0.05] px-4 py-1 text-xs text-gray-500">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              app.tutorflow.co.uk/dashboard
+              app.teachharbour.co.uk/dashboard
             </div>
           </div>
 
@@ -328,7 +328,7 @@ function DashboardMockup() {
                 <div className="flex h-5 w-5 items-center justify-center rounded-md" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
                   <Brain className="h-3 w-3 text-white" />
                 </div>
-                <span className="text-[11px] font-bold text-white">TutorFlow</span>
+                <span className="text-[11px] font-bold text-white">Teach Harbour</span>
               </div>
 
               <nav className="flex-1 space-y-0.5 px-2 py-3">
@@ -965,7 +965,7 @@ export default function Home() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg shadow-lg shadow-violet-500/30" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
               <Brain className="h-4 w-4 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-white">TutorFlow</span>
+            <span className="text-lg font-bold tracking-tight text-white">Teach Harbour</span>
           </motion.div>
 
           {/* Nav links */}
@@ -1152,7 +1152,7 @@ export default function Home() {
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              Get started with TutorFlow <ArrowRight className="h-5 w-5" />
+              Get started with Teach Harbour <ArrowRight className="h-5 w-5" />
             </motion.span>
           </Link>
         </Reveal>
@@ -1428,7 +1428,7 @@ export default function Home() {
             </div>
             <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
               {[
-                { icon: Mail,   label: "hello@tutorflow.co.uk" },
+                { icon: Mail,   label: "hello@teachharbour.co.uk" },
                 { icon: Phone,  label: "+44 20 7946 0000"      },
                 { icon: MapPin, label: "London, United Kingdom" },
               ].map(({ icon: Icon, label }) => (
@@ -1460,7 +1460,7 @@ export default function Home() {
             Ready to <VF>transform your tutoring</VF>?
           </h2>
           <p className="mx-auto mt-4 max-w-md text-base text-gray-400">
-            Join tutors across England and Wales who already use TutorFlow to save time and deliver better results.
+            Join tutors across England and Wales who already use Teach Harbour to save time and deliver better results.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <Link href="/login">
@@ -1503,7 +1503,7 @@ export default function Home() {
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
                   <Brain className="h-3.5 w-3.5 text-white" />
                 </div>
-                <span className="text-sm font-bold text-white">TutorFlow</span>
+                <span className="text-sm font-bold text-white">Teach Harbour</span>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed mb-4">
                 The UK&apos;s tutoring operating system. AI-powered lesson planning, progress tracking, and parent communication — all in one place.
@@ -1528,7 +1528,7 @@ export default function Home() {
             <FooterCol title="Support" links={[
               { label: "Contact us",  href: "/contact"  },
               { label: "FAQ",         href: "#faq"      },
-              { label: "hello@tutorflow.co.uk", href: "mailto:hello@tutorflow.co.uk" },
+              { label: "hello@teachharbour.co.uk", href: "mailto:hello@teachharbour.co.uk" },
             ]} />
 
             {/* Legal */}
@@ -1536,13 +1536,13 @@ export default function Home() {
               { label: "Terms of Use",   href: "/terms"   },
               { label: "Privacy Policy", href: "/privacy" },
               { label: "Cookie Policy",  href: "/cookies" },
-              { label: "legal@tutorflow.co.uk", href: "mailto:legal@tutorflow.co.uk" },
+              { label: "legal@teachharbour.co.uk", href: "mailto:legal@teachharbour.co.uk" },
             ]} />
           </div>
 
           {/* ── Bottom bar ── */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/[0.06] pt-6 text-[11px] text-gray-600">
-            <p>© {new Date().getFullYear()} TutorFlow Ltd. Registered in England &amp; Wales. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} Teach Harbour Ltd. Registered in England &amp; Wales. All rights reserved.</p>
             <p>Governed by the laws of England &amp; Wales · ICO registered · UK GDPR compliant</p>
           </div>
         </div>

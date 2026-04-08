@@ -141,12 +141,12 @@ export default function SettingsPage() {
 
         {/* App info */}
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 space-y-3">
-          <h2 className="text-sm font-semibold text-gray-700">About TutorFlow</h2>
+          <h2 className="text-sm font-semibold text-gray-700">About Teach Harbour</h2>
           <div className="text-sm text-gray-600 space-y-1">
             <p>Version: <span className="font-mono">1.0.0-mvp</span></p>
             <p>Environment: <span className="font-mono text-green-600">development</span></p>
             <p className="text-xs text-gray-400 pt-2">
-              TutorFlow is a tutor-led operating system for private tutors in England.
+              Teach Harbour is a tutor-led operating system for private tutors in England.
               All AI outputs are drafts and require tutor review before use.
               Student data is never used to train AI models.
             </p>

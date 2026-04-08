@@ -89,7 +89,7 @@ export default function RegisterPage() {
           <div className="h-10 w-10 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow-sm mb-3">
             <Brain className="h-5 w-5 text-white" />
           </div>
-          <h1 className="text-lg font-bold text-gray-900 dark:text-zinc-50 tracking-tight">TutorFlow</h1>
+          <h1 className="text-lg font-bold text-gray-900 dark:text-zinc-50 tracking-tight">Teach Harbour</h1>
           <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">Create your tutor account</p>
         </div>
 

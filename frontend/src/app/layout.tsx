@@ -20,7 +20,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TutorFlow — UK Tutoring Operating System",
+  title: "Teach Harbour — UK Tutoring Operating System",
   description:
     "A teacher-led, privacy-first tutoring platform for UK secondary and college educators.",
 };

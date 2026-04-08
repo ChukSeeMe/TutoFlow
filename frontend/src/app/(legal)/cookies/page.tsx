@@ -1,8 +1,8 @@
 import { Cookie, AlertCircle } from "lucide-react";
 
 export const metadata = {
-  title: "Cookie Policy — TutorFlow",
-  description: "TutorFlow Cookie Policy — how we use cookies and how you can manage your preferences.",
+  title: "Cookie Policy — Teach Harbour",
+  description: "Teach Harbour Cookie Policy — how we use cookies and how you can manage your preferences.",
 };
 
 const LAST_UPDATED = "1 April 2025";
@@ -28,7 +28,7 @@ export default function CookiePage() {
       <div className="mb-8 flex gap-3 rounded-xl border border-emerald-500/25 bg-emerald-50 dark:bg-emerald-500/10 p-4">
         <AlertCircle className="h-5 w-5 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
         <p className="text-sm text-emerald-800 dark:text-emerald-300">
-          This policy explains how TutorFlow uses cookies and similar technologies in compliance with the UK Privacy and Electronic Communications Regulations (PECR) and UK GDPR. You can manage your cookie preferences at any time.
+          This policy explains how Teach Harbour uses cookies and similar technologies in compliance with the UK Privacy and Electronic Communications Regulations (PECR) and UK GDPR. You can manage your cookie preferences at any time.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function CookiePage() {
       </Section>
 
       <Section id="2" title="2. How We Use Cookies">
-        <p>TutorFlow uses cookies for the following purposes:</p>
+        <p>Teach Harbour uses cookies for the following purposes:</p>
         <ul>
           <li><strong>Authentication</strong> — to keep you logged in securely during your session and across page loads.</li>
           <li><strong>Preferences</strong> — to remember your settings such as light/dark mode.</li>
@@ -74,7 +74,7 @@ export default function CookiePage() {
             {
               label: "Marketing",
               color: "bg-amber-500/10 border-amber-500/25 text-amber-700 dark:text-amber-400",
-              desc: "TutorFlow does not currently use marketing or advertising cookies on the Platform.",
+              desc: "Teach Harbour does not currently use marketing or advertising cookies on the Platform.",
               consent: "N/A — not used",
             },
           ].map(({ label, color, desc, consent }) => (
@@ -107,7 +107,7 @@ export default function CookiePage() {
                 ["next-auth.session-token", "NextAuth.js session identifier",                         "Strictly Necessary", "30 days"],
                 ["theme",            "Remembers your light/dark mode preference",                      "Functional",         "1 year (localStorage)"],
                 ["sidebar_state",    "Remembers sidebar open/closed state",                           "Functional",         "Session (localStorage)"],
-                ["_tf_analytics",    "Anonymous usage analytics (no PII, no cross-site tracking)",    "Analytics",          "30 days"],
+                ["_th_analytics",    "Anonymous usage analytics (no PII, no cross-site tracking)",    "Analytics",          "30 days"],
               ].map(([name, purpose, type, duration]) => (
                 <tr key={name}>
                   <td className="px-4 py-3 font-mono text-[rgb(var(--text))]">{name}</td>
@@ -139,9 +139,9 @@ export default function CookiePage() {
       <Section id="6" title="6. Managing Your Cookie Preferences">
         <p>You can manage or withdraw consent for non-essential cookies at any time:</p>
         <ul>
-          <li><strong>Cookie banner</strong> — when you first visit TutorFlow, you can set your preferences via the cookie consent banner.</li>
+          <li><strong>Cookie banner</strong> — when you first visit Teach Harbour, you can set your preferences via the cookie consent banner.</li>
           <li><strong>Browser settings</strong> — most browsers allow you to block or delete cookies. Note that disabling strictly necessary cookies will prevent the Platform from functioning correctly.</li>
-          <li><strong>Email request</strong> — contact <a href="mailto:privacy@tutorflow.co.uk">privacy@tutorflow.co.uk</a> to withdraw consent for analytics cookies at any time.</li>
+          <li><strong>Email request</strong> — contact <a href="mailto:privacy@teachharbour.co.uk">privacy@teachharbour.co.uk</a> to withdraw consent for analytics cookies at any time.</li>
         </ul>
         <p>For guidance on managing cookies in specific browsers, visit <a href="https://www.aboutcookies.org" target="_blank" rel="noopener noreferrer">aboutcookies.org</a>.</p>
       </Section>
@@ -157,8 +157,8 @@ export default function CookiePage() {
       <Section id="9" title="9. Contact Us">
         <p>If you have questions about our use of cookies, please contact:</p>
         <div className="not-prose rounded-xl border border-[rgb(var(--border)/0.15)] bg-[rgb(var(--bg-card))] p-5 text-sm">
-          <p className="font-semibold text-[rgb(var(--text))] mb-2">TutorFlow Ltd — Privacy Team</p>
-          <p className="text-[rgb(var(--text-secondary))]">Email: <a href="mailto:privacy@tutorflow.co.uk" className="text-brand-500 hover:underline">privacy@tutorflow.co.uk</a></p>
+          <p className="font-semibold text-[rgb(var(--text))] mb-2">Teach Harbour Ltd — Privacy Team</p>
+          <p className="text-[rgb(var(--text-secondary))]">Email: <a href="mailto:privacy@teachharbour.co.uk" className="text-brand-500 hover:underline">privacy@teachharbour.co.uk</a></p>
         </div>
       </Section>
 

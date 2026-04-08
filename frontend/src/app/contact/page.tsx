@@ -57,9 +57,9 @@ const CONTACT_METHODS = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@tutorflow.co.uk",
+    value: "hello@teachharbour.co.uk",
     detail: "We aim to reply within one business day.",
-    href: "mailto:hello@tutorflow.co.uk",
+    href: "mailto:hello@teachharbour.co.uk",
     color: "bg-indigo-500/15 text-indigo-400",
   },
   {
@@ -151,7 +151,7 @@ export default function ContactPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 shadow-lg shadow-indigo-500/30">
               <Brain className="h-4 w-4 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight">TutorFlow</span>
+            <span className="text-lg font-bold tracking-tight">Teach Harbour</span>
           </Link>
           <div className="flex items-center gap-3">
             <NavThemeToggle />
@@ -173,7 +173,7 @@ export default function ContactPage() {
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-400/25 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-400">
               <Mail className="h-3.5 w-3.5" /> We&apos;d love to hear from you
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Contact TutorFlow</h1>
+            <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Contact Teach Harbour</h1>
             <p className="mx-auto mt-4 max-w-lg text-lg leading-relaxed text-[rgb(var(--text-secondary))]">
               Whether you want a demo, have a question, or just want to say hello — we&apos;re a small UK team and we personally read every message.
             </p>
@@ -328,23 +328,23 @@ export default function ContactPage() {
                 <h3 className="mb-4 font-semibold">Find us online</h3>
                 <div className="space-y-3">
                   <a
-                    href="https://twitter.com/tutorflow_uk"
+                    href="https://twitter.com/teachharbour_uk"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-indigo-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
                   >
                     <Twitter className="h-4 w-4 text-sky-400" />
-                    <span className="flex-1 font-medium">@tutorflow_uk</span>
+                    <span className="flex-1 font-medium">@teachharbour_uk</span>
                     <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-indigo-400 transition-colors">Twitter / X →</span>
                   </a>
                   <a
-                    href="https://linkedin.com/company/tutorflow"
+                    href="https://linkedin.com/company/teachharbour"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-indigo-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
                   >
                     <Linkedin className="h-4 w-4 text-blue-400" />
-                    <span className="flex-1 font-medium">TutorFlow</span>
+                    <span className="flex-1 font-medium">Teach Harbour</span>
                     <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-indigo-400 transition-colors">LinkedIn →</span>
                   </a>
                 </div>
@@ -355,7 +355,7 @@ export default function ContactPage() {
                 <h3 className="mb-4 font-semibold">Quick links</h3>
                 <div className="space-y-2">
                   {[
-                    { label: "Sign in to TutorFlow", href: "/login" },
+                    { label: "Sign in to Teach Harbour", href: "/login" },
                     { label: "View features",        href: "/#features" },
                     { label: "See the portals",      href: "/#portals" },
                     { label: "FAQ",                  href: "/#faq" },
@@ -384,10 +384,10 @@ export default function ContactPage() {
             <div className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-600">
               <Brain className="h-3 w-3 text-white" />
             </div>
-            <span className="font-semibold text-[rgb(var(--text))]">TutorFlow</span>
+            <span className="font-semibold text-[rgb(var(--text))]">Teach Harbour</span>
             <span>· UK Tutoring Operating System</span>
           </div>
-          <span>© {new Date().getFullYear()} TutorFlow. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Teach Harbour. All rights reserved.</span>
         </div>
       </footer>
     </div>

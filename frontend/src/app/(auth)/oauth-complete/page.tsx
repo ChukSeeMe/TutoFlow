@@ -9,7 +9,7 @@ import type { UserRole } from "@/types";
 
 /**
  * After a successful Google/Microsoft OAuth sign-in NextAuth redirects here.
- * We read the TutorFlow JWT out of the NextAuth session and put it in
+ * We read the Teach Harbour JWT out of the NextAuth session and put it in
  * the Zustand store, then navigate to the correct portal.
  */
 export default function OAuthComplete() {
@@ -20,9 +20,9 @@ export default function OAuthComplete() {
   useEffect(() => {
     if (status === "loading") return;
 
-    if (status === "authenticated" && session?.tutorflowToken && session?.tutorflowRole) {
-      setAuth(session.tutorflowToken, session.tutorflowRole as UserRole);
-      const role = (session.tutorflowRole as string).toLowerCase();
+    if (status === "authenticated" && session?.teachHarbourToken && session?.teachHarbourRole) {
+      setAuth(session.teachHarbourToken, session.teachHarbourRole as UserRole);
+      const role = (session.teachHarbourRole as string).toLowerCase();
       if (role === "tutor")        router.replace("/dashboard");
       else if (role === "student") router.replace("/student/dashboard");
       else if (role === "parent")  router.replace("/parent/dashboard");

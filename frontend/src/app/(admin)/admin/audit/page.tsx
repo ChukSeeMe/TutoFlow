@@ -203,7 +203,7 @@ export default function AdminAudit() {
     try {
       const exportParams = { action: actionFilter || undefined, user_id: userIdFilter ? parseInt(userIdFilter) : undefined, student_id: studentFilter ? parseInt(studentFilter) : undefined, ip_address: ipFilter || undefined, date_from: dateFrom || undefined, date_to: dateTo || undefined };
       const res = await adminApi.auditExportCSV(exportParams);
-      triggerDownload(res.data as Blob, `tutorflow-audit-${new Date().toISOString().slice(0,10)}.csv`);
+      triggerDownload(res.data as Blob, `teach-harbour-audit-${new Date().toISOString().slice(0,10)}.csv`);
     } finally { setExporting(null); }
   }
 
@@ -212,7 +212,7 @@ export default function AdminAudit() {
     try {
       const exportParams = { action: actionFilter || undefined, user_id: userIdFilter ? parseInt(userIdFilter) : undefined, student_id: studentFilter ? parseInt(studentFilter) : undefined, ip_address: ipFilter || undefined, date_from: dateFrom || undefined, date_to: dateTo || undefined };
       const res = await adminApi.auditExportPDF(exportParams);
-      triggerDownload(res.data as Blob, `tutorflow-audit-${new Date().toISOString().slice(0,10)}.pdf`);
+      triggerDownload(res.data as Blob, `teach-harbour-audit-${new Date().toISOString().slice(0,10)}.pdf`);
     } finally { setExporting(null); }
   }
 

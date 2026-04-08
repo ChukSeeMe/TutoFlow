@@ -37,7 +37,7 @@ export function AdminSidebar() {
           <Brain className="h-4 w-4 text-white" />
         </div>
         <div>
-          <p className="text-sm font-bold leading-none">TutorFlow</p>
+          <p className="text-sm font-bold leading-none">Teach Harbour</p>
           <p className="mt-0.5 text-[10px] text-[rgb(var(--text-secondary))]">Admin Panel</p>
         </div>
       </div>

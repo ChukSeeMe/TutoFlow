@@ -80,7 +80,7 @@ export default function LoginPage() {
           <div className="h-10 w-10 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow-sm mb-3">
             <Brain className="h-5 w-5 text-white" />
           </div>
-          <h1 className="text-lg font-bold text-gray-900 dark:text-zinc-50 tracking-tight">TutorFlow</h1>
+          <h1 className="text-lg font-bold text-gray-900 dark:text-zinc-50 tracking-tight">Teach Harbour</h1>
           <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">UK Tutoring Operating System</p>
         </div>
 
@@ -221,9 +221,9 @@ export default function LoginPage() {
         <div className="mt-5 rounded-xl px-4 py-3 bg-brand-50 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20 space-y-1.5">
           <p className="text-xs font-semibold text-brand-700 dark:text-brand-400">Demo accounts</p>
           {[
-            { label: "Tutor",   email: "demo@tutorflow.co.uk",    pw: "Demo1234!" },
-            { label: "Student", email: "student@tutorflow.co.uk", pw: "Student1234!" },
-            { label: "Parent",  email: "parent@tutorflow.co.uk",  pw: "Parent1234!" },
+            { label: "Tutor",   email: "demo@teachharbour.co.uk",    pw: "Demo1234!" },
+            { label: "Student", email: "student@teachharbour.co.uk", pw: "Student1234!" },
+            { label: "Parent",  email: "parent@teachharbour.co.uk",  pw: "Parent1234!" },
           ].map(({ label, email, pw }) => (
             <p key={label} className="text-xs text-brand-600 dark:text-brand-500">
               <span className="font-medium">{label}:</span> {email} / {pw}

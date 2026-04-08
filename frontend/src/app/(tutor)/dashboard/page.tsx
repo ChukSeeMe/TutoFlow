@@ -225,7 +225,7 @@ function HeroBanner({ name, today }: { name?: string; today: string }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          {name ? `Welcome back` : "Welcome to TutorFlow"}
+          {name ? `Welcome back` : "Welcome to Teach Harbour"}
           {name && (
             <motion.span
               className="block text-yellow-300"

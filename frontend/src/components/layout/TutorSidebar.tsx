@@ -164,7 +164,7 @@ export function TutorSidebar() {
           <Brain className="h-3.5 w-3.5 text-white" />
         </div>
         <span className="font-bold text-sm tracking-tight text-gray-900 dark:text-zinc-50">
-          TutorFlow
+          Teach Harbour
         </span>
       </div>
 

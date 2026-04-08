@@ -57,7 +57,7 @@ export default function StudentLayout({ children }: { children: React.ReactNode 
           <div className="h-6 w-6 rounded-lg bg-brand-gradient flex items-center justify-center">
             <Brain className="h-3.5 w-3.5 text-white" />
           </div>
-          <span className="text-brand-600 dark:text-brand-400 font-bold text-sm">TutorFlow</span>
+          <span className="text-brand-600 dark:text-brand-400 font-bold text-sm">Teach Harbour</span>
           <span className="text-xs text-gray-400 dark:text-zinc-600 ml-1">Student</span>
         </div>
 

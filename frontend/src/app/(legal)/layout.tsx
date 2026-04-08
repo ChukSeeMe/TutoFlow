@@ -21,7 +21,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-gradient shadow-glow-sm">
               <Brain className="h-3.5 w-3.5 text-white" />
             </div>
-            <span className="font-bold text-sm text-[rgb(var(--text))]">TutorFlow</span>
+            <span className="font-bold text-sm text-[rgb(var(--text))]">Teach Harbour</span>
           </Link>
 
           <nav className="flex items-center gap-1">
@@ -58,7 +58,7 @@ export default function LegalLayout({ children }: { children: React.ReactNode })
       {/* ── Footer ──────────────────────────────────────────────────────── */}
       <footer className="border-t border-[rgb(var(--border)/0.12)] mt-16">
         <div className="mx-auto max-w-5xl px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[rgb(var(--text-tertiary))]">
-          <p>© {new Date().getFullYear()} TutorFlow Ltd. Registered in England &amp; Wales. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Teach Harbour Ltd. Registered in England &amp; Wales. All rights reserved.</p>
           <div className="flex gap-4">
             {LEGAL_NAV.map(({ href, label }) => (
               <Link key={href} href={href} className="hover:text-[rgb(var(--text-secondary))] transition-colors">{label}</Link>

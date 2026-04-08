@@ -35,7 +35,7 @@ export function getAccessToken(): string | null {
 // where React Query fires before Zustand's onRehydrateStorage sets the token.
 if (typeof window !== "undefined") {
   try {
-    const raw = sessionStorage.getItem("tutorflow-auth");
+    const raw = sessionStorage.getItem("teach-harbour-auth");
     if (raw) {
       const persisted = JSON.parse(raw);
       const token = persisted?.state?.accessToken ?? null;

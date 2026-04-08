@@ -2,14 +2,14 @@ import "next-auth";
 
 declare module "next-auth" {
   interface Session {
-    tutorflowToken?: string;
-    tutorflowRole?: string;
+    teachHarbourToken?: string;
+    teachHarbourRole?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    tutorflowToken?: string;
-    tutorflowRole?: string;
+    teachHarbourToken?: string;
+    teachHarbourRole?: string;
   }
 }

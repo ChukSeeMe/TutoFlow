@@ -31,7 +31,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: "tutorflow-auth",
+      name: "teach-harbour-auth",
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
         accessToken: state.accessToken,

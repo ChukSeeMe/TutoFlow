@@ -20,7 +20,7 @@ const handler = NextAuth({
   callbacks: {
     /**
      * Called on first sign-in (account is set).
-     * We call the TutorFlow backend server-side to get a JWT, then stash it in the token.
+     * We call the Teach Harbour backend server-side to get a JWT, then stash it in the token.
      */
     async jwt({ token, account }) {
       if (account) {
@@ -41,8 +41,8 @@ const handler = NextAuth({
 
           if (res.ok) {
             const data = await res.json();
-            token.tutorflowToken = data.access_token;
-            token.tutorflowRole = data.role;
+            token.teachHarbourToken = data.access_token;
+            token.teachHarbourRole = data.role;
           }
         } catch (err) {
           console.error("[NextAuth] OAuth backend sync failed:", err);
@@ -52,8 +52,8 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      session.tutorflowToken = token.tutorflowToken as string | undefined;
-      session.tutorflowRole = token.tutorflowRole as string | undefined;
+      session.teachHarbourToken = token.teachHarbourToken as string | undefined;
+      session.teachHarbourRole = token.teachHarbourRole as string | undefined;
       return session;
     },
   },

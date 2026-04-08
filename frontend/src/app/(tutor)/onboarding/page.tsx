@@ -178,7 +178,7 @@ export default function OnboardingPage() {
           <div className="h-8 w-8 rounded-xl bg-brand-gradient flex items-center justify-center shadow-glow-sm">
             <Brain className="h-4.5 w-4.5 text-white" />
           </div>
-          <span className="text-xl font-bold text-gray-900 dark:text-zinc-100">TutorFlow</span>
+          <span className="text-xl font-bold text-gray-900 dark:text-zinc-100">Teach Harbour</span>
         </div>
 
         {/* Progress strip */}
@@ -217,7 +217,7 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div className="space-y-5">
               <div>
-                <h2 className="text-xl font-bold text-gray-900 dark:text-zinc-100">Welcome to TutorFlow</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-zinc-100">Welcome to Teach Harbour</h2>
                 <p className="text-sm text-gray-500 dark:text-zinc-500 mt-1">
                   Let&apos;s get you set up in under 2 minutes.
                 </p>

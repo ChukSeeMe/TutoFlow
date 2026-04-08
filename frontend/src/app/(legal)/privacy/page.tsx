@@ -1,8 +1,8 @@
 import { Shield, AlertCircle } from "lucide-react";
 
 export const metadata = {
-  title: "Privacy Policy — TutorFlow",
-  description: "TutorFlow Privacy Policy — how we collect, use, and protect your personal data under UK GDPR.",
+  title: "Privacy Policy — Teach Harbour",
+  description: "Teach Harbour Privacy Policy — how we collect, use, and protect your personal data under UK GDPR.",
 };
 
 const LAST_UPDATED = "1 April 2025";
@@ -28,13 +28,13 @@ export default function PrivacyPage() {
       <div className="mb-8 flex gap-3 rounded-xl border border-brand-500/25 bg-brand-50 dark:bg-brand-500/10 p-4">
         <AlertCircle className="h-5 w-5 flex-shrink-0 text-brand-600 dark:text-brand-400 mt-0.5" />
         <p className="text-sm text-brand-800 dark:text-brand-300">
-          TutorFlow Ltd is registered with the Information Commissioner&apos;s Office (ICO) as a Data Controller. This Policy explains how we collect, use, share, and protect your personal data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
+          Teach Harbour Ltd is registered with the Information Commissioner&apos;s Office (ICO) as a Data Controller. This Policy explains how we collect, use, share, and protect your personal data in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.
         </p>
       </div>
 
       <Section id="1" title="1. Who We Are">
-        <p>TutorFlow Ltd ("<strong>TutorFlow</strong>", "<strong>we</strong>", "<strong>us</strong>") is the Data Controller for personal data collected through the TutorFlow platform ("<strong>Platform</strong>"). Our ICO registration number is available on request.</p>
-        <p>Our Data Protection contact: <a href="mailto:privacy@tutorflow.co.uk">privacy@tutorflow.co.uk</a></p>
+        <p>Teach Harbour Ltd ("<strong>Teach Harbour</strong>", "<strong>we</strong>", "<strong>us</strong>") is the Data Controller for personal data collected through the Teach Harbour platform ("<strong>Platform</strong>"). Our ICO registration number is available on request.</p>
+        <p>Our Data Protection contact: <a href="mailto:privacy@teachharbour.co.uk">privacy@teachharbour.co.uk</a></p>
       </Section>
 
       <Section id="2" title="2. Data We Collect">
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
           <li><strong>Service providers (sub-processors)</strong>: Microsoft Azure (cloud hosting, UK/EU data centres), Anthropic (AI features — only anonymised prompt data), Stripe (payment processing), SendGrid (transactional email). All sub-processors are bound by data processing agreements.</li>
           <li><strong>Other users</strong>: Tutors can share progress reports and session summaries with the linked Parent. Students see only their own data.</li>
           <li><strong>Legal requirements</strong>: We may disclose data if required by law, court order, or to protect the safety of a child.</li>
-          <li><strong>Business transfer</strong>: If TutorFlow is acquired or merged, data may be transferred to the successor entity, subject to the same privacy protections.</li>
+          <li><strong>Business transfer</strong>: If Teach Harbour is acquired or merged, data may be transferred to the successor entity, subject to the same privacy protections.</li>
         </ul>
       </Section>
 
@@ -134,7 +134,7 @@ export default function PrivacyPage() {
           <li><strong>Rights related to automated decision-making</strong> — we do not make solely automated decisions with legal or similarly significant effects about you.</li>
           <li><strong>Right to withdraw consent</strong> — where processing is based on consent, you may withdraw it at any time without affecting the lawfulness of prior processing.</li>
         </ul>
-        <p>To exercise any right, email <a href="mailto:privacy@tutorflow.co.uk">privacy@tutorflow.co.uk</a>. We will respond within 30 days. We may request identity verification before processing your request.</p>
+        <p>To exercise any right, email <a href="mailto:privacy@teachharbour.co.uk">privacy@teachharbour.co.uk</a>. We will respond within 30 days. We may request identity verification before processing your request.</p>
       </Section>
 
       <Section id="9" title="9. Cookies">
@@ -153,7 +153,7 @@ export default function PrivacyPage() {
       </Section>
 
       <Section id="11" title="11. Complaints">
-        <p>If you have a concern about how we handle your data, please contact us first at <a href="mailto:privacy@tutorflow.co.uk">privacy@tutorflow.co.uk</a> and we will endeavour to resolve it promptly.</p>
+        <p>If you have a concern about how we handle your data, please contact us first at <a href="mailto:privacy@teachharbour.co.uk">privacy@teachharbour.co.uk</a> and we will endeavour to resolve it promptly.</p>
         <p>You also have the right to lodge a complaint with the <strong>Information Commissioner's Office (ICO)</strong>:</p>
         <div className="not-prose rounded-xl border border-[rgb(var(--border)/0.15)] bg-[rgb(var(--bg-card))] p-5 text-sm">
           <p className="font-semibold text-[rgb(var(--text))] mb-2">Information Commissioner&apos;s Office</p>
