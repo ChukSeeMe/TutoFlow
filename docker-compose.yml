@@ -3,7 +3,7 @@ version: "3.9"
 services:
   db:
     image: postgres:16-alpine
-    container_name: tutorflow_db
+    container_name: teach_harbour_db
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-tutorflow}
@@ -23,7 +23,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: tutorflow_api
+    container_name: teach_harbour_api
     restart: unless-stopped
     env_file:
       - .env
@@ -41,7 +41,7 @@ services:
 
   frontend:
     image: node:22-alpine
-    container_name: tutorflow_web
+    container_name: teach_harbour_web
     working_dir: /app
     restart: unless-stopped
     env_file:

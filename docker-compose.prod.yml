@@ -14,7 +14,7 @@ version: "3.9"
 services:
   db:
     image: postgres:16-alpine
-    container_name: tutorflow_db_prod
+    container_name: teach_harbour_db_prod
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -35,7 +35,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: tutorflow_api_prod
+    container_name: teach_harbour_api_prod
     restart: always
     env_file:
       - .env
@@ -61,7 +61,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: tutorflow_web_prod
+    container_name: teach_harbour_web_prod
     restart: always
     env_file:
       - .env
@@ -75,7 +75,7 @@ services:
 
   nginx:
     image: nginx:1.27-alpine
-    container_name: tutorflow_nginx
+    container_name: teach_harbour_nginx
     restart: always
     ports:
       - "80:80"

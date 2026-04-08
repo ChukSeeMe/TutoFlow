@@ -1,4 +1,4 @@
-# TutorFlow — Development Makefile
+# Teach Harbour — Development Makefile
 # Run `make help` to see all commands
 
 .PHONY: help up down build logs shell-api shell-db seed migrate test-backend test-frontend lint-backend lint-frontend reset
@@ -37,54 +37,54 @@ ps: ## Show running containers
 ##@ Database
 
 migrate: ## Run Alembic migrations inside the backend container
-	docker exec tutorflow_api alembic upgrade head
+	docker exec teach_harbour_api alembic upgrade head
 
 migrate-create: ## Create a new migration (usage: make migrate-create MSG="add_table_name")
-	docker exec tutorflow_api alembic revision --autogenerate -m "$(MSG)"
+	docker exec teach_harbour_api alembic revision --autogenerate -m "$(MSG)"
 
 seed: ## Seed the database with demo data
-	docker exec tutorflow_api python scripts/seed.py
+	docker exec teach_harbour_api python scripts/seed.py
 
 db-shell: ## Open a psql shell
-	docker exec -it tutorflow_db psql -U tutorflow -d tutorflow_db
+	docker exec -it teach_harbour_db psql -U tutorflow -d teach_harbour_db
 
 db-reset: ## WARNING: Drop and recreate the database (destroys all data)
-	docker exec tutorflow_db psql -U tutorflow -c "DROP DATABASE IF EXISTS tutorflow_db;" postgres
-	docker exec tutorflow_db psql -U tutorflow -c "CREATE DATABASE tutorflow_db;" postgres
+	docker exec teach_harbour_db psql -U tutorflow -c "DROP DATABASE IF EXISTS teach_harbour_db;" postgres
+	docker exec teach_harbour_db psql -U tutorflow -c "CREATE DATABASE teach_harbour_db;" postgres
 	$(MAKE) migrate
 	$(MAKE) seed
 
 ##@ Testing
 
 test-backend: ## Run backend tests inside container
-	docker exec tutorflow_api pytest tests/ -v
+	docker exec teach_harbour_api pytest tests/ -v
 
 test-backend-local: ## Run backend tests locally (requires local Python env)
 	cd backend && pytest tests/ -v
 
 test-frontend: ## Run frontend tests
-	docker exec tutorflow_web npx vitest run
+	docker exec teach_harbour_web npx vitest run
 
 test: test-backend test-frontend ## Run all tests
 
 ##@ Code Quality
 
 lint-backend: ## Lint and type-check backend
-	docker exec tutorflow_api python -m mypy app/ --ignore-missing-imports || true
-	docker exec tutorflow_api python -m ruff check app/ || true
+	docker exec teach_harbour_api python -m mypy app/ --ignore-missing-imports || true
+	docker exec teach_harbour_api python -m ruff check app/ || true
 
 lint-frontend: ## Type-check frontend
-	docker exec tutorflow_web npx tsc --noEmit
+	docker exec teach_harbour_web npx tsc --noEmit
 
 lint: lint-backend lint-frontend ## Lint everything
 
 ##@ Development
 
 shell-api: ## Open a bash shell inside the backend container
-	docker exec -it tutorflow_api bash
+	docker exec -it teach_harbour_api bash
 
 shell-web: ## Open a shell inside the frontend container
-	docker exec -it tutorflow_web sh
+	docker exec -it teach_harbour_web sh
 
 env-setup: ## Copy .env.example to .env if .env doesn't exist
 	@if [ ! -f .env ]; then cp .env.example .env && echo ".env created — fill in secrets before running."; else echo ".env already exists."; fi
