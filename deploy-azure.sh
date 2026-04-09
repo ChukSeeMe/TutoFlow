@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# TutorFlow — Azure Infrastructure Setup
+# Teach Harbour — Azure Infrastructure Setup
 # This script creates all Azure resources only (no Docker/image building).
 # Images are built and deployed via GitHub Actions (.github/workflows/deploy.yml)
 # =============================================================================
@@ -38,7 +38,7 @@ done
 
 echo ""
 echo "=========================================="
-echo "  TutorFlow — Azure Infrastructure Setup"
+echo "  Teach Harbour — Azure Infrastructure Setup"
 echo "  Region: $LOCATION"
 echo "=========================================="
 echo ""
@@ -201,7 +201,7 @@ else
       "SMTP_USERNAME=${SMTP_USERNAME:-}" \
       "SMTP_PASSWORD=${SMTP_PASSWORD:-}" \
       "SMTP_FROM_NAME=${SMTP_FROM_NAME:-TutorFlow}" \
-      "SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@tutorflow.co.uk}" \
+      "SMTP_FROM_EMAIL=${SMTP_FROM_EMAIL:-noreply@teachharbour.co.uk}" \
     --output table
 fi
 
