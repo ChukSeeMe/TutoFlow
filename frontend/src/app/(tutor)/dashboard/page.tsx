@@ -14,7 +14,7 @@ import {
   ArrowRight, Wand2, Plus, Brain, ChevronRight, Clock,
   CheckCircle2, Layers,
 } from "lucide-react";
-import { studentsApi, sessionsApi, analyticsApi } from "@/lib/api";
+import { studentsApi, sessionsApi, analyticsApi, getAccessToken } from "@/lib/api";
 import type { Student, LessonSession, StudentAnalytics } from "@/types";
 import { formatDatetime, getInitials, cn } from "@/lib/utils";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -375,23 +375,28 @@ function todayLabel() {
 // ── Dashboard ────────────────────────────────────────────────────────────────
 
 export default function TutorDashboard() {
+  const hasToken = !!getAccessToken();
+
   const { data: students = [], isLoading: studentsLoading, isError: studentsError } = useQuery<Student[]>({
     queryKey: ["students"],
     queryFn: () => studentsApi.list().then((r) => r.data),
+    enabled: hasToken,
   });
 
   const { data: sessions = [], isLoading: sessionsLoading, isError: sessionsError } = useQuery<LessonSession[]>({
     queryKey: ["sessions"],
     queryFn: () => sessionsApi.list().then((r) => r.data),
+    enabled: hasToken,
   });
 
   const { data: interventionsData } = useQuery({
     queryKey: ["interventions-dashboard"],
     queryFn: () => analyticsApi.interventionsDashboard().then((r) => r.data),
+    enabled: hasToken,
   });
 
-  const isLoading = studentsLoading || sessionsLoading;
-  const isError = studentsError && sessionsError;
+  const isLoading = hasToken && (studentsLoading || sessionsLoading);
+  const isError = studentsError || sessionsError;
 
   const now = new Date();
   const thisMonth = now.getMonth();

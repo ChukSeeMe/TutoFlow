@@ -24,7 +24,7 @@ import {
   Brain, BookOpen, BarChart3, ArrowRight,
   GraduationCap, Sparkles, CheckCircle2, Star,
   TrendingUp, FileText, MessageSquare, Moon, Sun,
-  Mail, Phone, MapPin, Shield, ChevronDown,
+  Mail, MapPin, Shield, ChevronDown,
   Cpu, Lock, Calendar, Users, Zap,
 } from "lucide-react";
 import { useAuthStore } from "@/stores/auth";
@@ -1220,6 +1220,72 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
+          PORTALS  (Tutor / Student / Parent) — right after stats
+      ══════════════════════════════════════════════════════════════ */}
+      <section id="portals" className="mx-auto mt-20 max-w-6xl px-6">
+        <Reveal className="mb-12 text-center">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Role-based portals</p>
+          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
+            A dedicated experience <VF>for everyone</VF>
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-base text-gray-400">
+            Three tailored portals — each designed for the people who use it every day.
+          </p>
+        </Reveal>
+        <motion.div
+          className="grid gap-5 md:grid-cols-3"
+          variants={scrollGrid}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+        >
+          {PORTALS.map(({ role, href, icon: Icon, scene: Scene, border, bg, glow, accent, ctaBg, features }) => (
+            <MotionLink
+              key={role}
+              href={href}
+              variants={scrollCard}
+              className={cn(
+                "group block rounded-2xl border overflow-hidden backdrop-blur-sm bg-gradient-to-br cursor-pointer",
+                border, bg,
+              )}
+              whileHover={{ y: -6, boxShadow: `0 0 52px -8px ${glow}` }}
+              transition={{ type: "spring", stiffness: 280, damping: 24 }}
+            >
+              {/* Scene illustration header */}
+              <div className="relative overflow-hidden">
+                <Scene className="w-full transition-transform duration-500 group-hover:scale-[1.03]" />
+                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#07071a] to-transparent" />
+                <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border bg-white/[0.06]", border)}>
+                    <Icon className={cn("h-3.5 w-3.5", accent)} />
+                  </div>
+                  <span className="text-sm font-bold text-white">{role} Portal</span>
+                </div>
+              </div>
+              {/* Features list */}
+              <div className="p-5 pt-4">
+                <ul className="space-y-2.5 mb-5">
+                  {features.map((feat) => (
+                    <li key={feat} className="flex items-center gap-2.5 text-sm text-gray-400">
+                      <CheckCircle2 className={cn("h-4 w-4 shrink-0", accent)} />
+                      {feat}
+                    </li>
+                  ))}
+                </ul>
+                <div className={cn(
+                  "flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-semibold transition-colors duration-200",
+                  ctaBg, accent,
+                )}>
+                  <span>Open {role} Portal</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+                </div>
+              </div>
+            </MotionLink>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
           FULL FEATURES GRID  (6 cards)
       ══════════════════════════════════════════════════════════════ */}
       <section id="features" className="mx-auto mt-28 max-w-6xl px-6">
@@ -1331,77 +1397,6 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          PORTALS
-      ══════════════════════════════════════════════════════════════ */}
-      <section id="portals" className="mx-auto mt-28 max-w-6xl px-6">
-        <Reveal className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Role-based portals</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
-            A dedicated experience <VF>for everyone</VF>
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-base text-gray-400">
-            Three tailored portals — each designed for the people who use it every day.
-          </p>
-        </Reveal>
-        <motion.div
-          className="grid gap-5 md:grid-cols-3"
-          variants={scrollGrid}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-        >
-          {PORTALS.map(({ role, href, icon: Icon, scene: Scene, border, bg, glow, accent, ctaBg, features }) => (
-            <MotionLink
-              key={role}
-              href={href}
-              variants={scrollCard}
-              className={cn(
-                "group block rounded-2xl border overflow-hidden backdrop-blur-sm bg-gradient-to-br cursor-pointer",
-                border, bg,
-              )}
-              whileHover={{ y: -6, boxShadow: `0 0 52px -8px ${glow}` }}
-              transition={{ type: "spring", stiffness: 280, damping: 24 }}
-            >
-              {/* Scene illustration header */}
-              <div className="relative overflow-hidden">
-                <Scene className="w-full transition-transform duration-500 group-hover:scale-[1.03]" />
-                {/* Gradient fade into card body */}
-                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#07071a] to-transparent" />
-                {/* Portal label overlay */}
-                <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border bg-white/[0.06]", border)}>
-                    <Icon className={cn("h-3.5 w-3.5", accent)} />
-                  </div>
-                  <span className="text-sm font-bold text-white">{role} Portal</span>
-                </div>
-              </div>
-
-              {/* Features list */}
-              <div className="p-5 pt-4">
-                <ul className="space-y-2.5 mb-5">
-                  {features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2.5 text-sm text-gray-400">
-                      <CheckCircle2 className={cn("h-4 w-4 shrink-0", accent)} />
-                      {feat}
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA row */}
-                <div className={cn(
-                  "flex items-center justify-between px-4 py-2.5 rounded-xl border text-sm font-semibold transition-colors duration-200",
-                  ctaBg, accent,
-                )}>
-                  <span>Open {role} Portal</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
-                </div>
-              </div>
-            </MotionLink>
-          ))}
-        </motion.div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
           FAQ
       ══════════════════════════════════════════════════════════════ */}
       <section id="faq" className="mx-auto mt-28 max-w-3xl px-6">
@@ -1429,7 +1424,6 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
               {[
                 { icon: Mail,   label: "hello@teachharbour.co.uk" },
-                { icon: Phone,  label: "+44 20 7946 0000"      },
                 { icon: MapPin, label: "London, United Kingdom" },
               ].map(({ icon: Icon, label }) => (
                 <motion.div
