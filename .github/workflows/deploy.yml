@@ -66,19 +66,36 @@ jobs:
           cache-from: type=gha,scope=backend
           cache-to: type=gha,mode=max,scope=backend
 
+      - name: Set up Node.js for frontend build
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci --legacy-peer-deps
+
+      - name: Build Next.js on runner
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_URL: /api/backend
+          NODE_ENV: production
+        run: npm run build
+
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
+          file: ./frontend/Dockerfile.ci
           push: true
           tags: |
             ${{ env.IMAGE_FRONTEND }}
             ${{ env.IMAGE_FRONTEND_LATEST }}
           platforms: linux/amd64
-          cache-from: type=gha,scope=frontend
-          cache-to: type=gha,mode=max,scope=frontend
-          build-args: |
-            NEXT_PUBLIC_API_URL=/api/backend
+          cache-from: type=gha,scope=frontend-image
+          cache-to: type=gha,mode=max,scope=frontend-image
 
       - name: Login to Azure
         uses: azure/login@v2.3.0
