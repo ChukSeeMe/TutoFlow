@@ -24,16 +24,16 @@ limiter = Limiter(key_func=get_remote_address)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    log.info("tutorflow_starting", environment=settings.environment)
+    log.info("teach_harbour_starting", environment=settings.environment)
     if settings.environment == "development":
         await create_all_tables()
         log.info("database_tables_ready")
     yield
-    log.info("tutorflow_shutdown")
+    log.info("teach_harbour_shutdown")
 
 
 app = FastAPI(
-    title="TutorFlow API",
+    title="Teach Harbour API",
     description="UK tutoring operating system — teacher-led, privacy-first.",
     version="1.0.0",
     lifespan=lifespan,
@@ -74,7 +74,7 @@ async def global_exception_handler(request: Request, exc: Exception):
 # ── Health check ───────────────────────────────────────────────────────────────
 @app.get("/health", tags=["system"])
 async def health():
-    return {"status": "ok", "app": "TutorFlow", "version": "1.0.0"}
+    return {"status": "ok", "app": "Teach Harbour", "version": "1.0.0"}
 
 
 # ── Routers ────────────────────────────────────────────────────────────────────

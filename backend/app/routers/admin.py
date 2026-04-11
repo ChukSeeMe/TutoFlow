@@ -465,7 +465,7 @@ _AUDIT_PDF_TEMPLATE = """<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <h1>TutorFlow — Audit Log Report</h1>
+  <h1>Teach Harbour — Audit Log Report</h1>
   <p class="sub">{{ title }}</p>
   <div class="meta">
     <strong>Generated:</strong> {{ generated_at }}<br>
@@ -505,8 +505,8 @@ _AUDIT_PDF_TEMPLATE = """<!DOCTYPE html>
     </tbody>
   </table>
   <div class="footer">
-    TutorFlow — Confidential. Generated for compliance/audit purposes only.
-    © {{ year }} TutorFlow. All rights reserved.
+    Teach Harbour — Confidential. Generated for compliance/audit purposes only.
+    © {{ year }} Teach Harbour. All rights reserved.
   </div>
 </body>
 </html>"""
@@ -701,7 +701,7 @@ async def export_audit_csv(
             str(r.detail_json) if r.detail_json else "",
         ])
 
-    filename = f"tutorflow-audit-{datetime.now().strftime('%Y%m%d-%H%M')}.csv"
+    filename = f"teach-harbour-audit-{datetime.now().strftime('%Y%m%d-%H%M')}.csv"
     return StreamingResponse(
         iter([buf.getvalue()]),
         media_type="text/csv",
@@ -739,7 +739,7 @@ async def export_audit_pdf(
         date_to=date_to,
         filter_summary=", ".join(parts) if parts else "None",
     )
-    filename = f"tutorflow-audit-{datetime.now().strftime('%Y%m%d-%H%M')}.pdf"
+    filename = f"teach-harbour-audit-{datetime.now().strftime('%Y%m%d-%H%M')}.pdf"
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",

@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     )
 
     # ── App ───────────────────────────────────────────────────────────────────
-    app_name: str = "TutorFlow API"
+    app_name: str = "Teach Harbour API"
     environment: str = "development"
     log_level: str = "INFO"
 
@@ -47,8 +47,8 @@ class Settings(BaseSettings):
     smtp_port: int = 587
     smtp_username: str = ""
     smtp_password: str = ""
-    smtp_from_name: str = "TutorFlow"
-    smtp_from_email: str = "noreply@tutorflow.co.uk"
+    smtp_from_name: str = "Teach Harbour"
+    smtp_from_email: str = "noreply@teachharbour.co.uk"
     smtp_use_tls: bool = True
     app_base_url: str = "http://localhost:3000"
 

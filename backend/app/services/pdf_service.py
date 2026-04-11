@@ -34,7 +34,7 @@ REPORT_TEMPLATE = """
 <body>
   <div class="header">
     <div>
-      <h1>TutorFlow Progress Report</h1>
+      <h1>Teach Harbour Progress Report</h1>
       <p>Prepared by: <strong>{{ tutor_name }}</strong></p>
     </div>
     <div>
@@ -107,7 +107,7 @@ REPORT_TEMPLATE = """
   <p>Homework: {{ data.homework_status }}</p>
 
   <div class="disclaimer">
-    This report was prepared by your tutor using TutorFlow and has been reviewed and approved
+    This report was prepared by your tutor using Teach Harbour and has been reviewed and approved
     before sending. Please contact your tutor with any questions.
   </div>
 </body>

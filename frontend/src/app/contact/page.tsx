@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Brain, Mail, Phone, MapPin, Clock, ArrowLeft, CheckCircle2, Send, Twitter, Linkedin } from "lucide-react";
+import { Brain, Mail, MapPin, Clock, ArrowLeft, CheckCircle2, Send, Twitter, Linkedin } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 
@@ -61,14 +61,6 @@ const CONTACT_METHODS = [
     detail: "We aim to reply within one business day.",
     href: "mailto:hello@teachharbour.co.uk",
     color: "bg-indigo-500/15 text-indigo-400",
-  },
-  {
-    icon: Phone,
-    label: "Phone / WhatsApp",
-    value: "+44 7700 000000",
-    detail: "Mon – Fri, 9am – 6pm GMT.",
-    href: "tel:+447700000000",
-    color: "bg-violet-500/15 text-violet-400",
   },
   {
     icon: MapPin,

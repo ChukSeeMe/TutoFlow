@@ -189,7 +189,7 @@ async def oauth_callback(
 ):
     """
     Called server-side by NextAuth after a successful Google or Microsoft OAuth sign-in.
-    Finds or creates the user, then returns a TutorFlow JWT.
+    Finds or creates the user, then returns a Teach Harbour JWT.
     New OAuth users always get the TUTOR role — the tutor can invite students/parents normally.
     """
     email = payload.email.lower()

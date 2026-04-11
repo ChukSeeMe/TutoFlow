@@ -1,8 +1,9 @@
 "use client";
 
+import React from "react";
 import { motion, type MotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
-import type { ElementType, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 type GlowVariant = "none" | "brand" | "rose" | "emerald" | "amber";
 
@@ -87,26 +88,21 @@ export function GlassCard({
 }
 
 /** Motion-wrapped card with animation variants for stagger parents */
-export const MotionGlassCard = motion(
-  function MotionGlassCardInner({
-    children,
-    className,
-    glow = "none",
-    gradient = false,
-    interactive = false,
-    onClick,
-    ...rest
-  }: GlassCardProps & MotionProps) {
-    return (
-      <GlassCard
-        className={className}
-        glow={glow}
-        gradient={gradient}
-        interactive={interactive}
-        onClick={onClick}
-      >
-        {children}
-      </GlassCard>
-    );
-  }
-);
+const MotionGlassCardInner = React.forwardRef(function MotionGlassCardInner(
+  { children, className, glow = "none", gradient = false, interactive = false, onClick, ...rest }: GlassCardProps & MotionProps,
+  ref: React.ForwardedRef<HTMLDivElement>
+) {
+  return (
+    <GlassCard
+      className={className}
+      glow={glow}
+      gradient={gradient}
+      interactive={interactive}
+      onClick={onClick}
+    >
+      {children}
+    </GlassCard>
+  );
+});
+MotionGlassCardInner.displayName = "MotionGlassCardInner";
+export const MotionGlassCard = motion.create(MotionGlassCardInner);

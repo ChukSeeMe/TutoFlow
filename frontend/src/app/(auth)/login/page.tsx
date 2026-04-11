@@ -217,19 +217,6 @@ export default function LoginPage() {
           </Link>
         </p>
 
-        {/* Demo credentials */}
-        <div className="mt-5 rounded-xl px-4 py-3 bg-brand-50 dark:bg-brand-500/10 border border-brand-100 dark:border-brand-500/20 space-y-1.5">
-          <p className="text-xs font-semibold text-brand-700 dark:text-brand-400">Demo accounts</p>
-          {[
-            { label: "Tutor",   email: "demo@teachharbour.co.uk",    pw: "Demo1234!" },
-            { label: "Student", email: "student@teachharbour.co.uk", pw: "Student1234!" },
-            { label: "Parent",  email: "parent@teachharbour.co.uk",  pw: "Parent1234!" },
-          ].map(({ label, email, pw }) => (
-            <p key={label} className="text-xs text-brand-600 dark:text-brand-500">
-              <span className="font-medium">{label}:</span> {email} / {pw}
-            </p>
-          ))}
-        </div>
       </div>
     </div>
   );

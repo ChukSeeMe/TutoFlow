@@ -33,7 +33,7 @@ def _base_template(title: str, body_html: str) -> str:
           <!-- Header -->
           <tr>
             <td style="background:#2563eb;padding:24px 32px;">
-              <p style="margin:0;color:#ffffff;font-size:20px;font-weight:700;">TutorFlow</p>
+              <p style="margin:0;color:#ffffff;font-size:20px;font-weight:700;">Teach Harbour</p>
             </td>
           </tr>
           <!-- Body -->
@@ -46,7 +46,7 @@ def _base_template(title: str, body_html: str) -> str:
           <tr>
             <td style="padding:16px 32px;border-top:1px solid #f3f4f6;background:#f9fafb;">
               <p style="margin:0;font-size:12px;color:#9ca3af;">
-                This message was sent by TutorFlow. All information shared via TutorFlow has been
+                This message was sent by Teach Harbour. All information shared via Teach Harbour has been
                 personally reviewed and approved by your child&rsquo;s tutor.
               </p>
             </td>
@@ -61,7 +61,7 @@ def _base_template(title: str, body_html: str) -> str:
 
 def _welcome_html(first_name: str) -> str:
     body = f"""
-      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Welcome to TutorFlow, {first_name}!</h1>
+      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Welcome to Teach Harbour, {first_name}!</h1>
       <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
         Your tutor account is ready. You can now start adding students, planning lessons,
         and tracking progress.
@@ -75,7 +75,7 @@ def _welcome_html(first_name: str) -> str:
         If you didn&rsquo;t create this account, please ignore this email.
       </p>
     """
-    return _base_template("Welcome to TutorFlow", body)
+    return _base_template("Welcome to Teach Harbour", body)
 
 
 def _report_shared_html(parent_name: str, student_name: str, report_title: str, tutor_name: str) -> str:
@@ -162,7 +162,7 @@ def _fire(coro) -> None:
 def send_welcome(to_email: str, first_name: str) -> None:
     _fire(_send(
         to_email=to_email,
-        subject="Welcome to TutorFlow",
+        subject="Welcome to Teach Harbour",
         html=_welcome_html(first_name),
     ))
 

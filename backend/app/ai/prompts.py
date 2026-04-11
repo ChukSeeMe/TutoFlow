@@ -1,5 +1,5 @@
 """
-All AI prompts for TutorFlow.
+All AI prompts for Teach Harbour.
 
 Privacy rules enforced here:
 - Student first names are used only where needed (not full names, not dates of birth)
