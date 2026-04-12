@@ -97,6 +97,9 @@ jobs:
           cache-from: type=gha,scope=frontend-image
           cache-to: type=gha,mode=max,scope=frontend-image
 
+      - name: Install Azure CLI
+        run: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
       - name: Login to Azure
         uses: azure/login@v2.3.0
         with:
