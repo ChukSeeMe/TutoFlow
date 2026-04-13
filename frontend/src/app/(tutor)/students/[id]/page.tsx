@@ -1,18 +1,30 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useParams, useRouter } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   studentsApi, progressApi, analyticsApi, observationsApi, sessionsApi, homeworkApi,
 } from "@/lib/api";
 import type { StudentDetail, ProgressRecord, StudentAnalytics, ObservationNote, LessonSession, HomeworkTask } from "@/types";
 import { formatDate, formatDatetime, masteryLabel, masteryColour, priorityColour, attendancePercent, getInitials } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, AlertTriangle, Target, ClipboardList } from "lucide-react";
+import { ArrowLeft, BookOpen, AlertTriangle, Target, ClipboardList, Trash2, Loader2 } from "lucide-react";
 
 export default function StudentProfilePage() {
   const { id } = useParams<{ id: string }>();
   const studentId = Number(id);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const deleteMutation = useMutation({
+    mutationFn: () => studentsApi.deactivate(studentId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      router.push("/students");
+    },
+  });
 
   const { data: student, isLoading } = useQuery<StudentDetail>({
     queryKey: ["student", studentId],
@@ -97,7 +109,41 @@ export default function StudentProfilePage() {
             >
               Schedule Session
             </Link>
+            <button
+              onClick={() => setShowDeleteConfirm(true)}
+              className="border border-red-300 text-red-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-1.5"
+            >
+              <Trash2 className="h-3.5 w-3.5" /> Remove Student
+            </button>
           </div>
+
+          {/* Delete confirmation modal */}
+          {showDeleteConfirm && (
+            <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Remove student?</h3>
+                <p className="text-sm text-gray-500 mb-5">
+                  <strong>{student.full_name}</strong> will be removed from your register. Their session history and progress data will be retained for your records. This can be undone by contacting support.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => deleteMutation.mutate()}
+                    disabled={deleteMutation.isPending}
+                    className="flex-1 flex items-center justify-center gap-2 bg-red-600 text-white font-medium py-2.5 rounded-lg hover:bg-red-700 disabled:opacity-60"
+                  >
+                    {deleteMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                    {deleteMutation.isPending ? "Removing…" : "Yes, remove"}
+                  </button>
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="px-4 py-2.5 border border-gray-300 rounded-lg text-gray-700 text-sm hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

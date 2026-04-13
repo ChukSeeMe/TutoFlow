@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.user import User
@@ -20,6 +22,7 @@ from app.models.user import User as UserModel
 from app.services.email_service import send_homework_set
 
 router = APIRouter(prefix="/homework", tags=["homework"])
+limiter = Limiter(key_func=get_remote_address)
 
 
 async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
@@ -31,7 +34,9 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
 
 
 @router.post("/generate", response_model=HomeworkResponse, status_code=201)
+@limiter.limit("30/hour")
 async def generate_homework(
+    request: Request,
     payload: HomeworkGenerateRequest,
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),

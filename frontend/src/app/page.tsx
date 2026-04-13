@@ -174,18 +174,32 @@ function AnimatedCounter({ value, suffix = "" }: { value: number; suffix?: strin
 /** AnimatePresence FAQ accordion */
 function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const isDark = !mounted || theme !== "light";
   return (
     <div className="space-y-2">
       {FAQS.map((faq, i) => (
         <motion.div
           key={i}
-          className="overflow-hidden rounded-2xl border bg-white/[0.02] backdrop-blur-sm"
-          animate={{ borderColor: open === i ? "rgba(168,85,247,0.45)" : "rgba(255,255,255,0.07)" }}
+          className={cn(
+            "overflow-hidden rounded-2xl border",
+            isDark ? "bg-white/[0.02]" : "bg-white shadow-sm",
+          )}
+          animate={{
+            borderColor: open === i
+              ? "rgba(168,85,247,0.45)"
+              : isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.10)",
+          }}
           transition={{ duration: 0.2 }}
         >
           <button
             onClick={() => setOpen(open === i ? null : i)}
-            className="flex w-full items-center justify-between px-6 py-4 text-left text-sm font-semibold text-gray-100 transition-colors hover:text-white"
+            className={cn(
+              "flex w-full items-center justify-between px-6 py-4 text-left text-sm font-semibold transition-colors",
+              isDark ? "text-gray-100 hover:text-white" : "text-gray-800 hover:text-gray-900",
+            )}
           >
             {faq.q}
             <motion.span
@@ -193,7 +207,7 @@ function FAQ() {
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="ml-4 shrink-0"
             >
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className={cn("h-4 w-4", isDark ? "text-gray-500" : "text-gray-400")} />
             </motion.span>
           </button>
           <AnimatePresence initial={false}>
@@ -204,7 +218,10 @@ function FAQ() {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="border-t border-white/[0.06] px-6 pb-5 pt-4 text-sm leading-relaxed text-gray-400">{faq.a}</p>
+                <p className={cn(
+                  "px-6 pb-5 pt-4 text-sm leading-relaxed border-t",
+                  isDark ? "border-white/[0.06] text-gray-400" : "border-gray-100 text-gray-600",
+                )}>{faq.a}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -470,31 +487,41 @@ function DashboardMockup() {
   );
 }
 
-/** Glassmorphic feature card — coloured border, glow on hover, gradient wash */
+/** Clean professional feature card — solid background, subtle shadow */
 function FeatureCard({ f }: { f: typeof FEATURES[0] }) {
   const Icon = f.icon;
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const [hov, setHov] = useState(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setMounted(true), []);
+  const isDarkCard = !mounted || theme !== "light";
   return (
     <motion.div
       variants={scrollCard}
-      className={cn("group relative overflow-hidden rounded-2xl border p-6 backdrop-blur-sm", f.border, "bg-white/[0.02]")}
+      className={cn(
+        "group relative overflow-hidden rounded-2xl border p-6",
+        isDarkCard ? cn(f.border, "bg-white/[0.03]") : "border-gray-200 bg-white",
+      )}
       onHoverStart={() => setHov(true)}
       onHoverEnd={() => setHov(false)}
-      whileHover={{ scale: 1.02, y: -5 }}
+      whileHover={{ scale: 1.01, y: -3 }}
       transition={{ type: "spring", stiffness: 280, damping: 24 }}
-      style={{ boxShadow: hov ? `0 0 36px -6px ${f.glow}` : "none" }}
+      style={{
+        boxShadow: isDarkCard
+          ? (hov ? `0 0 36px -6px ${f.glow}` : "none")
+          : (hov ? "0 8px 24px rgba(0,0,0,0.10)" : "0 1px 4px rgba(0,0,0,0.06)"),
+      }}
     >
-      <motion.div
-        className={cn("absolute inset-0 bg-gradient-to-br opacity-0", f.grad)}
-        animate={{ opacity: hov ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      />
       <div className="relative z-10">
-        <div className={cn("mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border bg-white/[0.04]", f.border)}>
+        <div className={cn(
+          "mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border",
+          isDarkCard ? cn(f.border, "bg-white/[0.05]") : "border-gray-200 bg-gray-50",
+        )}>
           <Icon className={cn("h-5 w-5", f.ic)} />
         </div>
-        <h3 className="mb-2 text-[0.95rem] font-semibold text-white">{f.title}</h3>
-        <p className="text-sm leading-relaxed text-gray-400">{f.desc}</p>
+        <h3 className={cn("mb-2 text-[0.95rem] font-semibold", isDarkCard ? "text-white" : "text-gray-900")}>{f.title}</h3>
+        <p className={cn("text-sm leading-relaxed", isDarkCard ? "text-gray-400" : "text-gray-600")}>{f.desc}</p>
       </div>
     </motion.div>
   );
@@ -818,8 +845,8 @@ export default function Home() {
       data-hp=""
       className="min-h-screen overflow-x-hidden transition-colors duration-300"
       style={{
-        background: isDark ? "#07071A" : "#D9D5D4",
-        color:      isDark ? "#F2F2FA" : "#0C0C16",
+        background: isDark ? "#07071A" : "#F9FAFB",
+        color:      isDark ? "#F2F2FA" : "#111827",
       }}
     >
 
@@ -1040,7 +1067,7 @@ export default function Home() {
 
           {/* Headline — "Unlock Your Potential" style from image */}
           <motion.div variants={heroItem}>
-            <h1 className="text-[2.8rem] font-extrabold leading-[1.07] tracking-[-0.04em] text-white md:text-[4.2rem]">
+            <h1 className={cn("text-[2.8rem] font-extrabold leading-[1.07] tracking-[-0.04em] md:text-[4.2rem]", isDark ? "text-white" : "text-gray-900")}>
               The smarter way{" "}
               <VF>to tutor</VF>
               <br />
@@ -1077,8 +1104,15 @@ export default function Home() {
             </Link>
             <motion.a
               href="#features"
-              className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-9 py-3.5 text-sm font-semibold text-gray-200 backdrop-blur"
-              whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.09)", borderColor: "rgba(255,255,255,0.2)" }}
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full border px-9 py-3.5 text-sm font-semibold",
+                isDark
+                  ? "border-white/12 bg-white/[0.05] text-gray-200"
+                  : "border-gray-300 bg-white text-gray-700 shadow-sm",
+              )}
+              whileHover={isDark
+                ? { scale: 1.02, backgroundColor: "rgba(255,255,255,0.09)", borderColor: "rgba(255,255,255,0.2)" }
+                : { scale: 1.02, backgroundColor: "rgba(0,0,0,0.03)" }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
@@ -1129,15 +1163,16 @@ export default function Home() {
             <motion.div
               key={title}
               variants={scrollCard}
-              className={cn("rounded-2xl border p-6 backdrop-blur-sm", border, "bg-white/[0.02]")}
-              whileHover={{ scale: 1.02, y: -5, boxShadow: `0 0 40px -8px ${glow}` }}
+              className={cn("rounded-2xl border p-6", isDark ? cn(border, "bg-white/[0.03]") : "border-gray-200 bg-white")}
+              whileHover={{ scale: 1.01, y: -3 }}
               transition={{ type: "spring", stiffness: 280, damping: 24 }}
+              style={{ boxShadow: isDark ? "none" : "0 1px 4px rgba(0,0,0,0.06)" }}
             >
-              <div className={cn("mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border bg-white/[0.04]", border)}>
+              <div className={cn("mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border", isDark ? cn(border, "bg-white/[0.05]") : "border-gray-200 bg-gray-50")}>
                 <Icon className={cn("h-5 w-5", ic)} />
               </div>
-              <h3 className="mb-1.5 text-base font-semibold text-white">{title}</h3>
-              <p className="text-sm text-gray-400">{desc}</p>
+              <h3 className={cn("mb-1.5 text-base font-semibold", isDark ? "text-white" : "text-gray-900")}>{title}</h3>
+              <p className={cn("text-sm", isDark ? "text-gray-400" : "text-gray-600")}>{desc}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -1172,7 +1207,7 @@ export default function Home() {
           ].map(({ icon: Icon, label }, i) => (
             <motion.div
               key={label}
-              className="flex items-center gap-2 rounded-full border border-white/[0.07] bg-white/[0.02] px-4 py-2 text-xs font-medium text-gray-400 backdrop-blur-sm"
+              className={cn("flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-medium", isDark ? "border-white/[0.07] bg-white/[0.02] text-gray-400" : "border-gray-200 bg-white text-gray-600 shadow-sm")}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -1191,8 +1226,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section className="mx-auto mt-20 max-w-5xl px-6">
         <motion.div
-          className="grid grid-cols-2 gap-4 rounded-3xl border border-white/[0.055] bg-white/[0.018] p-8 backdrop-blur md:grid-cols-4"
-          style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+          className={cn("grid grid-cols-2 gap-4 rounded-3xl border p-8 md:grid-cols-4", isDark ? "border-white/[0.055] bg-white/[0.018]" : "border-gray-200 bg-white shadow-sm")}
           initial={{ opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -1225,7 +1259,7 @@ export default function Home() {
       <section id="portals" className="mx-auto mt-20 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Role-based portals</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>
             A dedicated experience <VF>for everyone</VF>
           </h2>
           <p className="mx-auto mt-4 max-w-lg text-base text-gray-400">
@@ -1245,8 +1279,8 @@ export default function Home() {
               href={href}
               variants={scrollCard}
               className={cn(
-                "group block rounded-2xl border overflow-hidden backdrop-blur-sm bg-gradient-to-br cursor-pointer",
-                border, bg,
+                "group block rounded-2xl border overflow-hidden cursor-pointer",
+                isDark ? cn(border, "bg-gradient-to-br", bg) : "border-gray-200 bg-white",
               )}
               whileHover={{ y: -6, boxShadow: `0 0 52px -8px ${glow}` }}
               transition={{ type: "spring", stiffness: 280, damping: 24 }}
@@ -1256,7 +1290,7 @@ export default function Home() {
                 <Scene className="w-full transition-transform duration-500 group-hover:scale-[1.03]" />
                 <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#07071a] to-transparent" />
                 <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border bg-white/[0.06]", border)}>
+                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border", isDark ? cn(border, "bg-white/[0.06]") : "border-gray-300 bg-white")}>
                     <Icon className={cn("h-3.5 w-3.5", accent)} />
                   </div>
                   <span className="text-sm font-bold text-white">{role} Portal</span>
@@ -1266,7 +1300,7 @@ export default function Home() {
               <div className="p-5 pt-4">
                 <ul className="space-y-2.5 mb-5">
                   {features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-2.5 text-sm text-gray-400">
+                    <li key={feat} className={cn("flex items-center gap-2.5 text-sm", isDark ? "text-gray-400" : "text-gray-600")}>
                       <CheckCircle2 className={cn("h-4 w-4 shrink-0", accent)} />
                       {feat}
                     </li>
@@ -1291,7 +1325,7 @@ export default function Home() {
       <section id="features" className="mx-auto mt-28 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Platform features</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>
             Everything a tutor needs,{" "}
             <VF>nothing they don&apos;t</VF>
           </h2>
@@ -1316,20 +1350,19 @@ export default function Home() {
       <section id="how-it-works" className="mx-auto mt-28 max-w-5xl px-6">
         <Reveal className="mb-12 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Simple workflow</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">Up and running in minutes</h2>
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Up and running in minutes</h2>
           <p className="mx-auto mt-4 max-w-md text-base text-gray-400">Three simple steps to transform how you run your tutoring practice.</p>
         </Reveal>
         <div className="grid gap-5 md:grid-cols-3">
           {STEPS.map(({ icon: Icon, step, title, desc }, i) => (
             <motion.div
               key={step}
-              className="relative rounded-2xl border border-violet-500/22 bg-white/[0.02] p-6 backdrop-blur-sm"
-              style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }}
+              className={cn("relative rounded-2xl border p-6", isDark ? "border-violet-500/22 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.14, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -5, borderColor: "rgba(168,85,247,0.45)", boxShadow: "0 0 32px -6px rgba(168,85,247,0.25), inset 0 1px 0 rgba(255,255,255,0.07)" }}
+              whileHover={{ y: -4, boxShadow: isDark ? "0 0 32px -6px rgba(168,85,247,0.25)" : "0 8px 24px rgba(0,0,0,0.09)" }}
             >
               {i < 2 && (
                 <div className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 md:block">
@@ -1345,8 +1378,8 @@ export default function Home() {
                 <Icon className="h-5 w-5 text-violet-400" />
               </motion.div>
               <p className="mb-1 font-mono text-xs font-bold text-violet-400">{step}</p>
-              <h3 className="mb-2 text-[0.95rem] font-bold text-white">{title}</h3>
-              <p className="text-sm leading-relaxed text-gray-400">{desc}</p>
+              <h3 className={cn("mb-2 text-[0.95rem] font-bold", isDark ? "text-white" : "text-gray-900")}>{title}</h3>
+              <p className={cn("text-sm leading-relaxed", isDark ? "text-gray-400" : "text-gray-600")}>{desc}</p>
             </motion.div>
           ))}
         </div>
@@ -1358,7 +1391,7 @@ export default function Home() {
       <section className="mx-auto mt-28 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Testimonials</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">Trusted by tutors nationwide</h2>
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Trusted by tutors nationwide</h2>
         </Reveal>
         <motion.div
           className="grid gap-5 md:grid-cols-3"
@@ -1371,14 +1404,14 @@ export default function Home() {
             <motion.div
               key={name}
               variants={scrollCard}
-              className="rounded-2xl border border-violet-500/20 bg-white/[0.02] p-6 backdrop-blur-sm"
-              whileHover={{ y: -5, borderColor: "rgba(168,85,247,0.38)", boxShadow: "0 0 36px -8px rgba(139,92,246,0.22)" }}
+              className={cn("rounded-2xl border p-6", isDark ? "border-violet-500/20 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
+              whileHover={{ y: -4, boxShadow: isDark ? "0 0 36px -8px rgba(139,92,246,0.22)" : "0 8px 24px rgba(0,0,0,0.09)" }}
               transition={{ type: "spring", stiffness: 280, damping: 24 }}
             >
               <div className="mb-4 flex">
                 {[...Array(stars)].map((_, i) => <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />)}
               </div>
-              <p className="mb-5 text-sm leading-relaxed text-gray-300">&ldquo;{text}&rdquo;</p>
+              <p className={cn("mb-5 text-sm leading-relaxed", isDark ? "text-gray-300" : "text-gray-600")}>&ldquo;{text}&rdquo;</p>
               <div className="flex items-center gap-3">
                 <div
                   className="dark-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
@@ -1387,7 +1420,7 @@ export default function Home() {
                   {name.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-white">{name}</p>
+                  <p className={cn("text-sm font-semibold", isDark ? "text-white" : "text-gray-900")}>{name}</p>
                   <p className="text-xs text-gray-500">{role} · {loc}</p>
                 </div>
               </div>
@@ -1402,7 +1435,7 @@ export default function Home() {
       <section id="faq" className="mx-auto mt-28 max-w-3xl px-6">
         <Reveal className="mb-10 text-center">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">FAQ</p>
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-4xl">Common questions</h2>
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Common questions</h2>
         </Reveal>
         <Reveal><FAQ /></Reveal>
       </section>
@@ -1413,13 +1446,18 @@ export default function Home() {
       <section className="mx-auto mt-28 max-w-4xl px-6">
         <Reveal>
           <div
-            className="rounded-3xl border border-violet-500/20 bg-white/[0.018] p-10 backdrop-blur"
-            style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.055)" }}
+            className={cn(
+              "rounded-3xl border p-10",
+              isDark
+                ? "border-violet-500/20 bg-white/[0.018]"
+                : "border-gray-200 bg-white shadow-sm",
+            )}
+            style={isDark ? { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.055)" } : undefined}
           >
             <div className="mb-8 text-center">
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Get in touch</p>
-              <h2 className="text-2xl font-extrabold text-white md:text-3xl">We&apos;d love to hear from you</h2>
-              <p className="mt-3 text-sm text-gray-400">Questions about pricing, features, or a custom demo? Reach out.</p>
+              <h2 className={cn("text-2xl font-extrabold md:text-3xl", isDark ? "text-white" : "text-gray-900")}>We&apos;d love to hear from you</h2>
+              <p className={cn("mt-3 text-sm", isDark ? "text-gray-400" : "text-gray-600")}>Questions about pricing, features, or a custom demo? Reach out.</p>
             </div>
             <div className="flex flex-col items-center justify-center gap-6 md:flex-row">
               {[
@@ -1428,7 +1466,7 @@ export default function Home() {
               ].map(({ icon: Icon, label }) => (
                 <motion.div
                   key={label}
-                  className="flex items-center gap-3 text-sm text-gray-400"
+                  className={cn("flex items-center gap-3 text-sm", isDark ? "text-gray-400" : "text-gray-600")}
                   whileHover={{ color: "#C084FC", x: 2 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
@@ -1445,15 +1483,18 @@ export default function Home() {
           FINAL CTA
       ══════════════════════════════════════════════════════════════ */}
       <section className="relative mx-auto mt-20 max-w-4xl overflow-hidden px-6 py-20 text-center">
-        <div className="absolute inset-0 -z-10 rounded-3xl border border-violet-500/20 bg-white/[0.018]"
-          style={{ boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" }} />
+        <div className={cn(
+          "absolute inset-0 -z-10 rounded-3xl border",
+          isDark ? "border-violet-500/20 bg-white/[0.018]" : "border-gray-200 bg-white shadow-sm",
+        )}
+          style={isDark ? { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" } : undefined} />
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
           style={{ background: "radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)" }} />
         <Reveal className="relative z-10">
-          <h2 className="text-3xl font-extrabold tracking-[-0.03em] text-white md:text-[2.6rem]">
+          <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-[2.6rem]", isDark ? "text-white" : "text-gray-900")}>
             Ready to <VF>transform your tutoring</VF>?
           </h2>
-          <p className="mx-auto mt-4 max-w-md text-base text-gray-400">
+          <p className={cn("mx-auto mt-4 max-w-md text-base", isDark ? "text-gray-400" : "text-gray-600")}>
             Join tutors across England and Wales who already use Teach Harbour to save time and deliver better results.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
@@ -1470,8 +1511,13 @@ export default function Home() {
             </Link>
             <Link href="/contact">
               <motion.span
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-8 py-3.5 text-sm font-semibold text-gray-200 backdrop-blur"
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(255,255,255,0.09)" }}
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full border px-8 py-3.5 text-sm font-semibold",
+                  isDark ? "border-white/10 bg-white/[0.05] text-gray-200" : "border-gray-300 bg-white text-gray-700 shadow-sm",
+                )}
+                whileHover={isDark
+                  ? { scale: 1.02, backgroundColor: "rgba(255,255,255,0.09)" }
+                  : { scale: 1.02, backgroundColor: "rgba(0,0,0,0.03)" }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >

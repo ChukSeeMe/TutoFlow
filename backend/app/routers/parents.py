@@ -33,6 +33,7 @@ from app.schemas.parent import (
 from app.core.security import hash_password
 from app.core.dependencies import require_tutor, require_parent
 from app.core.exceptions import NotFoundError, ForbiddenError, ConflictError
+from app.services.email_service import send_parent_welcome
 
 router = APIRouter(prefix="/parents", tags=["parents"])
 
@@ -107,6 +108,13 @@ async def create_parent(
         user_id=parent.user_id,
         created_at=parent.created_at,
     )
+    # Send welcome email with temp credentials
+    send_parent_welcome(
+        to_email=parent_user.email,
+        parent_name=payload.first_name.strip(),
+        temp_password=temp_password,
+    )
+
     # Attach temp password to response dict so tutor can share it
     response_dict = response.model_dump()
     response_dict["temp_password"] = temp_password

@@ -100,6 +100,68 @@ def _report_shared_html(parent_name: str, student_name: str, report_title: str, 
     return _base_template(f"New report: {report_title}", body)
 
 
+def _password_reset_html(first_name: str, reset_url: str) -> str:
+    body = f"""
+      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Reset your password</h1>
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
+        Hi {first_name}, we received a request to reset your Teach Harbour password.
+        Click the button below — this link expires in 1 hour.
+      </p>
+      <a href="{reset_url}"
+         style="display:inline-block;background:#2563eb;color:#ffffff;font-size:14px;font-weight:600;
+                padding:12px 24px;border-radius:8px;text-decoration:none;">
+        Reset password
+      </a>
+      <p style="margin:24px 0 0;font-size:13px;color:#6b7280;">
+        If you did not request this, you can safely ignore this email. Your password will not change.
+      </p>
+    """
+    return _base_template("Reset your Teach Harbour password", body)
+
+
+def _password_changed_html(first_name: str) -> str:
+    body = f"""
+      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Password changed</h1>
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
+        Hi {first_name}, the password for your Teach Harbour account was successfully changed.
+      </p>
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
+        If you did not make this change, please contact us immediately.
+      </p>
+      <a href="{settings.app_base_url}/login"
+         style="display:inline-block;background:#2563eb;color:#ffffff;font-size:14px;font-weight:600;
+                padding:12px 24px;border-radius:8px;text-decoration:none;">
+        Sign in to your account
+      </a>
+    """
+    return _base_template("Your Teach Harbour password was changed", body)
+
+
+def _parent_welcome_html(parent_name: str, email: str, temp_password: str) -> str:
+    body = f"""
+      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Welcome to Teach Harbour</h1>
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
+        Hi {parent_name}, your parent portal account has been set up by your child&rsquo;s tutor.
+        Use the details below to sign in for the first time.
+      </p>
+      <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin-bottom:24px;">
+        <p style="margin:0 0 6px;font-size:13px;color:#6b7280;">Email address</p>
+        <p style="margin:0 0 12px;font-size:14px;font-weight:600;color:#111827;">{email}</p>
+        <p style="margin:0 0 6px;font-size:13px;color:#6b7280;">Temporary password</p>
+        <p style="margin:0;font-size:14px;font-weight:600;color:#111827;font-family:monospace;">{temp_password}</p>
+      </div>
+      <a href="{settings.app_base_url}/login"
+         style="display:inline-block;background:#2563eb;color:#ffffff;font-size:14px;font-weight:600;
+                padding:12px 24px;border-radius:8px;text-decoration:none;">
+        Sign in to your portal
+      </a>
+      <p style="margin:24px 0 0;font-size:13px;color:#6b7280;">
+        Please change your password after your first login. If you did not expect this email, please ignore it.
+      </p>
+    """
+    return _base_template("Your Teach Harbour parent portal is ready", body)
+
+
 def _homework_set_html(student_name: str, homework_title: str, due_date: str | None, tutor_name: str) -> str:
     due_text = f" It is due <strong>{due_date}</strong>." if due_date else ""
     body = f"""
@@ -192,4 +254,28 @@ def send_homework_set(
         to_email=to_email,
         subject=f"New task set: {homework_title}",
         html=_homework_set_html(student_name, homework_title, due_date, tutor_name),
+    ))
+
+
+def send_password_reset(to_email: str, first_name: str, reset_url: str) -> None:
+    _fire(_send(
+        to_email=to_email,
+        subject="Reset your Teach Harbour password",
+        html=_password_reset_html(first_name, reset_url),
+    ))
+
+
+def send_password_changed(to_email: str, first_name: str) -> None:
+    _fire(_send(
+        to_email=to_email,
+        subject="Your Teach Harbour password was changed",
+        html=_password_changed_html(first_name),
+    ))
+
+
+def send_parent_welcome(to_email: str, parent_name: str, temp_password: str) -> None:
+    _fire(_send(
+        to_email=to_email,
+        subject="Your Teach Harbour parent portal is ready",
+        html=_parent_welcome_html(parent_name, to_email, temp_password),
     ))

@@ -1,8 +1,10 @@
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Response, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from pathlib import Path
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.user import User
@@ -19,6 +21,7 @@ from app.models.user import User as UserModel
 from app.services.email_service import send_report_shared
 
 router = APIRouter(prefix="/reports", tags=["reports"])
+limiter = Limiter(key_func=get_remote_address)
 
 
 async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
@@ -30,7 +33,9 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
 
 
 @router.post("/generate", response_model=ReportResponse, status_code=201)
+@limiter.limit("10/hour")
 async def generate(
+    request: Request,
     payload: ReportGenerateRequest,
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),

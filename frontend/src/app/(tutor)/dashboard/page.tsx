@@ -372,10 +372,78 @@ function todayLabel() {
   });
 }
 
+// ── Welcome popup (first-time login) ─────────────────────────────────────────
+
+const WELCOME_KEY = "th_welcome_seen_v1";
+
+function WelcomePopup({ onClose }: { onClose: () => void }) {
+  const steps = [
+    { icon: Users,        title: "Add your students",      desc: "Start by adding students and linking parents. Set up their year group and curriculum subjects." },
+    { icon: Brain,        title: "Plan with AI",            desc: "Generate lesson plans, homework, and quizzes in seconds. Every output is yours to review before use." },
+    { icon: TrendingUp,   title: "Track progress",          desc: "After each session, record notes and attendance. The system builds a progress picture automatically." },
+    { icon: CheckCircle2, title: "Communicate with parents", desc: "Generate and approve parent reports. Parents get their own secure portal to view updates." },
+  ];
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <motion.div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg"
+        initial={{ opacity: 0, scale: 0.93, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ type: "spring", stiffness: 320, damping: 28 }}
+      >
+        <div className="p-6 border-b border-gray-100">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
+              <Brain className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Welcome to Teach Harbour</h2>
+              <p className="text-sm text-gray-500">Here&apos;s how to get the most out of your account</p>
+            </div>
+          </div>
+        </div>
+        <div className="p-6 space-y-4">
+          {steps.map(({ icon: Icon, title, desc }, i) => (
+            <div key={i} className="flex gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 border border-brand-100">
+                <Icon className="h-4 w-4 text-brand-600" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{title}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="px-6 pb-6">
+          <button
+            onClick={onClose}
+            className="w-full py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors"
+          >
+            Get started
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 // ── Dashboard ────────────────────────────────────────────────────────────────
 
 export default function TutorDashboard() {
   const hasToken = !!getAccessToken();
+  const [showWelcome, setShowWelcome] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && !localStorage.getItem(WELCOME_KEY)) {
+      setShowWelcome(true);
+    }
+  }, []);
+
+  function dismissWelcome() {
+    localStorage.setItem(WELCOME_KEY, "1");
+    setShowWelcome(false);
+  }
 
   const { data: students = [], isLoading: studentsLoading, isError: studentsError } = useQuery<Student[]>({
     queryKey: ["students"],
@@ -499,6 +567,9 @@ export default function TutorDashboard() {
       animate="show"
       className="p-6 lg:p-8 space-y-6 max-w-[1400px] mx-auto"
     >
+      {/* ── First-time welcome popup ──────────────────────────────────────── */}
+      {showWelcome && <WelcomePopup onClose={dismissWelcome} />}
+
       {/* ── Animated Hero Banner ─────────────────────────────────────────── */}
       <HeroBanner today={`${greeting()} · ${todayLabel()}`} />
 

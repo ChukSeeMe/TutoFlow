@@ -40,6 +40,17 @@ def create_refresh_token(subject: str | Any) -> str:
     return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
 
 
+def create_reset_token(subject: str | Any) -> str:
+    """Short-lived token (1 hour) for password reset links."""
+    expire = datetime.now(timezone.utc) + timedelta(hours=1)
+    payload = {
+        "sub": str(subject),
+        "exp": expire,
+        "type": "reset",
+    }
+    return jwt.encode(payload, settings.secret_key, algorithm=settings.algorithm)
+
+
 def decode_token(token: str) -> dict:
     try:
         payload = jwt.decode(

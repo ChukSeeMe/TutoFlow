@@ -9,13 +9,18 @@ from app.database import get_db
 from app.models.user import User, UserRole
 from app.models.tutor import Tutor
 from app.models.audit import AuditLog
-from app.schemas.auth import LoginRequest, RegisterRequest, TokenResponse, OAuthCallbackRequest
+from app.schemas.auth import (
+    LoginRequest, RegisterRequest, TokenResponse, OAuthCallbackRequest,
+    ForgotPasswordRequest, ResetPasswordRequest, ChangePasswordRequest,
+)
+from app.core.dependencies import get_current_user
 from app.core.security import (
     hash_password, verify_password,
     create_access_token, create_refresh_token, decode_token,
+    create_reset_token,
 )
 from app.core.exceptions import UnauthorizedError, ConflictError
-from app.services.email_service import send_welcome
+from app.services.email_service import send_welcome, send_password_reset, send_password_changed
 from app.config import settings
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -178,6 +183,91 @@ async def refresh_token(
 async def logout(response: Response):
     response.delete_cookie("refresh_token")
     return {"message": "Logged out"}
+
+
+@router.post("/forgot-password", status_code=200)
+@limiter.limit("3/minute")
+async def forgot_password(
+    request: Request,
+    payload: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Always returns 200 regardless of whether the email exists (prevents user enumeration).
+    Sends a reset link if the user is found.
+    """
+    result = await db.execute(select(User).where(User.email == payload.email.lower()))
+    user = result.scalar_one_or_none()
+
+    if user and user.is_active:
+        # Resolve first name from tutor profile
+        first_name = "there"
+        tutor_result = await db.execute(select(Tutor).where(Tutor.user_id == user.id))
+        tutor = tutor_result.scalar_one_or_none()
+        if tutor:
+            first_name = tutor.first_name
+
+        reset_token = create_reset_token(subject=user.id)
+        reset_url = f"{settings.app_base_url}/reset-password?token={reset_token}"
+        send_password_reset(to_email=user.email, first_name=first_name, reset_url=reset_url)
+
+    return {"message": "If that email is registered, a reset link has been sent."}
+
+
+@router.post("/reset-password", status_code=200)
+async def reset_password(
+    payload: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Validate reset token and set new password."""
+    try:
+        token_data = decode_token(payload.token)
+    except ValueError:
+        raise UnauthorizedError("Reset link is invalid or has expired")
+
+    if token_data.get("type") != "reset":
+        raise UnauthorizedError("Invalid reset token")
+
+    result = await db.execute(select(User).where(User.id == int(token_data["sub"])))
+    user = result.scalar_one_or_none()
+    if not user or not user.is_active:
+        raise UnauthorizedError("User not found")
+
+    user.password_hash = hash_password(payload.new_password)
+    await db.commit()
+
+    # Notify via email
+    first_name = "there"
+    tutor_r = await db.execute(select(Tutor).where(Tutor.user_id == user.id))
+    t = tutor_r.scalar_one_or_none()
+    if t:
+        first_name = t.first_name
+    send_password_changed(to_email=user.email, first_name=first_name)
+
+    return {"message": "Password updated successfully"}
+
+
+@router.post("/change-password", status_code=200)
+async def change_password(
+    payload: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Authenticated users can change their own password."""
+    if not verify_password(payload.current_password, current_user.password_hash):
+        raise UnauthorizedError("Current password is incorrect")
+
+    current_user.password_hash = hash_password(payload.new_password)
+    await db.commit()
+
+    first_name = "there"
+    tutor_r = await db.execute(select(Tutor).where(Tutor.user_id == current_user.id))
+    t = tutor_r.scalar_one_or_none()
+    if t:
+        first_name = t.first_name
+    send_password_changed(to_email=current_user.email, first_name=first_name)
+
+    return {"message": "Password changed successfully"}
 
 
 @router.post("/oauth/callback", response_model=TokenResponse)

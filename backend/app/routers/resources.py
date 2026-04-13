@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from pydantic import BaseModel
 from typing import Optional
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.user import User
@@ -13,6 +15,7 @@ from app.core.dependencies import require_tutor
 from app.core.exceptions import NotFoundError
 
 router = APIRouter(prefix="/resources", tags=["resources"])
+limiter = Limiter(key_func=get_remote_address)
 
 VALID_TYPES = {
     "worksheet", "retrieval_quiz", "revision_card",
@@ -38,7 +41,9 @@ class ResourceGenerateResponse(BaseModel):
 
 
 @router.post("/generate", response_model=ResourceGenerateResponse)
+@limiter.limit("30/hour")
 async def generate_resource(
+    request: Request,
     payload: ResourceGenerateRequest,
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),

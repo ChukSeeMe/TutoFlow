@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from app.database import get_db
 from app.models.user import User
@@ -16,6 +18,7 @@ from app.core.dependencies import require_tutor
 from app.core.exceptions import NotFoundError, ForbiddenError
 
 router = APIRouter(prefix="/assessments", tags=["assessments"])
+limiter = Limiter(key_func=get_remote_address)
 
 
 async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
@@ -27,7 +30,9 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
 
 
 @router.post("/generate", response_model=AssessmentResponse, status_code=201)
+@limiter.limit("20/hour")
 async def generate(
+    request: Request,
     payload: AssessmentGenerateRequest,
     current_user: User = Depends(require_tutor),
     db: AsyncSession = Depends(get_db),

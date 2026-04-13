@@ -288,14 +288,12 @@ export default function SessionDetailPage() {
               <h2 className="font-semibold text-gray-900 flex items-center gap-2">
                 <ClipboardList className="h-4 w-4 text-brand-600" /> Observation Notes
               </h2>
-              {!isDelivered && (
-                <button
-                  onClick={() => setShowObsForm(true)}
-                  className="flex items-center gap-1 text-xs text-brand-600 hover:underline"
-                >
-                  <Plus className="h-3 w-3" /> Add observation
-                </button>
-              )}
+              <button
+                onClick={() => setShowObsForm(true)}
+                className="flex items-center gap-1 text-xs text-brand-600 hover:underline"
+              >
+                <Plus className="h-3 w-3" /> Add observation
+              </button>
             </div>
 
             {showObsForm && (
@@ -416,7 +414,7 @@ export default function SessionDetailPage() {
             <div className="space-y-2">
               <Link href={`/homework/new?student=${session.student_id}&session=${sessionId}`} className="block text-xs text-brand-600 dark:text-brand-400 hover:underline">→ Generate homework task</Link>
               <Link href={`/assessments/new?student=${session.student_id}&session=${sessionId}`} className="block text-xs text-brand-600 dark:text-brand-400 hover:underline">→ Create quiz or exit ticket</Link>
-              <Link href={`/reports/new?student=${session.student_id}`} className="block text-xs text-brand-600 dark:text-brand-400 hover:underline">→ Generate parent report</Link>
+              <Link href="/reports" className="block text-xs text-brand-600 dark:text-brand-400 hover:underline">→ Generate parent report</Link>
               <Link href={`/students/${session.student_id}`} className="block text-xs text-brand-600 dark:text-brand-400 hover:underline">→ View student profile</Link>
             </div>
           </div>
