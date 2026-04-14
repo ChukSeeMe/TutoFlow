@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/stores/auth";
+import { CookieConsent } from "@/components/ui/CookieConsent";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // Trigger Zustand rehydration from sessionStorage after mount so the server
@@ -40,6 +41,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       >
         <QueryClientProvider client={queryClient}>
           {children}
+          <CookieConsent />
         </QueryClientProvider>
       </ThemeProvider>
     </SessionProvider>
