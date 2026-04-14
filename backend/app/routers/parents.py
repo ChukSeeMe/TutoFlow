@@ -33,7 +33,7 @@ from app.schemas.parent import (
 from app.core.security import hash_password
 from app.core.dependencies import require_tutor, require_parent
 from app.core.exceptions import NotFoundError, ForbiddenError, ConflictError
-from app.services.email_service import send_parent_welcome
+from app.services.email_service import send_parent_welcome, send_direct_message
 
 router = APIRouter(prefix="/parents", tags=["parents"])
 
@@ -307,6 +307,52 @@ async def unlink_student_from_parent(
 
     await db.delete(link)
     await db.commit()
+
+
+class DirectEmailPayload(BaseModel):
+    subject: str
+    body: str
+
+
+@router.post("/{parent_id}/email", status_code=200)
+async def send_email_to_parent(
+    parent_id: int,
+    payload: DirectEmailPayload,
+    current_user: User = Depends(require_tutor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Send a custom direct message email to a parent from the tutor."""
+    tutor = await _get_tutor(current_user, db)
+
+    parent_result = await db.execute(
+        select(ParentGuardian).where(ParentGuardian.id == parent_id)
+    )
+    parent = parent_result.scalar_one_or_none()
+    if not parent:
+        raise NotFoundError("Parent not found")
+
+    # Look up parent's email from user account
+    user_result = await db.execute(
+        select(User).where(User.id == parent.user_id)
+    )
+    parent_user = user_result.scalar_one_or_none()
+    if not parent_user:
+        raise NotFoundError("Parent has no user account")
+
+    tutor_name = f"{current_user.email}"
+    # Try to get tutor's display name
+    if hasattr(tutor, "display_name") and tutor.display_name:
+        tutor_name = tutor.display_name
+
+    send_direct_message(
+        to_email=parent_user.email,
+        parent_name=parent.first_name,
+        tutor_name=tutor_name,
+        subject=payload.subject,
+        body=payload.body,
+    )
+
+    return {"message": "Email sent", "to": parent_user.email}
 
 
 # ── Parent-facing endpoints ────────────────────────────────────────────────────

@@ -168,6 +168,7 @@ export const analyticsApi = {
   studentSummary: (studentId: number) => api.get(`/analytics/${studentId}/summary`),
   interventionsDashboard: () => api.get("/analytics/interventions/dashboard"),
   insights: () => api.get("/analytics/insights"),
+  aiAdvice: (studentId: number) => api.post(`/analytics/insights/${studentId}/ai-advice`),
 };
 
 export const reportsApi = {
@@ -202,6 +203,8 @@ export const parentsApi = {
     api.post(`/parents/${parentId}/link/${studentId}`, data),
   unlinkStudent: (parentId: number, studentId: number) =>
     api.delete(`/parents/${parentId}/link/${studentId}`),
+  sendEmail: (parentId: number, data: { subject: string; body: string }) =>
+    api.post(`/parents/${parentId}/email`, data),
   // Parent-facing
   myChildren: () => api.get("/parents/my/children"),
   myTimeline: () => api.get("/parents/my/timeline"),

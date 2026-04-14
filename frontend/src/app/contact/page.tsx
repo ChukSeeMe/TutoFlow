@@ -60,7 +60,7 @@ const CONTACT_METHODS = [
     value: "hello@teachharbour.co.uk",
     detail: "We aim to reply within one business day.",
     href: "mailto:hello@teachharbour.co.uk",
-    color: "bg-indigo-500/15 text-indigo-400",
+    color: "bg-brand-500/15 text-brand-400",
   },
   {
     icon: MapPin,
@@ -132,15 +132,15 @@ export default function ContactPage() {
       {/* Animated background */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
         <div className="bg-dot-grid absolute inset-0 opacity-30" />
-        <div className="blob blob-1 -left-40 -top-40 h-[500px] w-[500px] bg-indigo-500/[0.06]" />
-        <div className="blob blob-2 -right-20 bottom-20 h-[400px] w-[400px] bg-violet-500/[0.06]" />
+        <div className="blob blob-1 -left-40 -top-40 h-[500px] w-[500px] bg-brand-500/[0.06]" />
+        <div className="blob blob-2 -right-20 bottom-20 h-[400px] w-[400px] bg-brand-500/[0.06]" />
       </div>
 
       {/* Nav */}
       <header className="sticky top-0 z-50 border-b border-[rgb(var(--border))/15] bg-[rgb(var(--bg))]/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
           <Link href="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 shadow-lg shadow-indigo-500/30">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 shadow-lg shadow-brand-500/30">
               <Brain className="h-4 w-4 text-white" />
             </div>
             <span className="text-lg font-bold tracking-tight">Teach Harbour</span>
@@ -162,7 +162,7 @@ export default function ContactPage() {
         {/* Header */}
         <Reveal>
           <div className="mb-14 text-center">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-400/25 bg-indigo-500/10 px-4 py-1.5 text-sm font-medium text-indigo-400">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-400/25 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-400">
               <Mail className="h-3.5 w-3.5" /> We&apos;d love to hear from you
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight md:text-5xl">Contact Teach Harbour</h1>
@@ -182,7 +182,7 @@ export default function ContactPage() {
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-[rgb(var(--text-tertiary))]">{label}</p>
                 {href ? (
-                  <a href={href} className="mt-1 block text-sm font-semibold text-indigo-400 hover:underline">{value}</a>
+                  <a href={href} className="mt-1 block text-sm font-semibold text-brand-400 hover:underline">{value}</a>
                 ) : (
                   <p className="mt-1 text-sm font-semibold">{value}</p>
                 )}
@@ -207,7 +207,7 @@ export default function ContactPage() {
                     </div>
                     <h3 className="text-xl font-bold">Message sent!</h3>
                     <p className="mt-2 text-sm text-[rgb(var(--text-secondary))]">
-                      Thank you, {name.split(" ")[0]}. We&apos;ll get back to you at <span className="font-medium text-indigo-400">{email}</span> within one business day.
+                      Thank you, {name.split(" ")[0]}. We&apos;ll get back to you at <span className="font-medium text-brand-400">{email}</span> within one business day.
                     </p>
                     <button
                       onClick={() => { setFormState("idle"); setName(""); setEmail(""); setMessage(""); }}
@@ -224,7 +224,7 @@ export default function ContactPage() {
                       <select
                         value={reason}
                         onChange={e => setReason(e.target.value)}
-                        className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                       >
                         {REASONS.map(r => <option key={r} value={r}>{r}</option>)}
                       </select>
@@ -239,7 +239,7 @@ export default function ContactPage() {
                           value={name}
                           onChange={e => setName(e.target.value)}
                           placeholder="Jane Smith"
-                          className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                          className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                           required
                         />
                       </div>
@@ -250,7 +250,7 @@ export default function ContactPage() {
                           value={email}
                           onChange={e => setEmail(e.target.value)}
                           placeholder="jane@example.co.uk"
-                          className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                          className="w-full rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                           required
                         />
                       </div>
@@ -264,7 +264,7 @@ export default function ContactPage() {
                         onChange={e => setMessage(e.target.value)}
                         rows={5}
                         placeholder="Tell us what you're working on or what you'd like to know…"
-                        className="w-full resize-none rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-3 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                        className="w-full resize-none rounded-xl border border-[rgb(var(--border))/20] bg-[rgb(var(--bg-elevated))] px-4 py-3 text-sm placeholder:text-[rgb(var(--text-tertiary))] focus:outline-none focus:ring-2 focus:ring-brand-500/50"
                         required
                       />
                     </div>
@@ -277,7 +277,7 @@ export default function ContactPage() {
                     <button
                       type="submit"
                       disabled={formState === "submitting"}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/30 hover:bg-brand-500 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       {formState === "submitting" ? (
                         <>
@@ -323,21 +323,21 @@ export default function ContactPage() {
                     href="https://twitter.com/teachharbour_uk"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-indigo-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
+                    className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-brand-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
                   >
                     <Twitter className="h-4 w-4 text-sky-400" />
                     <span className="flex-1 font-medium">@teachharbour_uk</span>
-                    <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-indigo-400 transition-colors">Twitter / X →</span>
+                    <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-brand-400 transition-colors">Twitter / X →</span>
                   </a>
                   <a
                     href="https://linkedin.com/company/teachharbour"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-indigo-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
+                    className="flex items-center gap-3 rounded-xl border border-[rgb(var(--border))/15] px-4 py-3 text-sm hover:border-brand-500/30 hover:bg-[rgb(var(--bg-elevated))] transition-all group"
                   >
                     <Linkedin className="h-4 w-4 text-blue-400" />
                     <span className="flex-1 font-medium">Teach Harbour</span>
-                    <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-indigo-400 transition-colors">LinkedIn →</span>
+                    <span className="text-xs text-[rgb(var(--text-tertiary))] group-hover:text-brand-400 transition-colors">LinkedIn →</span>
                   </a>
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default function ContactPage() {
       <footer className="border-t border-[rgb(var(--border))/15] px-6 py-8">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 text-sm text-[rgb(var(--text-tertiary))] md:flex-row md:justify-between">
           <div className="flex items-center gap-2">
-            <div className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-600">
+            <div className="flex h-5 w-5 items-center justify-center rounded-md bg-brand-600">
               <Brain className="h-3 w-3 text-white" />
             </div>
             <span className="font-semibold text-[rgb(var(--text))]">Teach Harbour</span>

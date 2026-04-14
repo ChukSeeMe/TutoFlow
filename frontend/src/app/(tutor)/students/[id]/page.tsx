@@ -93,7 +93,7 @@ export default function StudentProfilePage() {
             </Link>
             <Link
               href={`/students/${studentId}/send`}
-              className="border border-purple-300 text-purple-700 dark:border-purple-500/40 dark:text-purple-400 text-sm font-medium px-4 py-2 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-colors"
+              className="border border-brand-300 text-brand-700 dark:border-brand-500/40 dark:text-brand-400 text-sm font-medium px-4 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors"
             >
               SEND & Support
             </Link>

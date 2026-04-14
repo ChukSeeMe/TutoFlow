@@ -88,8 +88,8 @@ function FloatingBook({ className }: { className?: string }) {
       transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
     >
       {/* Book cover */}
-      <rect x="8" y="10" width="38" height="48" rx="4" fill="#6366f1" opacity="0.9" />
-      <rect x="8" y="10" width="6" height="48" rx="4" fill="#4f46e5" />
+      <rect x="8" y="10" width="38" height="48" rx="4" fill="#1c660c" opacity="0.9" />
+      <rect x="8" y="10" width="6" height="48" rx="4" fill="#27a81b" />
       {/* Pages */}
       <rect x="14" y="10" width="32" height="48" rx="3" fill="#f0f1ff" />
       {/* Lines */}
@@ -114,10 +114,10 @@ function FloatingGradCap({ className }: { className?: string }) {
       transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
     >
       {/* Board */}
-      <ellipse cx="32" cy="28" rx="26" ry="9" fill="#8b5cf6" opacity="0.9" />
+      <ellipse cx="32" cy="28" rx="26" ry="9" fill="#1c660c" opacity="0.9" />
       {/* Cap top */}
-      <rect x="14" y="16" width="36" height="14" rx="4" fill="#6366f1" />
-      <ellipse cx="32" cy="16" rx="18" ry="5" fill="#7c3aed" />
+      <rect x="14" y="16" width="36" height="14" rx="4" fill="#27a81b" />
+      <ellipse cx="32" cy="16" rx="18" ry="5" fill="#155209" />
       {/* Tassel */}
       <line x1="50" y1="28" x2="54" y2="44" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" />
       <circle cx="54" cy="45" r="3" fill="#fbbf24" />
@@ -179,18 +179,18 @@ function HeroBanner({ name, today }: { name?: string; today: string }) {
       className="relative overflow-hidden rounded-3xl min-h-[200px] flex items-center"
     >
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-700 via-brand-600 to-brand-500" />
       {/* Mesh overlay */}
       <div className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage: "radial-gradient(circle at 20% 80%, rgba(251,191,36,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(99,102,241,0.4) 0%, transparent 50%)",
+          backgroundImage: "radial-gradient(circle at 20% 80%, rgba(251,191,36,0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(28,102,12,0.4) 0%, transparent 50%)",
         }}
       />
 
       {/* Orbs */}
-      <Orb x="5%" y="-30%" size={220} color="rgba(139,92,246,0.5)" delay={0} />
+      <Orb x="5%" y="-30%" size={220} color="rgba(28,102,12,0.5)" delay={0} />
       <Orb x="65%" y="40%" size={180} color="rgba(251,191,36,0.25)" delay={2} />
-      <Orb x="80%" y="-20%" size={160} color="rgba(99,102,241,0.4)" delay={1} />
+      <Orb x="80%" y="-20%" size={160} color="rgba(28,102,12,0.4)" delay={1} />
 
       {/* Sparkles */}
       <Sparkle x="12%" y="15%" size={10} delay={0}    color="rgba(251,191,36,0.9)" />
@@ -211,7 +211,7 @@ function HeroBanner({ name, today }: { name?: string; today: string }) {
       {/* Text */}
       <div className="relative z-10 px-7 py-8 max-w-lg">
         <motion.p
-          className="text-indigo-200 text-sm font-medium mb-1"
+          className="text-brand-200 text-sm font-medium mb-1"
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
@@ -270,7 +270,7 @@ function HeroBanner({ name, today }: { name?: string; today: string }) {
         >
           <Link
             href="/sessions/new"
-            className="flex items-center gap-1.5 bg-white text-indigo-700 font-semibold text-sm px-4 py-2 rounded-xl shadow-lg hover:bg-yellow-50 transition-colors"
+            className="flex items-center gap-1.5 bg-white text-brand-700 font-semibold text-sm px-4 py-2 rounded-xl shadow-lg hover:bg-brand-50 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" /> Log Session
           </Link>
@@ -379,9 +379,9 @@ const WELCOME_KEY = "th_welcome_seen_v1";
 const TOUR_STEPS = [
   {
     icon: Brain,
-    color: "from-violet-500 to-purple-600",
-    iconBg: "bg-violet-100",
-    iconColor: "text-violet-700",
+    color: "from-brand-500 to-brand-700",
+    iconBg: "bg-brand-100",
+    iconColor: "text-brand-700",
     tag: "Welcome",
     title: "You've arrived at your tutoring command centre",
     body: "Teach Harbour is built for UK tutors who want to spend more time teaching and less time on administration. Everything you need — lesson planning, progress tracking, parent communication — is right here.",
@@ -389,7 +389,7 @@ const TOUR_STEPS = [
   },
   {
     icon: Users,
-    color: "from-blue-500 to-indigo-600",
+    color: "from-blue-500 to-blue-700",
     iconBg: "bg-blue-100",
     iconColor: "text-blue-700",
     tag: "Step 1 of 5",
@@ -409,9 +409,9 @@ const TOUR_STEPS = [
   },
   {
     icon: Brain,
-    color: "from-violet-500 to-fuchsia-600",
-    iconBg: "bg-violet-100",
-    iconColor: "text-violet-700",
+    color: "from-brand-500 to-brand-600",
+    iconBg: "bg-brand-100",
+    iconColor: "text-brand-700",
     tag: "Step 3 of 5",
     title: "Let AI do the planning",
     body: "Generate a fully structured, curriculum-aligned lesson plan in under 60 seconds. The AI streams content live as it writes — you see it building in real time. Every plan is yours to review and approve before use.",
@@ -775,14 +775,14 @@ export default function TutorDashboard() {
                 <AreaChart data={attendanceChartData} margin={{ top: 4, right: 8, bottom: 0, left: -24 }}>
                   <defs>
                     <linearGradient id="attendanceGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#1c660c" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#1c660c" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="week" tick={{ fontSize: 10, fill: "currentColor" }} className="text-gray-400 dark:text-zinc-600" axisLine={false} tickLine={false} />
                   <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "currentColor" }} className="text-gray-400 dark:text-zinc-600" axisLine={false} tickLine={false} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Area type="monotoneX" dataKey="attendance" stroke="#6366f1" strokeWidth={2} fill="url(#attendanceGrad)" dot={false} activeDot={{ r: 4, fill: "#6366f1", stroke: "none" }} />
+                  <Area type="monotoneX" dataKey="attendance" stroke="#1c660c" strokeWidth={2} fill="url(#attendanceGrad)" dot={false} activeDot={{ r: 4, fill: "#1c660c", stroke: "none" }} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -877,7 +877,7 @@ export default function TutorDashboard() {
           <GlassCard className="h-full">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100/60 dark:border-white/[0.05]">
               <div className="flex items-center gap-2">
-                <Layers className="h-3.5 w-3.5 text-violet-500" />
+                <Layers className="h-3.5 w-3.5 text-brand-500" />
                 <h2 className="text-sm font-semibold text-gray-800 dark:text-zinc-200">Mastery Overview</h2>
               </div>
               <Link href="/mastery" className="text-2xs text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-0.5">

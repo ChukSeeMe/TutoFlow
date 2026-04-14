@@ -13,7 +13,7 @@ interface UserRow {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  tutor:   "bg-violet-500/15 text-violet-400",
+  tutor:   "bg-brand-500/15 text-brand-400",
   student: "bg-blue-500/15 text-blue-400",
   parent:  "bg-emerald-500/15 text-emerald-400",
   admin:   "bg-red-500/15 text-red-400",
@@ -58,7 +58,7 @@ export default function AdminUsers() {
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by email…"
-            className="rounded-xl border border-white/10 bg-[rgb(var(--bg-card))] py-2 pl-9 pr-4 text-sm outline-none focus:border-indigo-500/50 w-64"
+            className="rounded-xl border border-white/10 bg-[rgb(var(--bg-card))] py-2 pl-9 pr-4 text-sm outline-none focus:border-brand-500/50 w-64"
           />
         </div>
 
@@ -66,7 +66,7 @@ export default function AdminUsers() {
           <select
             value={roleFilter}
             onChange={e => setRoleFilter(e.target.value)}
-            className="appearance-none rounded-xl border border-white/10 bg-[rgb(var(--bg-card))] py-2 pl-3 pr-8 text-sm outline-none focus:border-indigo-500/50"
+            className="appearance-none rounded-xl border border-white/10 bg-[rgb(var(--bg-card))] py-2 pl-3 pr-8 text-sm outline-none focus:border-brand-500/50"
           >
             <option value="">All roles</option>
             <option value="tutor">Tutor</option>
@@ -116,7 +116,7 @@ export default function AdminUsers() {
                     <select
                       value={user.role}
                       onChange={e => changeRole.mutate({ id: user.id, role: e.target.value })}
-                      className="rounded-lg border border-white/10 bg-[rgb(var(--bg))] px-1.5 py-0.5 text-xs outline-none focus:border-indigo-500/50"
+                      className="rounded-lg border border-white/10 bg-[rgb(var(--bg))] px-1.5 py-0.5 text-xs outline-none focus:border-brand-500/50"
                     >
                       <option value="tutor">tutor</option>
                       <option value="student">student</option>

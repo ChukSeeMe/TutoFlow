@@ -30,7 +30,7 @@ const BAR_COLOR: Record<MasteryStatus, string> = {
   developing:   "bg-orange-400 dark:bg-orange-500",
   secure:       "bg-green-500 dark:bg-green-400",
   needs_reteach:"bg-red-400 dark:bg-red-500",
-  exceeded:     "bg-purple-500 dark:bg-purple-400",
+  exceeded:     "bg-brand-500 dark:bg-brand-400",
 };
 
 function StudentMasteryPanel({ student }: { student: Student }) {

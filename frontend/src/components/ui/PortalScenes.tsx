@@ -40,8 +40,8 @@ export function StudentNightScene({ className }: { className?: string }) {
         </radialGradient>
         {/* Purple ambient */}
         <radialGradient id="sn-ambient" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stopColor="#7c3aed" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="#7c3aed" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#155209" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#155209" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -113,20 +113,20 @@ export function StudentNightScene({ className }: { className?: string }) {
       <ellipse cx="72"  cy="104" rx="28" ry="8"  fill="#fbbf24" opacity="0.2"  />
 
       {/* ── Books (far left) ────────────────────────────────────────────── */}
-      <rect x="10" y="130" width="44" height="9"  rx="2" fill="#6366f1" />
-      <rect x="10" y="121" width="40" height="9"  rx="2" fill="#8b5cf6" />
-      <rect x="13" y="112" width="36" height="9"  rx="2" fill="#7c3aed" />
-      <rect x="10" y="130" width="4"  height="9"  rx="1" fill="#4f46e5" />
-      <rect x="10" y="121" width="3.5" height="9" rx="1" fill="#6d28d9" />
-      <rect x="13" y="112" width="3"  height="9"  rx="1" fill="#5b21b6" />
+      <rect x="10" y="130" width="44" height="9"  rx="2" fill="#27a81b" />
+      <rect x="10" y="121" width="40" height="9"  rx="2" fill="#1c660c" />
+      <rect x="13" y="112" width="36" height="9"  rx="2" fill="#155209" />
+      <rect x="10" y="130" width="4"  height="9"  rx="1" fill="#3ec436" />
+      <rect x="10" y="121" width="3.5" height="9" rx="1" fill="#1c660c" />
+      <rect x="13" y="112" width="3"  height="9"  rx="1" fill="#103d07" />
 
       {/* ── Coffee cup ──────────────────────────────────────────────────── */}
       <rect x="148" y="138" width="20" height="14" rx="3.5" fill="#1a173c" />
       <rect x="148" y="138" width="20" height="4"  rx="2"   fill="#2d2960" />
       <path d="M168 142 Q177 142 177 148 Q177 153 168 153" stroke="#1a173c" strokeWidth="2.5" fill="none" />
       {/* Steam */}
-      <path d="M154 136 Q156 129 154 122" stroke="#6366f1" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.5" />
-      <path d="M161 134 Q163 127 161 120" stroke="#6366f1" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.35" />
+      <path d="M154 136 Q156 129 154 122" stroke="#1c660c" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.5" />
+      <path d="M161 134 Q163 127 161 120" stroke="#1c660c" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.35" />
 
       {/* ── Person (silhouette, leaning forward) ─────────────────────────── */}
       {/* Head */}
@@ -158,9 +158,9 @@ export function StudentNightScene({ className }: { className?: string }) {
 
       {/* ── Notebook + pen (right of laptop) ──────────────────────────── */}
       <rect x="295" y="140" width="50" height="12" rx="2" fill="#1a1840" />
-      <rect x="295" y="140" width="6"  height="12" rx="1" fill="#6366f1" opacity="0.7" />
-      <rect x="297" y="143" width="40" height="1.5" rx="0.75" fill="#4f46e5" opacity="0.4" />
-      <rect x="297" y="147" width="32" height="1.5" rx="0.75" fill="#4f46e5" opacity="0.3" />
+      <rect x="295" y="140" width="6"  height="12" rx="1" fill="#1c660c" opacity="0.7" />
+      <rect x="297" y="143" width="40" height="1.5" rx="0.75" fill="#27a81b" opacity="0.4" />
+      <rect x="297" y="147" width="32" height="1.5" rx="0.75" fill="#27a81b" opacity="0.3" />
       {/* Pen */}
       <rect x="350" y="136" width="3" height="22" rx="1.5" fill="#a5b4fc" opacity="0.8" transform="rotate(-12 350 136)" />
     </svg>
@@ -192,8 +192,8 @@ export function ParentReviewScene({ className }: { className?: string }) {
           <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="pr-glow2" cx="70%" cy="40%" r="50%">
-          <stop offset="0%"   stopColor="#6366f1" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#1c660c" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#1c660c" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="pr-warm" cx="15%" cy="80%" r="40%">
           <stop offset="0%"   stopColor="#f59e0b" stopOpacity="0.25" />
@@ -209,12 +209,12 @@ export function ParentReviewScene({ className }: { className?: string }) {
 
       {/* Decorative circuit dots (top-left) */}
       {[[15,20],[32,15],[48,22],[22,35],[40,38],[55,30]].map(([x,y],i) => (
-        <circle key={`d${i}`} cx={x} cy={y} r="1.5" fill="#6366f1" opacity="0.3" />
+        <circle key={`d${i}`} cx={x} cy={y} r="1.5" fill="#1c660c" opacity="0.3" />
       ))}
-      <line x1="15" y1="20" x2="32" y2="15" stroke="#6366f1" strokeWidth="0.8" opacity="0.2" />
-      <line x1="32" y1="15" x2="48" y2="22" stroke="#6366f1" strokeWidth="0.8" opacity="0.2" />
-      <line x1="22" y1="35" x2="40" y2="38" stroke="#6366f1" strokeWidth="0.8" opacity="0.2" />
-      <line x1="40" y1="38" x2="55" y2="30" stroke="#6366f1" strokeWidth="0.8" opacity="0.2" />
+      <line x1="15" y1="20" x2="32" y2="15" stroke="#1c660c" strokeWidth="0.8" opacity="0.2" />
+      <line x1="32" y1="15" x2="48" y2="22" stroke="#1c660c" strokeWidth="0.8" opacity="0.2" />
+      <line x1="22" y1="35" x2="40" y2="38" stroke="#1c660c" strokeWidth="0.8" opacity="0.2" />
+      <line x1="40" y1="38" x2="55" y2="30" stroke="#1c660c" strokeWidth="0.8" opacity="0.2" />
 
       {/* Desk surface */}
       <rect x="0" y="118" width="400" height="42" fill="url(#pr-desk)" />
@@ -230,17 +230,17 @@ export function ParentReviewScene({ className }: { className?: string }) {
       <line x1="163" y1="112" x2="257" y2="112" stroke="#1a3050" strokeWidth="0.8" opacity="0.8" />
       <line x1="163" y1="88"  x2="257" y2="88"  stroke="#1a3050" strokeWidth="0.8" opacity="0.8" />
       {/* Chart bars */}
-      <rect x="170" y="103" width="12" height="24" rx="2" fill="#6366f1" opacity="0.85" />
-      <rect x="187" y="95"  width="12" height="32" rx="2" fill="#8b5cf6" opacity="0.85" />
-      <rect x="204" y="88"  width="12" height="39" rx="2" fill="#6366f1" opacity="0.9" />
+      <rect x="170" y="103" width="12" height="24" rx="2" fill="#27a81b" opacity="0.85" />
+      <rect x="187" y="95"  width="12" height="32" rx="2" fill="#1c660c" opacity="0.85" />
+      <rect x="204" y="88"  width="12" height="39" rx="2" fill="#27a81b" opacity="0.9" />
       <rect x="221" y="80"  width="12" height="47" rx="2" fill="#10b981" opacity="0.9" />
       <rect x="238" y="83"  width="12" height="44" rx="2" fill="#10b981" opacity="0.95" />
       {/* X-axis labels */}
-      <rect x="169" y="130" width="14" height="2" rx="1" fill="#4f46e5" opacity="0.4" />
-      <rect x="186" y="130" width="14" height="2" rx="1" fill="#4f46e5" opacity="0.4" />
-      <rect x="203" y="130" width="14" height="2" rx="1" fill="#4f46e5" opacity="0.4" />
-      <rect x="220" y="130" width="14" height="2" rx="1" fill="#4f46e5" opacity="0.4" />
-      <rect x="237" y="130" width="14" height="2" rx="1" fill="#4f46e5" opacity="0.4" />
+      <rect x="169" y="130" width="14" height="2" rx="1" fill="#1c660c" opacity="0.4" />
+      <rect x="186" y="130" width="14" height="2" rx="1" fill="#27a81b" opacity="0.4" />
+      <rect x="203" y="130" width="14" height="2" rx="1" fill="#27a81b" opacity="0.4" />
+      <rect x="220" y="130" width="14" height="2" rx="1" fill="#27a81b" opacity="0.4" />
+      <rect x="237" y="130" width="14" height="2" rx="1" fill="#27a81b" opacity="0.4" />
       {/* Chart title bar */}
       <rect x="163" y="76" width="50" height="3" rx="1.5" fill="#38bdf8" opacity="0.7" />
       <rect x="216" y="76" width="30" height="3" rx="1.5" fill="#818cf8" opacity="0.4" />
@@ -280,8 +280,8 @@ export function ParentReviewScene({ className }: { className?: string }) {
       <path d="M356 55 L362 62 L374 48" stroke="#10b981" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.8" />
 
       {/* ── Floating progress ring (top) ──────────────────────────────────── */}
-      <circle cx="60" cy="38" r="22" fill="none" stroke="#6366f1" strokeWidth="2" strokeOpacity="0.15" />
-      <circle cx="60" cy="38" r="22" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeDasharray="100 38.5"
+      <circle cx="60" cy="38" r="22" fill="none" stroke="#1c660c" strokeWidth="2" strokeOpacity="0.15" />
+      <circle cx="60" cy="38" r="22" fill="none" stroke="#1c660c" strokeWidth="2.5" strokeDasharray="100 38.5"
         strokeLinecap="round" strokeOpacity="0.7"
         transform="rotate(-90 60 38)"
       />
@@ -307,12 +307,12 @@ export function TutorPlanningScene({ className }: { className?: string }) {
           <stop offset="100%" stopColor="#120a30" />
         </linearGradient>
         <radialGradient id="tp-glow" cx="35%" cy="65%" r="55%">
-          <stop offset="0%"   stopColor="#6366f1" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#1c660c" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#1c660c" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="tp-glow2" cx="75%" cy="35%" r="45%">
-          <stop offset="0%"   stopColor="#8b5cf6" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#27a81b" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#27a81b" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="tp-amber" cx="50%" cy="80%" r="40%">
           <stop offset="0%"   stopColor="#f59e0b" stopOpacity="0.2" />
@@ -331,23 +331,23 @@ export function TutorPlanningScene({ className }: { className?: string }) {
       <rect x="0" y="94" width="224" height="4"  fill="#150f35" />
 
       {/* ── Book stack (left) ──────────────────────────────────────────── */}
-      <rect x="8"  y="82" width="34" height="7"  rx="1.5" fill="#6366f1" />
-      <rect x="8"  y="74" width="30" height="8"  rx="1.5" fill="#8b5cf6" />
-      <rect x="10" y="66" width="27" height="8"  rx="1.5" fill="#7c3aed" />
-      <rect x="8"  y="82" width="3.5" height="7" rx="1"   fill="#4f46e5" />
-      <rect x="8"  y="74" width="3"   height="8" rx="1"   fill="#6d28d9" />
+      <rect x="8"  y="82" width="34" height="7"  rx="1.5" fill="#27a81b" />
+      <rect x="8"  y="74" width="30" height="8"  rx="1.5" fill="#1c660c" />
+      <rect x="10" y="66" width="27" height="8"  rx="1.5" fill="#155209" />
+      <rect x="8"  y="82" width="3.5" height="7" rx="1"   fill="#3ec436" />
+      <rect x="8"  y="74" width="3"   height="8" rx="1"   fill="#1c660c" />
 
       {/* ── Laptop/screen (center) ─────────────────────────────────────── */}
       <rect x="62" y="52" width="80" height="50" rx="5" fill="#090d1a" stroke="#1a2745" strokeWidth="1.5" />
       {/* Screen content */}
-      <rect x="68" y="58" width="40" height="2.5" rx="1" fill="#6366f1" opacity="0.8" />
+      <rect x="68" y="58" width="40" height="2.5" rx="1" fill="#1c660c" opacity="0.8" />
       <rect x="68" y="64" width="55" height="2"   rx="1" fill="#818cf8" opacity="0.5" />
       <rect x="68" y="70" width="30" height="2"   rx="1" fill="#38bdf8" opacity="0.6" />
       <rect x="68" y="76" width="48" height="2"   rx="1" fill="#818cf8" opacity="0.55" />
-      <rect x="68" y="82" width="35" height="2"   rx="1" fill="#6366f1" opacity="0.5" />
+      <rect x="68" y="82" width="35" height="2"   rx="1" fill="#1c660c" opacity="0.5" />
       <rect x="68" y="88" width="52" height="2"   rx="1" fill="#818cf8" opacity="0.45" />
       {/* Screen top glow */}
-      <rect x="62" y="52" width="80" height="5" rx="5" fill="#6366f1" opacity="0.08" />
+      <rect x="62" y="52" width="80" height="5" rx="5" fill="#1c660c" opacity="0.08" />
       {/* Laptop base */}
       <rect x="58" y="102" width="88" height="5" rx="2.5" fill="#10103a" />
 
@@ -356,8 +356,8 @@ export function TutorPlanningScene({ className }: { className?: string }) {
       <rect x="150" y="85"  width="14" height="3"  rx="2" fill="#201c50" />
       <path d="M164 88 Q170 88 170 92 Q170 96 164 96" stroke="#14122e" strokeWidth="2" fill="none" />
       {/* Steam */}
-      <path d="M154 83 Q155 78 154 73" stroke="#6366f1" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.5" />
-      <path d="M158 82 Q159 77 158 72" stroke="#6366f1" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.35" />
+      <path d="M154 83 Q155 78 154 73" stroke="#1c660c" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.5" />
+      <path d="M158 82 Q159 77 158 72" stroke="#1c660c" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.35" />
 
       {/* ── Tutor figure (left-center) ─────────────────────────────────── */}
       <ellipse cx="45" cy="63" rx="13" ry="14" fill="#0f0d28" />
@@ -367,7 +367,7 @@ export function TutorPlanningScene({ className }: { className?: string }) {
       <rect x="54" y="86"  width="38" height="8"  rx="4" fill="#0c0a20" />
 
       {/* ── Floating brain/AI icon (top-right) ────────────────────────── */}
-      <circle cx="194" cy="30" r="18" fill="#6366f1" fillOpacity="0.1" stroke="#6366f1" strokeWidth="1.5" strokeOpacity="0.4" />
+      <circle cx="194" cy="30" r="18" fill="#1c660c" fillOpacity="0.1" stroke="#1c660c" strokeWidth="1.5" strokeOpacity="0.4" />
       {/* Simplified brain shape */}
       <path d="M187 28 Q185 22 190 20 Q194 18 196 22 Q200 18 204 22 Q208 24 206 29 Q208 34 204 36 Q200 38 196 36 Q192 38 188 35 Q185 32 187 28Z"
         fill="none" stroke="#a5b4fc" strokeWidth="1.5" strokeLinejoin="round" opacity="0.8" />

@@ -40,14 +40,14 @@ export default function AdminDashboard() {
   if (isLoading || !data) {
     return (
       <div className="flex h-full items-center justify-center p-12">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
       </div>
     );
   }
 
   const cards = [
-    { icon: Users,        label: "Total Users",          value: data.total_users,         color: "bg-indigo-500/15 text-indigo-400",  sub: `+${data.new_users_this_month} this month` },
-    { icon: GraduationCap,label: "Tutors",               value: data.tutors,               color: "bg-violet-500/15 text-violet-400" },
+    { icon: Users,        label: "Total Users",          value: data.total_users,         color: "bg-brand-500/15 text-brand-400",  sub: `+${data.new_users_this_month} this month` },
+    { icon: GraduationCap,label: "Tutors",               value: data.tutors,               color: "bg-brand-500/15 text-brand-400" },
     { icon: BookOpen,     label: "Students (profiles)",  value: data.total_students,       color: "bg-blue-500/15 text-blue-400" },
     { icon: UserCheck,    label: "Parents",              value: data.parents,              color: "bg-emerald-500/15 text-emerald-400" },
     { icon: Activity,     label: "Active Users",         value: data.active_users,         color: "bg-cyan-500/15 text-cyan-400" },
@@ -76,7 +76,7 @@ export default function AdminDashboard() {
           <h2 className="mb-4 font-semibold">User breakdown</h2>
           <div className="space-y-3">
             {[
-              { label: "Tutors",   count: data.tutors,     total: data.total_users, color: "bg-violet-500" },
+              { label: "Tutors",   count: data.tutors,     total: data.total_users, color: "bg-brand-500" },
               { label: "Students", count: data.students,   total: data.total_users, color: "bg-blue-500" },
               { label: "Parents",  count: data.parents,    total: data.total_users, color: "bg-emerald-500" },
               { label: "Admins",   count: data.admins,     total: data.total_users, color: "bg-red-500" },
@@ -108,13 +108,13 @@ export default function AdminDashboard() {
               <a
                 key={href}
                 href={href}
-                className="flex items-center justify-between rounded-xl border border-white/8 bg-[rgb(var(--bg))]/50 px-4 py-3 hover:border-indigo-500/30 hover:bg-[rgb(var(--bg-card))] transition-all group"
+                className="flex items-center justify-between rounded-xl border border-white/8 bg-[rgb(var(--bg))]/50 px-4 py-3 hover:border-brand-500/30 hover:bg-[rgb(var(--bg-card))] transition-all group"
               >
                 <div>
-                  <p className="text-sm font-medium group-hover:text-indigo-400 transition-colors">{label}</p>
+                  <p className="text-sm font-medium group-hover:text-brand-400 transition-colors">{label}</p>
                   <p className="text-xs text-[rgb(var(--text-secondary))]">{desc}</p>
                 </div>
-                <span className="text-[rgb(var(--text-tertiary))] group-hover:text-indigo-400 transition-colors">→</span>
+                <span className="text-[rgb(var(--text-tertiary))] group-hover:text-brand-400 transition-colors">→</span>
               </a>
             ))}
           </div>

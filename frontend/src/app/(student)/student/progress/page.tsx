@@ -94,7 +94,7 @@ export default function StudentProgressPage() {
                     <div
                       className={`h-full rounded-full transition-all ${
                         p.mastery_status === "secure" ? "bg-green-500" :
-                        p.mastery_status === "exceeded" ? "bg-purple-500" :
+                        p.mastery_status === "exceeded" ? "bg-brand-500" :
                         p.mastery_status === "developing" ? "bg-orange-400" :
                         p.mastery_status === "practising" ? "bg-yellow-400" :
                         p.mastery_status === "taught" ? "bg-blue-300" :

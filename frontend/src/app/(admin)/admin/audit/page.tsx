@@ -38,13 +38,13 @@ const ACTION_COLOURS: Record<string, string> = {
   login:           "bg-green-500/15 text-green-400",
   login_failed:    "bg-red-500/15 text-red-400",
   logout:          "bg-slate-500/15 text-slate-400",
-  register:        "bg-indigo-500/15 text-indigo-400",
+  register:        "bg-brand-500/15 text-brand-400",
   oauth_login:     "bg-blue-500/15 text-blue-400",
-  oauth_register:  "bg-violet-500/15 text-violet-400",
+  oauth_register:  "bg-brand-500/15 text-brand-400",
   create:          "bg-emerald-500/15 text-emerald-400",
   update:          "bg-amber-500/15 text-amber-400",
   delete:          "bg-red-500/15 text-red-400",
-  ai_generate:     "bg-purple-500/15 text-purple-400",
+  ai_generate:     "bg-brand-500/15 text-brand-400",
 };
 
 const KNOWN_ACTIONS = [
@@ -107,7 +107,7 @@ function ComplianceModal({ onClose }: { onClose: () => void }) {
       <div className="w-full max-w-md rounded-2xl border border-white/10 bg-[rgb(var(--bg-card))] p-6 shadow-2xl">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-indigo-400" />
+            <Shield className="h-5 w-5 text-brand-400" />
             <h2 className="font-semibold">GDPR Compliance Export</h2>
           </div>
           <button onClick={onClose} className="rounded-lg p-1 hover:bg-white/8 transition-colors">
@@ -124,14 +124,14 @@ function ComplianceModal({ onClose }: { onClose: () => void }) {
           value={studentId}
           onChange={e => setStudentId(e.target.value)}
           placeholder="e.g. 12"
-          className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+          className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
         />
         {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
         <div className="mt-5 flex gap-3">
           <button
             onClick={handleExport}
             disabled={loading}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 transition-colors disabled:opacity-60"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 py-2.5 text-sm font-semibold text-white hover:bg-brand-500 transition-colors disabled:opacity-60"
           >
             {loading ? (
               <><div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" /> Generating…</>
@@ -248,7 +248,7 @@ export default function AdminAudit() {
             </button>
             <button
               onClick={() => setCompliance(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-4 py-2 text-sm font-medium text-indigo-400 hover:bg-indigo-500/15 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-brand-500/30 bg-brand-500/10 px-4 py-2 text-sm font-medium text-brand-400 hover:bg-brand-500/15 transition-colors"
             >
               <Shield className="h-4 w-4" /> Compliance Export
             </button>
@@ -284,7 +284,7 @@ export default function AdminAudit() {
               <select
                 value={actionFilter}
                 onChange={e => { setAction(e.target.value); setPage(1); }}
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               >
                 <option value="">All actions</option>
                 {KNOWN_ACTIONS.map(a => <option key={a} value={a}>{a}</option>)}
@@ -298,7 +298,7 @@ export default function AdminAudit() {
                 value={userIdFilter}
                 onChange={e => { setUserId(e.target.value); setPage(1); }}
                 placeholder="e.g. 5"
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               />
             </div>
             {/* Student ID */}
@@ -309,7 +309,7 @@ export default function AdminAudit() {
                 value={studentFilter}
                 onChange={e => { setStudent(e.target.value); setPage(1); }}
                 placeholder="e.g. 12"
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               />
             </div>
             {/* IP Address */}
@@ -320,7 +320,7 @@ export default function AdminAudit() {
                 value={ipFilter}
                 onChange={e => { setIp(e.target.value); setPage(1); }}
                 placeholder="e.g. 192.168"
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               />
             </div>
             {/* Date From */}
@@ -330,7 +330,7 @@ export default function AdminAudit() {
                 type="date"
                 value={dateFrom}
                 onChange={e => { setDateFrom(e.target.value); setPage(1); }}
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               />
             </div>
             {/* Date To */}
@@ -340,7 +340,7 @@ export default function AdminAudit() {
                 type="date"
                 value={dateTo}
                 onChange={e => { setDateTo(e.target.value); setPage(1); }}
-                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="w-full rounded-xl border border-white/10 bg-[rgb(var(--bg-elevated))] px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-500/50"
               />
             </div>
           </div>
@@ -365,7 +365,7 @@ export default function AdminAudit() {
               {isLoading ? (
                 <tr>
                   <td colSpan={8} className="py-16 text-center text-[rgb(var(--text-tertiary))]">
-                    <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+                    <div className="mx-auto h-6 w-6 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
                   </td>
                 </tr>
               ) : logs.length === 0 ? (
@@ -425,7 +425,7 @@ export default function AdminAudit() {
                             <span className="ml-1 text-[rgb(var(--text-tertiary))]">#{log.resource_id}</span>
                           )}
                           {log.student_id && (
-                            <span className="ml-1.5 rounded bg-indigo-500/15 px-1 py-0.5 text-[10px] text-indigo-300">
+                            <span className="ml-1.5 rounded bg-brand-500/15 px-1 py-0.5 text-[10px] text-brand-300">
                               student:{log.student_id}
                             </span>
                           )}

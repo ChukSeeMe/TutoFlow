@@ -3,9 +3,16 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuthStore } from "@/stores/auth";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  // Trigger Zustand rehydration from sessionStorage after mount so the server
+  // render and initial client render both start from the same default state.
+  useEffect(() => {
+    useAuthStore.persist.rehydrate();
+  }, []);
+
   const [queryClient] = useState(
     () =>
       new QueryClient({

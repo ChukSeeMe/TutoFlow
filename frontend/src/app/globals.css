@@ -6,23 +6,23 @@
 @layer base {
   :root {
     /* Light mode — white cards on cool-gray body */
-    --bg:             237 239 248;
+    --bg:             237 243 237;
     --bg-card:        255 255 255;
-    --bg-elevated:    248 249 254;
-    --bg-subtle:      225 227 242;
+    --bg-elevated:    245 250 245;
+    --bg-subtle:      220 235 220;
 
     /* Light mode borders */
-    --border:         194 197 218;
-    --border-subtle:  214 217 234;
+    --border:         180 210 180;
+    --border-subtle:  205 228 205;
 
-    /* Light mode text — darkened for strong contrast */
-    --text:           12  12  22;    /* near-black */
-    --text-secondary: 52  54  78;    /* dark blue-gray — was 82 84 108 */
-    --text-tertiary:  96  98 122;    /* medium — was 140 142 165 */
+    /* Light mode text */
+    --text:           12  22  12;
+    --text-secondary: 42  72  42;
+    --text-tertiary:  80  110 80;
 
-    /* Accent */
-    --brand:          99 102 241;
-    --brand-muted:    238 242 255;
+    /* Accent — brand green #1C660C = rgb(28 102 12) */
+    --brand:          28 102 12;
+    --brand-muted:    220 245 215;
 
     /* Radius tokens */
     --radius-sm:  0.5rem;
@@ -33,20 +33,20 @@
   }
 
   .dark {
-    --bg:             10  10  16;
-    --bg-card:        18  18  28;
-    --bg-elevated:    26  26  38;
-    --bg-subtle:      34  34  50;
+    --bg:             8   14   8;
+    --bg-card:        14  22  14;
+    --bg-elevated:    20  32  20;
+    --bg-subtle:      28  44  28;
 
     --border:         255 255 255;
     --border-subtle:  255 255 255;
 
-    --text:           242 242 250;
-    --text-secondary: 158 160 180;
-    --text-tertiary:  108 110 130;
+    --text:           235 245 235;
+    --text-secondary: 150 175 150;
+    --text-tertiary:  100 125 100;
 
-    --brand:          99 102 241;
-    --brand-muted:    28  26  72;
+    --brand:          39 168 27;
+    --brand-muted:    14  40  10;
   }
 
   *, *::before, *::after {
@@ -73,19 +73,19 @@
 
   body {
     background-color: rgb(var(--bg));
-    background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.08) 0%, transparent 70%);
+    background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(28,102,12,0.08) 0%, transparent 70%);
     color: rgb(var(--text));
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     transition: background-color 220ms ease, color 220ms ease;
   }
 
   ::selection {
-    background-color: rgba(99, 102, 241, 0.20);
+    background-color: rgba(28, 102, 12, 0.20);
     color: inherit;
   }
 
   :focus-visible {
-    outline: 2px solid rgba(99, 102, 241, 0.65);
+    outline: 2px solid rgba(28, 102, 12, 0.65);
     outline-offset: 2px;
   }
 }
@@ -115,13 +115,13 @@
   }
 
   .text-gradient {
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #1c660c 0%, #27a81b 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
-  .glow-brand   { box-shadow: 0 0 28px -4px rgba(99,102,241,0.55); }
+  .glow-brand   { box-shadow: 0 0 28px -4px rgba(28,102,12,0.55); }
   .glow-rose    { box-shadow: 0 0 28px -4px rgba(244,63,94,0.45); }
   .glow-emerald { box-shadow: 0 0 28px -4px rgba(16,185,129,0.45); }
 
@@ -134,7 +134,7 @@
     inset: 0;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(139,92,246,0.2));
+    background: linear-gradient(135deg, rgba(28,102,12,0.5), rgba(39,168,27,0.2));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -160,7 +160,7 @@
 
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: rgba(99,102,241,0.2) transparent;
+    scrollbar-color: rgba(28,102,12,0.2) transparent;
   }
 
   .num {
@@ -178,9 +178,6 @@
     opacity: 0.025;
   }
 
-  /* ── Animated background blobs — defined here as stubs only ──────────── */
-  /* (actual animation rules live outside @layer below) */
-
   /* ── Scroll-reveal ────────────────────────────────────────────────────── */
   .reveal {
     opacity: 0;
@@ -195,10 +192,10 @@
 
 /* Dark body mesh */
 .dark body {
-  background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(99,102,241,0.14) 0%, transparent 70%);
+  background-image: radial-gradient(ellipse 80% 40% at 50% -10%, rgba(28,102,12,0.14) 0%, transparent 70%);
 }
 
-/* ── Blob definitions (outside @layer so they are never purged or overridden) */
+/* ── Blob definitions ─────────────────────────────────────────────────────── */
 .blob {
   position: absolute;
   border-radius: 9999px;
@@ -219,12 +216,12 @@
 
 /* ── Animated dot grid background ─────────────────────────────────────────── */
 .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(99,102,241,0.12) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(28,102,12,0.12) 1px, transparent 1px);
   background-size: 28px 28px;
   animation: grid-drift 20s linear infinite;
 }
 .dark .bg-dot-grid {
-  background-image: radial-gradient(circle, rgba(99,102,241,0.18) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(39,168,27,0.18) 1px, transparent 1px);
 }
 
 /* ── Blob float keyframes ──────────────────────────────────────────────────── */
@@ -251,9 +248,6 @@
 }
 
 /* ── Homepage light-mode text overrides ────────────────────────────────────── */
-/* Background: #D9D5D4 (warm light gray). All near-white text must flip dark.   */
-
-/* 1. Headings */
 html:not(.dark) [data-hp] h1,
 html:not(.dark) [data-hp] h2,
 html:not(.dark) [data-hp] h3,
@@ -261,20 +255,17 @@ html:not(.dark) [data-hp] h4 {
   color: rgb(var(--text)) !important;
 }
 
-/* 2. White & near-white body text → near-black */
 html:not(.dark) [data-hp] .text-white:not(.keep-white),
 html:not(.dark) [data-hp] [class*="text-white/"]:not(.keep-white) {
   color: rgb(var(--text)) !important;
 }
 
-/* 3. Light-gray text → readable dark */
 html:not(.dark) [data-hp] .text-gray-100,
 html:not(.dark) [data-hp] .text-gray-200,
 html:not(.dark) [data-hp] .text-gray-300 {
   color: rgb(var(--text-secondary)) !important;
 }
 
-/* 4. Restore ALL colors inside dark-surface containers (mockup, coloured avatars) */
 html:not(.dark) [data-hp] .dark-surface,
 html:not(.dark) [data-hp] .dark-surface h1,
 html:not(.dark) [data-hp] .dark-surface h2,
@@ -288,73 +279,67 @@ html:not(.dark) [data-hp] .dark-surface .text-gray-300 {
   color: revert !important;
 }
 
-/* 5. Gradient-bg buttons pinned to white text */
 html:not(.dark) [data-hp] .keep-white,
 html:not(.dark) [data-hp] .keep-white * {
   color: white !important;
 }
 
-/* 6. Muted helper class */
 html:not(.dark) [data-hp] .hp-muted {
   color: rgb(var(--text-secondary)) !important;
 }
 
 /* ── Light mode overrides ──────────────────────────────────────────────────── */
-:not(.dark) .bg-gray-50       { background-color: rgb(237 239 248); }
-:not(.dark) .bg-gray-100      { background-color: rgb(225 227 242); }
-:not(.dark) .hover\:bg-gray-50:hover  { background-color: rgb(225 227 242); }
-:not(.dark) .hover\:bg-gray-100:hover { background-color: rgb(212 215 232); }
+:not(.dark) .bg-gray-50       { background-color: rgb(237 243 237); }
+:not(.dark) .bg-gray-100      { background-color: rgb(220 235 220); }
+:not(.dark) .hover\:bg-gray-50:hover  { background-color: rgb(220 235 220); }
+:not(.dark) .hover\:bg-gray-100:hover { background-color: rgb(205 225 205); }
 
 :not(.dark) input,
 :not(.dark) select,
-:not(.dark) textarea { background-color: rgb(252 252 255); }
+:not(.dark) textarea { background-color: rgb(252 255 252); }
 
-:not(.dark) .border-gray-200  { border-color: rgb(194 197 218); }
-:not(.dark) .border-gray-300  { border-color: rgb(178 181 206); }
-:not(.dark) .border-gray-100  { border-color: rgb(214 217 234); }
-:not(.dark) .divide-gray-100 > * + * { border-color: rgb(214 217 234); }
-:not(.dark) .divide-gray-200 > * + * { border-color: rgb(194 197 218); }
+:not(.dark) .border-gray-200  { border-color: rgb(180 210 180); }
+:not(.dark) .border-gray-300  { border-color: rgb(160 195 160); }
+:not(.dark) .border-gray-100  { border-color: rgb(205 228 205); }
+:not(.dark) .divide-gray-100 > * + * { border-color: rgb(205 228 205); }
+:not(.dark) .divide-gray-200 > * + * { border-color: rgb(180 210 180); }
 
-/* Stronger text contrast in light mode */
-:not(.dark) .text-gray-500    { color: rgb(82 84 108); }
-:not(.dark) .text-gray-400    { color: rgb(96 98 122); }
+:not(.dark) .text-gray-500    { color: rgb(80 110 80); }
+:not(.dark) .text-gray-400    { color: rgb(96 126 96); }
 
 /* ── Dark mode overrides ───────────────────────────────────────────────────── */
 
 /* Surfaces */
-.dark .bg-white        { background-color: rgb(18 18 28); }
-.dark .bg-gray-50      { background-color: rgb(26 26 38); }
-.dark .bg-gray-100     { background-color: rgb(34 34 50); }
+.dark .bg-white        { background-color: rgb(14 22 14); }
+.dark .bg-gray-50      { background-color: rgb(20 32 20); }
+.dark .bg-gray-100     { background-color: rgb(28 44 28); }
 .dark .hover\:bg-gray-50:hover  { background-color: rgba(255,255,255,0.03); }
 .dark .hover\:bg-gray-100:hover { background-color: rgba(255,255,255,0.05); }
 
 /* ── Universal dark mode select / dropdown fix ──────────────────────────── */
-/* Covers ALL select elements — regardless of which class they use */
 .dark select {
-  background-color: rgb(26 26 38) !important;
-  color: rgb(228 228 240) !important;
+  background-color: rgb(20 32 20) !important;
+  color: rgb(228 240 228) !important;
   border-color: rgba(255,255,255,0.10) !important;
   color-scheme: dark;
 }
 .dark select option {
-  background-color: rgb(26 26 38);
-  color: rgb(228 228 240);
+  background-color: rgb(20 32 20);
+  color: rgb(228 240 228);
 }
-/* Custom-styled select used in admin/tutor pages with --bg-card variable */
 .dark select[class*="bg-[rgb"] {
-  background-color: rgb(18 18 28) !important;
+  background-color: rgb(14 22 14) !important;
 }
 
 /* Form inputs */
 .dark input.bg-white,
 .dark select.bg-white,
-.dark textarea.bg-white { background-color: rgb(30 30 44); color: rgb(228 228 240); }
+.dark textarea.bg-white { background-color: rgb(24 36 24); color: rgb(228 240 228); }
 
-/* Generic inputs */
 .dark input:not([class*="bg-"]),
 .dark textarea:not([class*="bg-"]) {
-  background-color: rgb(26 26 38);
-  color: rgb(228 228 240);
+  background-color: rgb(20 32 20);
+  color: rgb(228 240 228);
 }
 
 /* Borders */
@@ -365,13 +350,13 @@ html:not(.dark) [data-hp] .hp-muted {
 .dark .divide-gray-200 > * + *  { border-color: rgba(255,255,255,0.07); }
 
 /* Text */
-.dark .text-gray-900   { color: rgb(242 242 250); }
-.dark .text-gray-800   { color: rgb(222 223 238); }
-.dark .text-gray-700   { color: rgb(200 202 220); }
-.dark .text-gray-600   { color: rgb(158 160 180); }
-.dark .text-gray-500   { color: rgb(108 110 130); }
-.dark .text-gray-400   { color: rgb(82  84 104); }
-.dark .text-gray-300   { color: rgb(62  64  84); }
+.dark .text-gray-900   { color: rgb(235 245 235); }
+.dark .text-gray-800   { color: rgb(215 230 215); }
+.dark .text-gray-700   { color: rgb(190 210 190); }
+.dark .text-gray-600   { color: rgb(150 175 150); }
+.dark .text-gray-500   { color: rgb(100 125 100); }
+.dark .text-gray-400   { color: rgb(75  100 75); }
+.dark .text-gray-300   { color: rgb(55  80  55); }
 
 /* Shadows */
 .dark .shadow-xl { box-shadow: 0 8px 40px 0 rgba(0,0,0,0.7), 0 2px 8px 0 rgba(0,0,0,0.5); }

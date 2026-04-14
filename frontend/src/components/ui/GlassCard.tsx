@@ -28,7 +28,7 @@ const glowMap: Record<GlowVariant, string> = {
 
 const gradientMap: Record<GlowVariant, string> = {
   none:    "",
-  brand:   "before:bg-gradient-to-br before:from-brand-500/10 before:to-violet-500/5",
+  brand:   "before:bg-gradient-to-br before:from-brand-500/10 before:to-brand-400/5",
   rose:    "before:bg-gradient-to-br before:from-rose-500/10 before:to-rose-600/5",
   emerald: "before:bg-gradient-to-br before:from-emerald-500/10 before:to-emerald-600/5",
   amber:   "before:bg-gradient-to-br before:from-amber-500/10 before:to-amber-600/5",

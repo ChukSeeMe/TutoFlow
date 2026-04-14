@@ -279,3 +279,31 @@ def send_parent_welcome(to_email: str, parent_name: str, temp_password: str) -> 
         subject="Your Teach Harbour parent portal is ready",
         html=_parent_welcome_html(parent_name, to_email, temp_password),
     ))
+
+
+def send_direct_message(
+    to_email: str,
+    parent_name: str,
+    tutor_name: str,
+    subject: str,
+    body: str,
+) -> None:
+    """Send a custom message from the tutor to a parent."""
+    escaped_body = body.replace("\n", "<br/>")
+    html_body = f"""
+      <h1 style="margin:0 0 8px;font-size:22px;color:#111827;">Message from your tutor</h1>
+      <p style="margin:0 0 16px;font-size:15px;color:#374151;line-height:1.6;">
+        Hi {parent_name},
+      </p>
+      <div style="background:#f3f4f6;border-radius:8px;padding:16px;margin-bottom:24px;font-size:15px;color:#111827;line-height:1.7;">
+        {escaped_body}
+      </div>
+      <p style="margin:0;font-size:13px;color:#6b7280;">
+        This message was sent by {tutor_name} via Teach Harbour.
+      </p>
+    """
+    _fire(_send(
+        to_email=to_email,
+        subject=subject,
+        html=_base_template(subject, html_body),
+    ))

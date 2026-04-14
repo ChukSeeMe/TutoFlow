@@ -63,7 +63,7 @@ const ACTIVITY_COLORS: Record<string, string> = {
   explain:  "bg-blue-50 text-blue-700 border-blue-200",
   practice: "bg-green-50 text-green-700 border-green-200",
   discuss:  "bg-amber-50 text-amber-700 border-amber-200",
-  assess:   "bg-purple-50 text-purple-700 border-purple-200",
+  assess:   "bg-brand-50 text-brand-700 border-brand-200",
 };
 
 const ENGAGEMENT_COLORS = ["", "bg-red-500", "bg-orange-400", "bg-yellow-400", "bg-lime-500", "bg-green-500"];
@@ -638,7 +638,7 @@ export default function SessionDetailPage() {
           </span>
         )}
         {isDelivered && session.engagement_score && (
-          <span className="text-xs px-3 py-1 rounded-full bg-purple-50 text-purple-700">
+          <span className="text-xs px-3 py-1 rounded-full bg-brand-50 text-brand-700">
             Engagement: {session.engagement_score}/5
           </span>
         )}

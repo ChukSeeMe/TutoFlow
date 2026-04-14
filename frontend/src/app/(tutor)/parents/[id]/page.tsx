@@ -7,8 +7,8 @@ import type { ParentGuardian, Student } from "@/types";
 import { useState } from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import {
-  User, Phone, Mail, Edit2, Save, X, Users,
-  GraduationCap, Link as LinkIcon, Loader2, Unlink,
+  Phone, Mail, Edit2, Save, X, Send,
+  GraduationCap, Link as LinkIcon, Loader2, Unlink, CheckCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -41,6 +41,10 @@ export default function ParentProfilePage() {
   const [linkStudentId, setLinkStudentId] = useState("");
   const [linkSaving, setLinkSaving] = useState(false);
   const [linkError, setLinkError] = useState<string | null>(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailBody, setEmailBody] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
 
   const { data: parent, isLoading } = useQuery<ParentGuardian>({
     queryKey: ["parent", parentId],
@@ -78,6 +82,20 @@ export default function ParentProfilePage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["parent", parentId] });
       queryClient.invalidateQueries({ queryKey: ["parents"] });
+    },
+  });
+
+  const emailMutation = useMutation({
+    mutationFn: (data: { subject: string; body: string }) =>
+      parentsApi.sendEmail(parentId, data),
+    onSuccess: () => {
+      setEmailSent(true);
+      setEmailSubject("");
+      setEmailBody("");
+      setTimeout(() => {
+        setShowEmailModal(false);
+        setEmailSent(false);
+      }, 2000);
     },
   });
 
@@ -158,12 +176,20 @@ export default function ParentProfilePage() {
               </button>
             </div>
           ) : (
-            <button
-              onClick={startEdit}
-              className="flex items-center gap-1.5 border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50"
-            >
-              <Edit2 className="h-4 w-4" /> Edit profile
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowEmailModal(true)}
+                className="flex items-center gap-1.5 bg-brand-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-brand-700"
+              >
+                <Mail className="h-4 w-4" /> Send email
+              </button>
+              <button
+                onClick={startEdit}
+                className="flex items-center gap-1.5 border border-gray-300 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50"
+              >
+                <Edit2 className="h-4 w-4" /> Edit profile
+              </button>
+            </div>
           )
         }
       />
@@ -310,6 +336,47 @@ export default function ParentProfilePage() {
           )}
         </div>
 
+        {/* Contact details card */}
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <Mail className="h-4 w-4 text-brand-600" /> Contact Details
+          </h2>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between py-2 border-b border-gray-100">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <Mail className="h-4 w-4 text-gray-400" />
+                <span className="font-medium">Email</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-900">{parent.user_id ? "Registered" : "Not available"}</span>
+                <button
+                  onClick={() => setShowEmailModal(true)}
+                  className="text-xs text-brand-600 hover:text-brand-700 font-medium hover:underline"
+                >
+                  Send message →
+                </button>
+              </div>
+            </div>
+            {parent.phone && (
+              <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <Phone className="h-4 w-4 text-gray-400" />
+                  <span className="font-medium">Phone</span>
+                </div>
+                <a href={`tel:${parent.phone}`} className="text-sm text-brand-600 hover:underline">
+                  {parent.phone}
+                </a>
+              </div>
+            )}
+            <div className="flex items-center justify-between py-2">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span className="font-medium">Preferred contact</span>
+              </div>
+              <span className="text-sm text-gray-900 capitalize">{parent.communication_preference}</span>
+            </div>
+          </div>
+        </div>
+
         {/* Linked students */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
@@ -384,6 +451,85 @@ export default function ParentProfilePage() {
           )}
         </div>
       </div>
+
+      {/* Email compose modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                <Send className="h-5 w-5 text-brand-600" />
+                Email {parent.first_name}
+              </h2>
+              <button
+                onClick={() => { setShowEmailModal(false); setEmailSent(false); }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {emailSent ? (
+              <div className="flex flex-col items-center justify-center py-8 gap-3">
+                <CheckCircle className="h-12 w-12 text-brand-500" />
+                <p className="text-gray-700 font-medium">Email sent successfully!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    placeholder="e.g. Update on this week's sessions"
+                    className={inputCn}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    value={emailBody}
+                    onChange={(e) => setEmailBody(e.target.value)}
+                    placeholder="Write your message here…"
+                    rows={6}
+                    className={cn(inputCn, "resize-none")}
+                  />
+                </div>
+
+                {emailMutation.isError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                    <p className="text-sm text-red-700">Failed to send email. Please try again.</p>
+                  </div>
+                )}
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    onClick={() => setShowEmailModal(false)}
+                    className="border border-gray-300 text-gray-600 text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => emailMutation.mutate({ subject: emailSubject, body: emailBody })}
+                    disabled={!emailSubject.trim() || !emailBody.trim() || emailMutation.isPending}
+                    className="flex items-center gap-1.5 bg-brand-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-brand-700 disabled:opacity-60"
+                  >
+                    {emailMutation.isPending
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : <Send className="h-4 w-4" />}
+                    {emailMutation.isPending ? "Sending…" : "Send email"}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

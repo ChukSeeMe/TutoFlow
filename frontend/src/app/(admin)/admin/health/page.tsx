@@ -37,7 +37,7 @@ export default function AdminHealth() {
   if (isLoading || !data) {
     return (
       <div className="flex h-full items-center justify-center p-12">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
       </div>
     );
   }
@@ -62,7 +62,7 @@ export default function AdminHealth() {
       {/* Status cards */}
       <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-2xl border border-white/8 bg-[rgb(var(--bg-card))] p-5">
-          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/15 text-indigo-400">
+          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-400">
             <Database className="h-5 w-5" />
           </div>
           <div className="flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function AdminHealth() {
         </div>
 
         <div className="rounded-2xl border border-white/8 bg-[rgb(var(--bg-card))] p-5">
-          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/15 text-violet-400">
+          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500/15 text-brand-400">
             <Activity className="h-5 w-5" />
           </div>
           <p className="text-2xl font-bold">{data.total_audit_logs.toLocaleString()}</p>

@@ -76,12 +76,12 @@ const FAQS = [
 ];
 
 const FEATURES = [
-  { icon: Brain,         title: "AI Lesson Planning",   desc: "Generate structured, curriculum-aligned lesson plans in seconds. Every output awaits your approval.",                    border: "border-violet-500/25",  glow: "rgba(139,92,246,0.28)",  grad: "from-violet-500/12 to-purple-500/5",  ic: "text-violet-400"  },
-  { icon: BarChart3,     title: "Progress Analytics",   desc: "Track mastery across topics with visual dashboards. Identify knowledge gaps before they become exam problems.",          border: "border-fuchsia-500/25", glow: "rgba(217,70,239,0.28)",  grad: "from-fuchsia-500/12 to-purple-500/5", ic: "text-fuchsia-400" },
-  { icon: FileText,      title: "Automated Reports",    desc: "One-click progress reports personalised for each student. Professional, detailed, and parent-ready instantly.",          border: "border-purple-500/25",  glow: "rgba(168,85,247,0.28)",  grad: "from-purple-500/12 to-violet-500/5",  ic: "text-purple-400"  },
-  { icon: MessageSquare, title: "Parent Communication", desc: "Keep parents informed with automatic session summaries. Secure, auditable messaging built right in.",                   border: "border-indigo-500/25",  glow: "rgba(99,102,241,0.28)",  grad: "from-indigo-500/12 to-violet-500/5",  ic: "text-indigo-400"  },
-  { icon: Calendar,      title: "Session Management",   desc: "Schedule and track lessons, attendance, and homework from one clean interface. Never lose track of a session again.",   border: "border-violet-500/25",  glow: "rgba(139,92,246,0.28)",  grad: "from-violet-500/12 to-fuchsia-500/5", ic: "text-violet-400"  },
-  { icon: TrendingUp,    title: "Intervention Engine",  desc: "Rule-based recommendations flag students who need extra support — triggered automatically before grades drop.",          border: "border-fuchsia-500/25", glow: "rgba(217,70,239,0.28)",  grad: "from-fuchsia-500/12 to-purple-500/5", ic: "text-fuchsia-400" },
+  { icon: Brain,         title: "AI Lesson Planning",   desc: "Generate structured, curriculum-aligned lesson plans in seconds. Every output awaits your approval.",                    border: "border-brand-500/25",  glow: "rgba(28,102,12,0.28)",  grad: "from-brand-500/12 to-brand-400/5",  ic: "text-brand-400"  },
+  { icon: BarChart3,     title: "Progress Analytics",   desc: "Track mastery across topics with visual dashboards. Identify knowledge gaps before they become exam problems.",          border: "border-brand-400/25",  glow: "rgba(39,168,27,0.28)",  grad: "from-brand-400/12 to-brand-300/5",  ic: "text-brand-400"  },
+  { icon: FileText,      title: "Automated Reports",    desc: "One-click progress reports personalised for each student. Professional, detailed, and parent-ready instantly.",          border: "border-brand-600/25",  glow: "rgba(28,102,12,0.28)",  grad: "from-brand-600/12 to-brand-500/5",  ic: "text-brand-500"  },
+  { icon: MessageSquare, title: "Parent Communication", desc: "Keep parents informed with automatic session summaries. Secure, auditable messaging built right in.",                   border: "border-brand-500/25",  glow: "rgba(28,102,12,0.28)",  grad: "from-brand-500/12 to-brand-400/5",  ic: "text-brand-400"  },
+  { icon: Calendar,      title: "Session Management",   desc: "Schedule and track lessons, attendance, and homework from one clean interface. Never lose track of a session again.",   border: "border-brand-500/25",  glow: "rgba(28,102,12,0.28)",  grad: "from-brand-500/12 to-brand-300/5",  ic: "text-brand-400"  },
+  { icon: TrendingUp,    title: "Intervention Engine",  desc: "Rule-based recommendations flag students who need extra support — triggered automatically before grades drop.",          border: "border-brand-400/25",  glow: "rgba(39,168,27,0.28)",  grad: "from-brand-400/12 to-brand-300/5",  ic: "text-brand-400"  },
 ];
 
 const STEPS = [
@@ -104,20 +104,20 @@ const STATS = [
 ];
 
 const PORTALS = [
-  { role: "Tutor",   href: "/dashboard",         icon: GraduationCap, scene: TutorPlanningScene,  border: "border-violet-500/20",  bg: "from-violet-500/8 to-purple-500/4",  glow: "rgba(139,92,246,0.2)",  accent: "text-violet-400",  ctaBg: "bg-violet-500/10 hover:bg-violet-500/20 border-violet-500/20",
+  { role: "Tutor",   href: "/dashboard",         icon: GraduationCap, scene: TutorPlanningScene,  image: "/laptop_tutor.jpg",    border: "border-brand-500/20",  bg: "from-brand-500/8 to-brand-600/4",  glow: "rgba(28,102,12,0.2)",  accent: "text-brand-400",  ctaBg: "bg-brand-500/10 hover:bg-brand-500/20 border-brand-500/20",
     features: ["AI lesson & homework generation", "Student progress heatmaps", "One-click PDF reports", "Parent communication hub", "Curriculum-aligned planning", "Intervention alerts"] },
-  { role: "Student", href: "/student/dashboard", icon: BookOpen,       scene: StudentNightScene,   border: "border-fuchsia-500/20", bg: "from-fuchsia-500/8 to-purple-500/4", glow: "rgba(217,70,239,0.2)", accent: "text-fuchsia-400", ctaBg: "bg-fuchsia-500/10 hover:bg-fuchsia-500/20 border-fuchsia-500/20",
+  { role: "Student", href: "/student/dashboard", icon: BookOpen,       scene: StudentNightScene,   image: "/student_ipad.jpg",    border: "border-brand-400/20",  bg: "from-brand-400/8 to-brand-500/4",  glow: "rgba(39,168,27,0.2)",  accent: "text-brand-300",  ctaBg: "bg-brand-400/10 hover:bg-brand-400/20 border-brand-400/20",
     features: ["Personal learning dashboard", "Assigned homework tracker", "Interactive quizzes", "Mastery progress tracking", "Session reflections", "Achievement badges"] },
-  { role: "Parent",  href: "/parent/dashboard",  icon: Users,          scene: ParentReviewScene,   border: "border-purple-500/20",  bg: "from-purple-500/8 to-violet-500/4",  glow: "rgba(168,85,247,0.2)",  accent: "text-purple-400",  ctaBg: "bg-purple-500/10 hover:bg-purple-500/20 border-purple-500/20",
+  { role: "Parent",  href: "/parent/dashboard",  icon: Users,          scene: ParentReviewScene,   image: "/parent_phone.jpg",    border: "border-brand-600/20",  bg: "from-brand-600/8 to-brand-700/4",  glow: "rgba(28,102,12,0.2)",  accent: "text-brand-400",  ctaBg: "bg-brand-600/10 hover:bg-brand-600/20 border-brand-600/20",
     features: ["Live session summaries", "Download progress reports", "Homework status updates", "Attendance timeline", "Secure messaging", "Invoice tracking"] },
 ];
 
 /** Floating 3D-style icons around the dashboard mockup */
 const FLOAT_ICONS = [
-  { emoji: "📖", key: "book",   floatLeft: "-9%",  floatTop: "18%",  size: 56, delay: 0,   dur: 4.4, glow: "rgba(99,102,241,0.55)"  },
+  { emoji: "📖", key: "book",   floatLeft: "-9%",  floatTop: "18%",  size: 56, delay: 0,   dur: 4.4, glow: "rgba(28,102,12,0.55)"  },
   { emoji: "🌍", key: "globe",  floatLeft: "97%",  floatTop: "6%",   size: 48, delay: 1.1, dur: 5.0, glow: "rgba(16,185,129,0.55)"  },
   { emoji: "✏️", key: "pencil", floatLeft: "101%", floatTop: "48%",  size: 40, delay: 0.7, dur: 5.7, glow: "rgba(245,158,11,0.55)"  },
-  { emoji: "🧠", key: "brain",  floatLeft: "-11%", floatTop: "62%",  size: 54, delay: 0.3, dur: 5.2, glow: "rgba(217,70,239,0.55)"  },
+  { emoji: "🧠", key: "brain",  floatLeft: "-11%", floatTop: "62%",  size: 54, delay: 0.3, dur: 5.2, glow: "rgba(39,168,27,0.55)"  },
   { emoji: "⚛️", key: "atom",   floatLeft: "99%",  floatTop: "76%",  size: 44, delay: 1.4, dur: 4.8, glow: "rgba(59,130,246,0.55)"  },
 ];
 
@@ -125,10 +125,10 @@ const FLOAT_ICONS = [
    HELPER COMPONENTS
 ═══════════════════════════════════════════════════════════════════════════ */
 
-/** Violet → Fuchsia gradient text — matches image exactly */
+/** Brand gradient text */
 function VF({ children }: { children: ReactNode }) {
   return (
-    <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">
+    <span className="bg-gradient-to-r from-brand-400 via-brand-500 to-brand-600 bg-clip-text text-transparent">
       {children}
     </span>
   );
@@ -189,7 +189,7 @@ function FAQ() {
           )}
           animate={{
             borderColor: open === i
-              ? "rgba(168,85,247,0.45)"
+              ? "rgba(28,102,12,0.45)"
               : isDark ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.10)",
           }}
           transition={{ duration: 0.2 }}
@@ -303,7 +303,7 @@ function DashboardMockup() {
       {/* Glow pool underneath */}
       <div
         className="pointer-events-none absolute -bottom-14 left-1/2 h-48 w-3/4 -translate-x-1/2 rounded-full blur-3xl"
-        style={{ background: "radial-gradient(ellipse, rgba(139,92,246,0.28) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(28,102,12,0.28) 0%, transparent 70%)" }}
       />
 
       {/* Y-axis continuous float wrapper */}
@@ -316,11 +316,11 @@ function DashboardMockup() {
         <div
           className="relative overflow-hidden rounded-2xl dark-surface"
           style={{
-            border: "1px solid rgba(168,85,247,0.28)",
+            border: "1px solid rgba(28,102,12,0.28)",
             boxShadow: [
               "0 40px 130px -20px rgba(0,0,0,0.95)",
               "0 0 0 1px rgba(255,255,255,0.04)",
-              "0 0 80px -20px rgba(139,92,246,0.35)",
+              "0 0 80px -20px rgba(28,102,12,0.35)",
               "inset 0 1px 0 rgba(255,255,255,0.08)",
             ].join(", "),
           }}
@@ -342,7 +342,7 @@ function DashboardMockup() {
             {/* Sidebar */}
             <div className="hidden w-44 flex-shrink-0 flex-col border-r border-white/[0.048] bg-[#060612] md:flex">
               <div className="flex items-center gap-2 border-b border-white/[0.048] px-4 py-3">
-                <div className="flex h-5 w-5 items-center justify-center rounded-md" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
+                <div className="flex h-5 w-5 items-center justify-center rounded-md" style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>
                   <Brain className="h-3 w-3 text-white" />
                 </div>
                 <span className="text-[11px] font-bold text-white">Teach Harbour</span>
@@ -359,7 +359,7 @@ function DashboardMockup() {
                 ].map(({ label, active }, i) => (
                   <motion.div
                     key={label}
-                    className={`rounded-lg px-3 py-1.5 text-[10px] font-medium ${active ? "bg-violet-600/22 text-violet-300" : "text-zinc-600"}`}
+                    className={`rounded-lg px-3 py-1.5 text-[10px] font-medium ${active ? "bg-brand-600/22 text-brand-300" : "text-zinc-600"}`}
                     initial={{ x: -10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.5 + i * 0.055 }}
@@ -372,7 +372,7 @@ function DashboardMockup() {
               <div className="border-t border-white/[0.048] p-3">
                 <div className="flex items-center gap-2">
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
-                    style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>SM</div>
+                    style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>SM</div>
                   <div>
                     <p className="text-[10px] font-semibold text-zinc-200">Sarah M.</p>
                     <p className="text-[9px] text-zinc-600">Tutor</p>
@@ -388,7 +388,7 @@ function DashboardMockup() {
                   <p className="text-sm font-bold text-white">Good morning, Sarah 👋</p>
                   <p className="text-[10px] text-zinc-500">3 sessions today · 2 homework to review</p>
                 </div>
-                <div className="flex items-center gap-1.5 rounded-full border border-violet-500/28 bg-violet-500/10 px-3 py-1 text-[10px] font-medium text-violet-300">
+                <div className="flex items-center gap-1.5 rounded-full border border-brand-500/28 bg-brand-500/10 px-3 py-1 text-[10px] font-medium text-brand-300">
                   <Sparkles className="h-3 w-3" /> AI ready
                 </div>
               </div>
@@ -396,7 +396,7 @@ function DashboardMockup() {
               {/* Metric cards */}
               <div className="mb-4 grid grid-cols-3 gap-2 md:gap-3">
                 {[
-                  { label: "Students", value: "12", sub: "+2 this term",  c: "text-violet-400",  d: "bg-violet-500"  },
+                  { label: "Students", value: "12", sub: "+2 this term",  c: "text-brand-400",  d: "bg-brand-500"  },
                   { label: "Sessions", value: "47", sub: "This term",     c: "text-fuchsia-400", d: "bg-fuchsia-500" },
                   { label: "Reports",  value: "8",  sub: "Ready to send", c: "text-emerald-400", d: "bg-emerald-500" },
                 ].map(({ label, value, sub, c, d }, i) => (
@@ -423,7 +423,7 @@ function DashboardMockup() {
                   <p className="mb-2 text-[10px] font-semibold text-zinc-300">My students</p>
                   <div className="flex-1 space-y-2 overflow-hidden">
                     {[
-                      { name: "Amara J.", age: "Y9",  pct: 82, c: "bg-violet-500"  },
+                      { name: "Amara J.", age: "Y9",  pct: 82, c: "bg-brand-500"  },
                       { name: "Leo K.",   age: "Y11", pct: 65, c: "bg-fuchsia-500" },
                       { name: "Priya S.", age: "Y7",  pct: 91, c: "bg-emerald-500" },
                       { name: "Daniel O.",age: "Y10", pct: 48, c: "bg-amber-500"   },
@@ -461,7 +461,7 @@ function DashboardMockup() {
                 <div className="flex flex-col gap-2 overflow-hidden rounded-xl border border-white/[0.048] bg-white/[0.025] p-3">
                   <p className="text-[10px] font-semibold text-zinc-300">Upcoming sessions</p>
                   {[
-                    { name: "Amara J.", sub: "Maths",   time: "2:00 PM", c: "bg-violet-500"  },
+                    { name: "Amara J.", sub: "Maths",   time: "2:00 PM", c: "bg-brand-500"  },
                     { name: "Leo K.",   sub: "Physics",  time: "4:30 PM", c: "bg-fuchsia-500" },
                     { name: "Priya S.", sub: "English",  time: "6:00 PM", c: "bg-emerald-500" },
                   ].map(({ name, sub, time, c }, i) => (
@@ -537,20 +537,20 @@ function BgBook() {
     <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <radialGradient id="bk-glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stopColor="#a78bfa" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#7c3aed" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#6dd966" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#1c660c" stopOpacity="0" />
         </radialGradient>
         <linearGradient id="bk-cover-l" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#7c3aed" />
-          <stop offset="100%" stopColor="#4f46e5" />
+          <stop offset="0%"   stopColor="#155209" />
+          <stop offset="100%" stopColor="#1c660c" />
         </linearGradient>
         <linearGradient id="bk-cover-r" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#6d28d9" />
+          <stop offset="0%"   stopColor="#1c660c" />
+          <stop offset="100%" stopColor="#27a81b" />
         </linearGradient>
         <linearGradient id="bk-page" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor="#f5f3ff" />
-          <stop offset="100%" stopColor="#ede9fe" />
+          <stop offset="0%"   stopColor="#edfaeb" />
+          <stop offset="100%" stopColor="#d3f5cc" />
         </linearGradient>
       </defs>
       {/* Ambient glow */}
@@ -784,11 +784,11 @@ function BgAtom() {
 function HeroBgFloats() {
   const items = [
     // Book — top left, large
-    { C: BgBook,   w: 150, left: "3%",  top: "8%",  dur: 6.5, delay: 0,   rotRange: 0,  glow: "rgba(139,92,246,0.45)"  },
+    { C: BgBook,   w: 150, left: "3%",  top: "8%",  dur: 6.5, delay: 0,   rotRange: 0,  glow: "rgba(28,102,12,0.45)"  },
     // Globe — top right
     { C: BgGlobe,  w: 136, left: "80%", top: "5%",  dur: 7.2, delay: 1.2, rotRange: 0,  glow: "rgba(16,185,129,0.45)"  },
     // Brain — bottom left
-    { C: BgBrain,  w: 144, left: "1%",  top: "62%", dur: 6.0, delay: 0.6, rotRange: 0,  glow: "rgba(217,70,239,0.45)"  },
+    { C: BgBrain,  w: 144, left: "1%",  top: "62%", dur: 6.0, delay: 0.6, rotRange: 0,  glow: "rgba(39,168,27,0.45)"  },
     // Pencil — right center (rotated)
     { C: BgPencil, w: 60,  left: "89%", top: "40%", dur: 5.5, delay: 1.8, rotRange: 12, glow: "rgba(251,191,36,0.45)"  },
     // Atom — bottom right
@@ -867,7 +867,7 @@ export default function Home() {
             top: "-8%",
             width: "68%",
             height: "90%",
-            background: "radial-gradient(ellipse at 38% 38%, rgba(124,58,237,0.88) 0%, rgba(109,40,217,0.6) 35%, rgba(76,29,149,0.25) 65%, transparent 80%)",
+            background: "radial-gradient(ellipse at 38% 38%, rgba(28,102,12,0.88) 0%, rgba(28,102,12,0.6) 35%, rgba(14,52,6,0.25) 65%, transparent 80%)",
             borderRadius: "63% 37% 54% 46% / 55% 48% 52% 45%",
             willChange: "border-radius, transform",
           }}
@@ -893,7 +893,7 @@ export default function Home() {
             top: "3%",
             width: "64%",
             height: "82%",
-            background: "radial-gradient(ellipse at 60% 42%, rgba(192,38,211,0.82) 0%, rgba(162,28,175,0.55) 35%, rgba(134,25,143,0.22) 65%, transparent 80%)",
+            background: "radial-gradient(ellipse at 60% 42%, rgba(39,168,27,0.82) 0%, rgba(162,28,175,0.55) 35%, rgba(134,25,143,0.22) 65%, transparent 80%)",
             borderRadius: "37% 63% 46% 54% / 45% 52% 48% 55%",
             willChange: "border-radius, transform",
           }}
@@ -919,7 +919,7 @@ export default function Home() {
             bottom: "-18%",
             width: "80%",
             height: "55%",
-            background: "radial-gradient(ellipse at 50% 30%, rgba(76,29,149,0.65) 0%, rgba(109,40,217,0.35) 45%, transparent 72%)",
+            background: "radial-gradient(ellipse at 50% 30%, rgba(14,52,6,0.65) 0%, rgba(28,102,12,0.35) 45%, transparent 72%)",
             borderRadius: "50% 50% 30% 70% / 50% 50% 70% 30%",
             willChange: "border-radius, transform",
           }}
@@ -989,7 +989,7 @@ export default function Home() {
             whileHover={{ scale: 1.03 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg shadow-lg shadow-violet-500/30" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg shadow-lg shadow-violet-500/30" style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>
               <Brain className="h-4 w-4 text-white" />
             </div>
             <span className="text-lg font-bold tracking-tight text-white">Teach Harbour</span>
@@ -1030,8 +1030,8 @@ export default function Home() {
             <Link href="/login">
               <motion.span
                 className="keep-white inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-sm font-semibold text-white"
-                style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)", boxShadow: "0 0 22px -4px rgba(192,38,211,0.55)" }}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 32px -4px rgba(192,38,211,0.75)" }}
+                style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)", boxShadow: "0 0 22px -4px rgba(39,168,27,0.55)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 32px -4px rgba(39,168,27,0.75)" }}
                 whileTap={{ scale: 0.96 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
@@ -1054,7 +1054,7 @@ export default function Home() {
         >
           {/* Badge */}
           <motion.div variants={heroItem}>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-violet-400/22 bg-violet-500/10 px-4 py-1.5 text-sm font-medium text-violet-300">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-brand-400/22 bg-brand-500/10 px-4 py-1.5 text-sm font-medium text-brand-300">
               <motion.span
                 animate={{ rotate: [0, 20, -20, 0] }}
                 transition={{ duration: 2.8, repeat: Infinity, repeatDelay: 4 }}
@@ -1089,10 +1089,10 @@ export default function Home() {
               <motion.span
                 className="keep-white inline-flex items-center gap-2 rounded-full px-9 py-3.5 text-sm font-semibold text-white"
                 style={{
-                  background: "linear-gradient(135deg,#7C3AED,#C026D3)",
-                  boxShadow: "0 0 44px -8px rgba(192,38,211,0.7), 0 0 88px -16px rgba(124,58,237,0.45)",
+                  background: "linear-gradient(135deg,#1c660c,#27a81b)",
+                  boxShadow: "0 0 44px -8px rgba(39,168,27,0.7), 0 0 88px -16px rgba(28,102,12,0.45)",
                 }}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 60px -8px rgba(192,38,211,0.85), 0 0 110px -16px rgba(124,58,237,0.6)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 60px -8px rgba(39,168,27,0.85), 0 0 110px -16px rgba(28,102,12,0.6)" }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
@@ -1156,9 +1156,9 @@ export default function Home() {
           viewport={{ once: true, margin: "-60px" }}
         >
           {[
-            { icon: GraduationCap, title: "Elite Tutors",      desc: "Access top qualified UK tutors",          border: "border-violet-500/25",  glow: "rgba(139,92,246,0.22)", ic: "text-violet-400"  },
-            { icon: Calendar,      title: "Flexible Learning",  desc: "Learn anytime, at your own pace",         border: "border-fuchsia-500/25", glow: "rgba(217,70,239,0.22)", ic: "text-fuchsia-400" },
-            { icon: BarChart3,     title: "Progress Tracking",  desc: "Monitor and celebrate every achievement", border: "border-purple-500/25",  glow: "rgba(168,85,247,0.22)", ic: "text-purple-400"  },
+            { icon: GraduationCap, title: "Elite Tutors",      desc: "Access top qualified UK tutors",          border: "border-brand-500/25",  glow: "rgba(28,102,12,0.22)", ic: "text-brand-400"  },
+            { icon: Calendar,      title: "Flexible Learning",  desc: "Learn anytime, at your own pace",         border: "border-fuchsia-500/25", glow: "rgba(39,168,27,0.22)", ic: "text-fuchsia-400" },
+            { icon: BarChart3,     title: "Progress Tracking",  desc: "Monitor and celebrate every achievement", border: "border-brand-500/25",  glow: "rgba(28,102,12,0.22)", ic: "text-brand-400"  },
           ].map(({ icon: Icon, title, desc, border, glow, ic }) => (
             <motion.div
               key={title}
@@ -1182,8 +1182,8 @@ export default function Home() {
           <Link href="/login">
             <motion.span
               className="keep-white inline-flex items-center gap-2 rounded-full px-10 py-4 text-base font-semibold text-white"
-              style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)", boxShadow: "0 0 40px -8px rgba(192,38,211,0.6)" }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 60px -8px rgba(192,38,211,0.82)" }}
+              style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)", boxShadow: "0 0 40px -8px rgba(39,168,27,0.6)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 60px -8px rgba(39,168,27,0.82)" }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
@@ -1212,9 +1212,9 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.07 }}
-              whileHover={{ borderColor: "rgba(168,85,247,0.4)", color: "#C084FC" }}
+              whileHover={{ borderColor: "rgba(28,102,12,0.4)", color: "#3ec436" }}
             >
-              <Icon className="h-3.5 w-3.5 text-violet-400" />
+              <Icon className="h-3.5 w-3.5 text-brand-400" />
               {label}
             </motion.div>
           ))}
@@ -1258,7 +1258,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section id="portals" className="mx-auto mt-20 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Role-based portals</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">Role-based portals</p>
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>
             A dedicated experience <VF>for everyone</VF>
           </h2>
@@ -1273,7 +1273,7 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
         >
-          {PORTALS.map(({ role, href, icon: Icon, scene: Scene, border, bg, glow, accent, ctaBg, features }) => (
+          {PORTALS.map(({ role, href, icon: Icon, scene: Scene, image, border, bg, glow, accent, ctaBg, features }) => (
             <MotionLink
               key={role}
               href={href}
@@ -1287,11 +1287,22 @@ export default function Home() {
             >
               {/* Scene illustration header */}
               <div className="relative overflow-hidden">
-                <Scene className="w-full transition-transform duration-500 group-hover:scale-[1.03]" />
-                <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#07071a] to-transparent" />
+                {isDark ? (
+                  <Scene className="w-full transition-transform duration-500 group-hover:scale-[1.03]" />
+                ) : (
+                  <img
+                    src={image}
+                    alt={`${role} portal`}
+                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                )}
+                <div className={cn(
+                  "absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t to-transparent",
+                  isDark ? "from-[#07071a]" : "from-black/40",
+                )} />
                 <div className="absolute bottom-3 left-4 flex items-center gap-2">
-                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border", isDark ? cn(border, "bg-white/[0.06]") : "border-gray-300 bg-white")}>
-                    <Icon className={cn("h-3.5 w-3.5", accent)} />
+                  <div className={cn("inline-flex h-7 w-7 items-center justify-center rounded-lg border", isDark ? cn(border, "bg-white/[0.06]") : "border-white/40 bg-white/20 backdrop-blur-sm")}>
+                    <Icon className={cn("h-3.5 w-3.5", isDark ? accent : "text-white")} />
                   </div>
                   <span className="text-sm font-bold text-white">{role} Portal</span>
                 </div>
@@ -1324,7 +1335,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section id="features" className="mx-auto mt-28 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Platform features</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">Platform features</p>
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>
             Everything a tutor needs,{" "}
             <VF>nothing they don&apos;t</VF>
@@ -1349,7 +1360,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section id="how-it-works" className="mx-auto mt-28 max-w-5xl px-6">
         <Reveal className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Simple workflow</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">Simple workflow</p>
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Up and running in minutes</h2>
           <p className="mx-auto mt-4 max-w-md text-base text-gray-400">Three simple steps to transform how you run your tutoring practice.</p>
         </Reveal>
@@ -1357,27 +1368,27 @@ export default function Home() {
           {STEPS.map(({ icon: Icon, step, title, desc }, i) => (
             <motion.div
               key={step}
-              className={cn("relative rounded-2xl border p-6", isDark ? "border-violet-500/22 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
+              className={cn("relative rounded-2xl border p-6", isDark ? "border-brand-500/22 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
               initial={{ opacity: 0, y: 22 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
               transition={{ delay: i * 0.14, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ y: -4, boxShadow: isDark ? "0 0 32px -6px rgba(168,85,247,0.25)" : "0 8px 24px rgba(0,0,0,0.09)" }}
+              whileHover={{ y: -4, boxShadow: isDark ? "0 0 32px -6px rgba(28,102,12,0.25)" : "0 8px 24px rgba(0,0,0,0.09)" }}
             >
               {i < 2 && (
                 <div className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 md:block">
-                  <ArrowRight className="h-5 w-5 text-violet-500/38" />
+                  <ArrowRight className="h-5 w-5 text-brand-500/38" />
                 </div>
               )}
               <motion.div
-                className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-violet-500/25 bg-violet-500/10"
+                className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl border border-brand-500/25 bg-brand-500/10"
                 whileInView={{ scale: [0.55, 1.12, 1] }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.14 + 0.28, duration: 0.5 }}
               >
-                <Icon className="h-5 w-5 text-violet-400" />
+                <Icon className="h-5 w-5 text-brand-400" />
               </motion.div>
-              <p className="mb-1 font-mono text-xs font-bold text-violet-400">{step}</p>
+              <p className="mb-1 font-mono text-xs font-bold text-brand-400">{step}</p>
               <h3 className={cn("mb-2 text-[0.95rem] font-bold", isDark ? "text-white" : "text-gray-900")}>{title}</h3>
               <p className={cn("text-sm leading-relaxed", isDark ? "text-gray-400" : "text-gray-600")}>{desc}</p>
             </motion.div>
@@ -1390,7 +1401,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section className="mx-auto mt-28 max-w-6xl px-6">
         <Reveal className="mb-12 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Testimonials</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">Testimonials</p>
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Trusted by tutors nationwide</h2>
         </Reveal>
         <motion.div
@@ -1404,8 +1415,8 @@ export default function Home() {
             <motion.div
               key={name}
               variants={scrollCard}
-              className={cn("rounded-2xl border p-6", isDark ? "border-violet-500/20 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
-              whileHover={{ y: -4, boxShadow: isDark ? "0 0 36px -8px rgba(139,92,246,0.22)" : "0 8px 24px rgba(0,0,0,0.09)" }}
+              className={cn("rounded-2xl border p-6", isDark ? "border-brand-500/20 bg-white/[0.02]" : "border-gray-200 bg-white shadow-sm")}
+              whileHover={{ y: -4, boxShadow: isDark ? "0 0 36px -8px rgba(28,102,12,0.22)" : "0 8px 24px rgba(0,0,0,0.09)" }}
               transition={{ type: "spring", stiffness: 280, damping: 24 }}
             >
               <div className="mb-4 flex">
@@ -1415,7 +1426,7 @@ export default function Home() {
               <div className="flex items-center gap-3">
                 <div
                   className="dark-surface flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-                  style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}
+                  style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}
                 >
                   {name.split(" ").map((n) => n[0]).join("")}
                 </div>
@@ -1434,7 +1445,7 @@ export default function Home() {
       ══════════════════════════════════════════════════════════════ */}
       <section id="faq" className="mx-auto mt-28 max-w-3xl px-6">
         <Reveal className="mb-10 text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">FAQ</p>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">FAQ</p>
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-4xl", isDark ? "text-white" : "text-gray-900")}>Common questions</h2>
         </Reveal>
         <Reveal><FAQ /></Reveal>
@@ -1449,13 +1460,13 @@ export default function Home() {
             className={cn(
               "rounded-3xl border p-10",
               isDark
-                ? "border-violet-500/20 bg-white/[0.018]"
+                ? "border-brand-500/20 bg-white/[0.018]"
                 : "border-gray-200 bg-white shadow-sm",
             )}
             style={isDark ? { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.055)" } : undefined}
           >
             <div className="mb-8 text-center">
-              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-violet-400">Get in touch</p>
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.13em] text-brand-400">Get in touch</p>
               <h2 className={cn("text-2xl font-extrabold md:text-3xl", isDark ? "text-white" : "text-gray-900")}>We&apos;d love to hear from you</h2>
               <p className={cn("mt-3 text-sm", isDark ? "text-gray-400" : "text-gray-600")}>Questions about pricing, features, or a custom demo? Reach out.</p>
             </div>
@@ -1467,10 +1478,10 @@ export default function Home() {
                 <motion.div
                   key={label}
                   className={cn("flex items-center gap-3 text-sm", isDark ? "text-gray-400" : "text-gray-600")}
-                  whileHover={{ color: "#C084FC", x: 2 }}
+                  whileHover={{ color: "#3ec436", x: 2 }}
                   transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 >
-                  <Icon className="h-4 w-4 shrink-0 text-violet-400" />
+                  <Icon className="h-4 w-4 shrink-0 text-brand-400" />
                   {label}
                 </motion.div>
               ))}
@@ -1485,11 +1496,11 @@ export default function Home() {
       <section className="relative mx-auto mt-20 max-w-4xl overflow-hidden px-6 py-20 text-center">
         <div className={cn(
           "absolute inset-0 -z-10 rounded-3xl border",
-          isDark ? "border-violet-500/20 bg-white/[0.018]" : "border-gray-200 bg-white shadow-sm",
+          isDark ? "border-brand-500/20 bg-white/[0.018]" : "border-gray-200 bg-white shadow-sm",
         )}
           style={isDark ? { boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)" } : undefined} />
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, rgba(28,102,12,0.18) 0%, transparent 70%)" }} />
         <Reveal className="relative z-10">
           <h2 className={cn("text-3xl font-extrabold tracking-[-0.03em] md:text-[2.6rem]", isDark ? "text-white" : "text-gray-900")}>
             Ready to <VF>transform your tutoring</VF>?
@@ -1501,8 +1512,8 @@ export default function Home() {
             <Link href="/login">
               <motion.span
                 className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-sm font-semibold text-white"
-                style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)", boxShadow: "0 0 38px -8px rgba(192,38,211,0.65)" }}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 55px -8px rgba(192,38,211,0.85)" }}
+                style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)", boxShadow: "0 0 38px -8px rgba(39,168,27,0.65)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 55px -8px rgba(39,168,27,0.85)" }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
@@ -1540,7 +1551,7 @@ export default function Home() {
             {/* Brand column */}
             <div className="col-span-2 md:col-span-1">
               <div className="flex items-center gap-2.5 mb-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg" style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>
                   <Brain className="h-3.5 w-3.5 text-white" />
                 </div>
                 <span className="text-sm font-bold text-white">Teach Harbour</span>

@@ -120,7 +120,7 @@ export default function LearningPassportPage() {
   const sendSections = [
     { title: "SEND Notes",                icon: Shield,        colour: "blue",   field: student.send_notes },
     { title: "Support Strategies",        icon: Lightbulb,     colour: "amber",  field: student.support_strategies },
-    { title: "Preferred Scaffolds",       icon: Brain,         colour: "purple", field: student.preferred_scaffolds },
+    { title: "Preferred Scaffolds",       icon: Brain,         colour: "brand",  field: student.preferred_scaffolds },
     { title: "Literacy Notes",            icon: BookOpen,      colour: "green",  field: student.literacy_notes },
     { title: "Communication Prefs",       icon: MessageCircle, colour: "teal",   field: student.communication_preferences },
   ];
@@ -128,7 +128,7 @@ export default function LearningPassportPage() {
   const iconColour: Record<string, string> = {
     blue:   "text-blue-600 dark:text-blue-400",
     amber:  "text-amber-600 dark:text-amber-400",
-    purple: "text-purple-600 dark:text-purple-400",
+    brand: "text-brand-600 dark:text-brand-400",
     green:  "text-green-600 dark:text-green-400",
     teal:   "text-teal-600 dark:text-teal-400",
   };
@@ -161,7 +161,7 @@ export default function LearningPassportPage() {
           <div className="flex items-center gap-2 flex-shrink-0">
             <Link
               href={`/students/${studentId}/send`}
-              className="flex items-center gap-1.5 text-xs text-purple-600 dark:text-purple-400 border border-purple-300 dark:border-purple-500/40 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg px-3 py-1.5 transition-colors"
+              className="flex items-center gap-1.5 text-xs text-brand-600 dark:text-brand-400 border border-brand-300 dark:border-brand-500/40 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg px-3 py-1.5 transition-colors"
             >
               <Shield className="h-3.5 w-3.5" />
               SEND & Support
@@ -272,7 +272,7 @@ export default function LearningPassportPage() {
           {!hasSend && (
             <Link
               href={`/students/${studentId}/send`}
-              className="text-xs text-purple-600 dark:text-purple-400 hover:underline flex items-center gap-1"
+              className="text-xs text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
             >
               Add SEND notes <ExternalLink className="h-3 w-3" />
             </Link>

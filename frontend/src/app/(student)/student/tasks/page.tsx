@@ -20,7 +20,7 @@ const statusColour: Record<HomeworkStatus, string> = {
   set: "bg-blue-100 text-blue-700",
   in_progress: "bg-yellow-100 text-yellow-700",
   submitted: "bg-green-100 text-green-700",
-  marked: "bg-purple-100 text-purple-700",
+  marked: "bg-brand-100 text-brand-700",
   overdue: "bg-red-100 text-red-700",
 };
 

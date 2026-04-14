@@ -26,7 +26,9 @@ const handler = NextAuth({
       if (account) {
         try {
           const backendUrl =
-            process.env.BACKEND_INTERNAL_URL || "http://backend:8000";
+            process.env.BACKEND_INTERNAL_URL || "http://localhost:8000";
+
+          console.log(`[NextAuth] Calling backend at ${backendUrl}/auth/oauth/callback`);
 
           const res = await fetch(`${backendUrl}/auth/oauth/callback`, {
             method: "POST",
@@ -37,15 +39,20 @@ const handler = NextAuth({
               provider: account.provider,
               provider_id: account.providerAccountId,
             }),
+            signal: AbortSignal.timeout(10_000), // 10 s timeout
           });
 
           if (res.ok) {
             const data = await res.json();
             token.teachHarbourToken = data.access_token;
             token.teachHarbourRole = data.role;
+            console.log(`[NextAuth] Backend sync OK — role: ${data.role}`);
+          } else {
+            const body = await res.text();
+            console.error(`[NextAuth] Backend sync failed ${res.status}: ${body}`);
           }
         } catch (err) {
-          console.error("[NextAuth] OAuth backend sync failed:", err);
+          console.error("[NextAuth] OAuth backend sync error:", err);
         }
       }
       return token;

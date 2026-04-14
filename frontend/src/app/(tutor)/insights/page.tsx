@@ -1,12 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Link from "next/link";
 import { analyticsApi } from "@/lib/api";
 import {
+  RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell,
+  LineChart, Line, CartesianGrid, Legend,
+} from "recharts";
+import {
   Brain, AlertTriangle, TrendingUp, TrendingDown, Minus,
   Target, GraduationCap, Clock, ChevronRight, ArrowUpDown,
+  Sparkles, Loader2, X, BookOpen, Activity, CheckSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -44,12 +50,9 @@ function RiskGauge({ score, level }: { score: number; level: string }) {
   const cfg = RISK_CONFIG[level as keyof typeof RISK_CONFIG];
   return (
     <div className="flex flex-col items-center gap-1">
-      {/* Arc gauge — SVG half-circle */}
       <div className="relative w-16 h-9 overflow-hidden">
         <svg viewBox="0 0 64 36" className="w-full h-full">
-          {/* Track */}
           <path d="M 4 32 A 28 28 0 0 1 60 32" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" className="text-gray-200 dark:text-white/10" />
-          {/* Fill */}
           <path
             d="M 4 32 A 28 28 0 0 1 60 32"
             fill="none"
@@ -101,11 +104,164 @@ function MasteryBar({ secure, total }: { secure: number; total: number }) {
   );
 }
 
+// ── Student radar chart ────────────────────────────────────────────────────────
+
+function StudentRadar({ insight }: { insight: StudentInsight }) {
+  const radarData = [
+    { subject: "Attendance", value: Math.round(insight.attendance_rate * 100) },
+    { subject: "Engagement", value: insight.average_engagement ? Math.round((insight.average_engagement / 5) * 100) : 0 },
+    { subject: "Quiz Score", value: insight.average_quiz_score ? Math.round(insight.average_quiz_score) : 0 },
+    { subject: "Mastery", value: insight.total_topics > 0 ? Math.round((insight.topics_secure / insight.total_topics) * 100) : 0 },
+    { subject: "Progress", value: Math.max(0, 100 - insight.risk_score) },
+  ];
+
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <RadarChart data={radarData} margin={{ top: 8, right: 16, bottom: 8, left: 16 }}>
+        <PolarGrid stroke="#e5e7eb" />
+        <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: "#6b7280" }} />
+        <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
+        <Radar
+          name="Student"
+          dataKey="value"
+          stroke="#1c660c"
+          fill="#1c660c"
+          fillOpacity={0.18}
+          strokeWidth={2}
+        />
+      </RadarChart>
+    </ResponsiveContainer>
+  );
+}
+
+// ── AI Advice Panel ────────────────────────────────────────────────────────────
+
+function AIAdvicePanel({ studentId, studentName }: { studentId: number; studentName: string }) {
+  const [advice, setAdvice] = useState<string | null>(null);
+
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: () => analyticsApi.aiAdvice(studentId).then((r) => r.data.advice),
+    onSuccess: (data) => setAdvice(data),
+  });
+
+  return (
+    <div className="border border-brand-200 dark:border-brand-500/20 bg-brand-50 dark:bg-brand-500/5 rounded-xl p-4">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs font-semibold text-brand-700 dark:text-brand-400 uppercase tracking-wide flex items-center gap-1.5">
+          <Sparkles className="h-3.5 w-3.5" /> AI Teaching Advice
+        </p>
+        {!advice && (
+          <button
+            onClick={() => mutate()}
+            disabled={isPending}
+            className="flex items-center gap-1.5 text-xs bg-brand-600 text-white px-3 py-1.5 rounded-lg hover:bg-brand-700 disabled:opacity-60"
+          >
+            {isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+            {isPending ? "Generating…" : "Get AI advice"}
+          </button>
+        )}
+        {advice && (
+          <button onClick={() => setAdvice(null)} className="text-gray-400 hover:text-gray-600">
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {isError && (
+        <p className="text-xs text-red-600">Failed to generate advice. Check AI configuration.</p>
+      )}
+
+      {!advice && !isPending && !isError && (
+        <p className="text-xs text-brand-600 dark:text-brand-400 opacity-70">
+          Click "Get AI advice" to generate personalised teaching strategies for {studentName.split(" ")[0]}.
+        </p>
+      )}
+
+      {isPending && (
+        <div className="flex items-center gap-2 text-xs text-brand-600 dark:text-brand-400">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+          Analysing student data and generating suggestions…
+        </div>
+      )}
+
+      {advice && (
+        <div className="text-sm text-gray-700 dark:text-zinc-300 whitespace-pre-line leading-relaxed">
+          {advice}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Behavior & learning breakdown ──────────────────────────────────────────────
+
+function BehaviorBreakdown({ insight }: { insight: StudentInsight }) {
+  const attendance = Math.round(insight.attendance_rate * 100);
+  const engagement = insight.average_engagement
+    ? Math.round((insight.average_engagement / 5) * 100)
+    : null;
+  const homeworkCompletion = null; // placeholder — could be derived from analytics
+
+  const bars = [
+    {
+      label: "Attendance",
+      value: attendance,
+      icon: <Activity className="h-3.5 w-3.5" />,
+      color: attendance >= 85 ? "bg-green-500" : attendance >= 70 ? "bg-amber-500" : "bg-red-500",
+    },
+    {
+      label: "Engagement",
+      value: engagement,
+      icon: <Brain className="h-3.5 w-3.5" />,
+      color: engagement == null ? "bg-gray-200" : engagement >= 60 ? "bg-brand-500" : engagement >= 40 ? "bg-amber-500" : "bg-red-500",
+    },
+    {
+      label: "Quiz Avg",
+      value: insight.average_quiz_score ? Math.round(insight.average_quiz_score) : null,
+      icon: <BookOpen className="h-3.5 w-3.5" />,
+      color: !insight.average_quiz_score ? "bg-gray-200"
+        : insight.average_quiz_score >= 70 ? "bg-green-500"
+        : insight.average_quiz_score >= 50 ? "bg-amber-500"
+        : "bg-red-500",
+    },
+    {
+      label: "Mastery",
+      value: insight.total_topics > 0
+        ? Math.round((insight.topics_secure / insight.total_topics) * 100)
+        : null,
+      icon: <CheckSquare className="h-3.5 w-3.5" />,
+      color: "bg-brand-500",
+    },
+  ];
+
+  return (
+    <div className="space-y-2.5">
+      {bars.map(({ label, value, icon, color }) => (
+        <div key={label} className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 w-24 flex-shrink-0 text-xs text-gray-500 dark:text-zinc-500">
+            {icon} {label}
+          </div>
+          <div className="flex-1 h-2 bg-gray-100 dark:bg-white/[0.06] rounded-full overflow-hidden">
+            <div
+              className={cn("h-full rounded-full transition-all", color)}
+              style={{ width: `${value ?? 0}%` }}
+            />
+          </div>
+          <span className="text-xs font-medium text-gray-700 dark:text-zinc-300 w-8 text-right">
+            {value != null ? `${value}%` : "—"}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ── Student insight card ───────────────────────────────────────────────────────
 
 function InsightCard({ insight }: { insight: StudentInsight }) {
   const cfg = RISK_CONFIG[insight.risk_level];
   const [expanded, setExpanded] = useState(false);
+  const [showRadar, setShowRadar] = useState(false);
 
   return (
     <div className={cn("rounded-xl border overflow-hidden transition-all", cfg.border, "bg-white dark:bg-[#16161f]")}>
@@ -179,6 +335,29 @@ function InsightCard({ insight }: { insight: StudentInsight }) {
             ))}
           </div>
 
+          {/* Behavior & Learning breakdown */}
+          <div>
+            <p className="text-xs font-semibold text-gray-600 dark:text-zinc-400 mb-2 uppercase tracking-wide">
+              Behavior & Learning Breakdown
+            </p>
+            <BehaviorBreakdown insight={insight} />
+          </div>
+
+          {/* Toggle: radar chart */}
+          <div>
+            <button
+              onClick={() => setShowRadar(!showRadar)}
+              className="text-xs text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
+            >
+              {showRadar ? "Hide" : "Show"} multi-dimensional profile
+            </button>
+            {showRadar && (
+              <div className="mt-3 border border-gray-100 dark:border-white/[0.06] rounded-xl p-2 bg-gray-50 dark:bg-white/[0.02]">
+                <StudentRadar insight={insight} />
+              </div>
+            )}
+          </div>
+
           {/* Risk factors */}
           {insight.risk_factors.length > 0 && (
             <div>
@@ -211,6 +390,9 @@ function InsightCard({ insight }: { insight: StudentInsight }) {
               }
             </div>
           )}
+
+          {/* AI Advice */}
+          <AIAdvicePanel studentId={insight.student_id} studentName={insight.student_name} />
 
           {/* Actions */}
           <div className="flex items-center gap-3 pt-1">
@@ -263,6 +445,89 @@ function SummaryStrip({ insights }: { insights: StudentInsight[] }) {
   );
 }
 
+// ── Overview charts ────────────────────────────────────────────────────────────
+
+function OverviewCharts({ insights }: { insights: StudentInsight[] }) {
+  // Bar chart: quiz avg per student
+  const quizData = insights
+    .filter(i => i.average_quiz_score != null)
+    .map(i => ({
+      name: i.student_name.split(" ")[0],
+      score: Math.round(i.average_quiz_score!),
+      level: i.risk_level,
+    }));
+
+  // Scatter-style: attendance vs engagement
+  const profileData = insights.map(i => ({
+    name: i.student_name.split(" ")[0],
+    attendance: Math.round(i.attendance_rate * 100),
+    engagement: i.average_engagement ? Math.round((i.average_engagement / 5) * 100) : 0,
+    mastery: i.total_topics > 0 ? Math.round((i.topics_secure / i.total_topics) * 100) : 0,
+  }));
+
+  const riskColors: Record<string, string> = {
+    critical: "#ef4444",
+    at_risk: "#f59e0b",
+    monitoring: "#60a5fa",
+    on_track: "#22c55e",
+  };
+
+  if (quizData.length === 0 && profileData.length === 0) return null;
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+      {/* Quiz score bar chart */}
+      {quizData.length > 0 && (
+        <div className="bg-white dark:bg-[#16161f] border border-gray-200 dark:border-white/[0.07] rounded-xl p-4">
+          <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wide mb-3">
+            Quiz Score by Student
+          </p>
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={quizData} margin={{ top: 4, right: 8, bottom: 4, left: -16 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#9ca3af" }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "#9ca3af" }} />
+              <Tooltip
+                contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
+                formatter={(v: number) => [`${v}%`, "Score"]}
+              />
+              <Bar dataKey="score" radius={[4, 4, 0, 0]}>
+                {quizData.map((entry, i) => (
+                  <Cell key={i} fill={riskColors[entry.level] ?? "#1c660c"} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+
+      {/* Attendance vs Engagement line */}
+      {profileData.length > 0 && (
+        <div className="bg-white dark:bg-[#16161f] border border-gray-200 dark:border-white/[0.07] rounded-xl p-4">
+          <p className="text-xs font-semibold text-gray-500 dark:text-zinc-400 uppercase tracking-wide mb-3">
+            Attendance, Engagement & Mastery
+          </p>
+          <ResponsiveContainer width="100%" height={180}>
+            <LineChart data={profileData} margin={{ top: 4, right: 8, bottom: 4, left: -16 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#9ca3af" }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 10, fill: "#9ca3af" }} />
+              <Tooltip
+                contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e5e7eb" }}
+                formatter={(v: number) => [`${v}%`]}
+              />
+              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Line type="monotone" dataKey="attendance" stroke="#3b82f6" strokeWidth={2} dot={{ r: 3 }} name="Attendance" />
+              <Line type="monotone" dataKey="engagement" stroke="#f59e0b" strokeWidth={2} dot={{ r: 3 }} name="Engagement" />
+              <Line type="monotone" dataKey="mastery" stroke="#1c660c" strokeWidth={2} dot={{ r: 3 }} name="Mastery" />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Page ───────────────────────────────────────────────────────────────────────
 
 type SortKey = "risk" | "grade" | "name";
@@ -284,7 +549,6 @@ export default function InsightsPage() {
   const sorted = [...filtered].sort((a, b) => {
     if (sortKey === "name") return a.student_name.localeCompare(b.student_name);
     if (sortKey === "grade") return a.predicted_grade.localeCompare(b.predicted_grade);
-    // Default: risk score desc (already sorted from API, but allow re-sort)
     const levelOrder = { critical: 0, at_risk: 1, monitoring: 2, on_track: 3 };
     const lo = levelOrder[a.risk_level] - levelOrder[b.risk_level];
     if (lo !== 0) return lo;
@@ -303,13 +567,12 @@ export default function InsightsPage() {
             <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100">AI Insight Engine</h1>
           </div>
           <p className="text-sm text-gray-500 dark:text-zinc-500 max-w-xl">
-            Predictive flags for every student — risk score, predicted grade, and weeks to target.
-            All calculations are deterministic and explainable.
+            Risk scores, predicted grades, behavior breakdown, and AI-generated teaching strategies for every student.
           </p>
         </div>
         <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-zinc-600 bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] px-3 py-1.5 rounded-lg">
           <AlertTriangle className="h-3.5 w-3.5" />
-          Rule-based · No black box
+          Rule-based · Explainable
         </div>
       </div>
 
@@ -331,8 +594,13 @@ export default function InsightsPage() {
         <>
           <SummaryStrip insights={insights} />
 
+          {/* Overview charts */}
+          <div className="mt-5">
+            <OverviewCharts insights={insights} />
+          </div>
+
           {/* Filter + Sort toolbar */}
-          <div className="flex flex-wrap items-center gap-3 mt-5 mb-4">
+          <div className="flex flex-wrap items-center gap-3 mb-4">
             <div className="flex gap-1">
               {[
                 { key: "all", label: "All" },
@@ -383,7 +651,7 @@ export default function InsightsPage() {
 
           <p className="text-xs text-gray-400 dark:text-zinc-600 text-center mt-6">
             Risk scores update each page load. Grade predictions use quiz averages + topic mastery ratio.
-            All signals are explicit — click any card to see contributing factors.
+            Expand any card to view behavior breakdown, radar profile, and get AI advice.
           </p>
         </>
       )}

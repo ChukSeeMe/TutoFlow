@@ -13,7 +13,8 @@ from app.models.progress import ProgressRecord
 from app.schemas.analytics import StudentAnalyticsSummary
 from app.services.recommendation_service import get_student_analytics
 from app.core.dependencies import require_tutor
-from app.core.exceptions import ForbiddenError
+from app.core.exceptions import ForbiddenError, NotFoundError
+from app.ai.claude_client import call_claude
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
@@ -425,3 +426,87 @@ async def get_insights(
     insights.sort(key=lambda x: (level_order[x.risk_level], -x.risk_score))
 
     return insights
+
+
+# ── AI advice endpoint ─────────────────────────────────────────────────────────
+
+class AIAdviceResponse(BaseModel):
+    advice: str
+
+
+@router.post("/insights/{student_id}/ai-advice", response_model=AIAdviceResponse)
+async def get_ai_advice(
+    student_id: int,
+    current_user: User = Depends(require_tutor),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Call Claude to generate personalised teaching strategy advice for a student.
+    Data sent to AI is anonymised (no names, only aggregate metrics).
+    """
+    tutor = await _get_tutor(current_user, db)
+
+    student_result = await db.execute(
+        select(Student).where(
+            Student.id == student_id,
+            Student.tutor_id == tutor.id,
+        )
+    )
+    student = student_result.scalar_one_or_none()
+    if not student:
+        raise NotFoundError("Student not found")
+
+    try:
+        summary = await get_student_analytics(student_id, tutor.id, db)
+    except Exception as exc:
+        raise NotFoundError("Could not load student analytics") from exc
+
+    progress_result = await db.execute(
+        select(ProgressRecord).where(ProgressRecord.student_id == student_id)
+    )
+    progress = progress_result.scalars().all()
+    total_topics = len(progress)
+    mastery_ratio = summary.topics_secure / total_topics if total_topics > 0 else 0.0
+
+    key_stage = student.key_stage.value if student.key_stage else "Not specified"
+    risk = _risk_score(
+        attendance_rate=summary.attendance_rate,
+        avg_engagement=summary.average_engagement,
+        topics_needs_reteach=summary.topics_needs_reteach,
+        outstanding_homework=summary.outstanding_homework,
+        flagged_observations=summary.flagged_observations,
+        avg_quiz_score=summary.average_quiz_score,
+    )
+    risk_level = _risk_level(risk)
+    factors = _risk_factors(
+        attendance_rate=summary.attendance_rate,
+        avg_engagement=summary.average_engagement,
+        topics_needs_reteach=summary.topics_needs_reteach,
+        outstanding_homework=summary.outstanding_homework,
+        flagged_observations=summary.flagged_observations,
+        avg_quiz_score=summary.average_quiz_score,
+        trend="stable",
+    )
+
+    system_prompt = (
+        "You are an expert UK educational tutor advisor. "
+        "You give concise, actionable, evidence-based teaching strategy suggestions. "
+        "Focus on practical next steps a private tutor can take in 1-to-1 sessions. "
+        "Keep advice warm, constructive, and under 250 words. Use bullet points."
+    )
+    user_prompt = f"""A student has the following anonymised profile:
+- Key stage: {key_stage}
+- Year group: {student.year_group or 'Unknown'}
+- Risk level: {risk_level} (score: {risk})
+- Attendance rate: {round(summary.attendance_rate * 100)}%
+- Average engagement: {f"{summary.average_engagement:.1f}/5" if summary.average_engagement else "No data"}
+- Average quiz score: {f"{round(summary.average_quiz_score)}%" if summary.average_quiz_score else "No data"}
+- Topics secure: {summary.topics_secure} / {total_topics} ({round(mastery_ratio * 100)}%)
+- Topics needing reteach: {summary.topics_needs_reteach}
+- Outstanding homework tasks: {summary.outstanding_homework}
+- Risk factors identified: {", ".join(factors) if factors else "None"}
+
+Please suggest targeted, practical teaching strategies for this student."""
+
+    advice = await call_claude(system_prompt, user_prompt, max_tokens=600, use_cache=False)
+    return AIAdviceResponse(advice=advice)

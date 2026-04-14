@@ -90,11 +90,11 @@ function StreamingPanel({ phase, onReset }: { phase: StreamPhase; onReset: () =>
       <div className="flex items-center gap-3 border-b border-gray-100 px-6 py-4">
         <div className={cn(
           "flex h-9 w-9 items-center justify-center rounded-xl",
-          phase.kind === "done" ? "bg-green-100" : "bg-violet-100",
+          phase.kind === "done" ? "bg-green-100" : "bg-brand-100",
         )}>
           {phase.kind === "done"
             ? <CheckCircle className="h-5 w-5 text-green-600" />
-            : <Brain className="h-5 w-5 text-violet-600 animate-pulse" />
+            : <Brain className="h-5 w-5 text-brand-600 animate-pulse" />
           }
         </div>
         <div>
@@ -128,7 +128,7 @@ function StreamingPanel({ phase, onReset }: { phase: StreamPhase; onReset: () =>
               i < currentStep
                 ? "bg-green-500 text-white"
                 : i === currentStep
-                ? "bg-violet-600 text-white animate-pulse"
+                ? "bg-brand-600 text-white animate-pulse"
                 : "bg-gray-100 text-gray-400",
             )}>
               {i < currentStep ? "✓" : i + 1}
@@ -150,7 +150,7 @@ function StreamingPanel({ phase, onReset }: { phase: StreamPhase; onReset: () =>
           className="h-64 overflow-y-auto px-6 py-4 font-mono text-xs leading-relaxed text-gray-600 bg-gray-50"
         >
           {(phase as { chunks: string }).chunks}
-          <span className="inline-block h-3 w-1 bg-violet-500 animate-pulse ml-0.5 align-middle" />
+          <span className="inline-block h-3 w-1 bg-brand-500 animate-pulse ml-0.5 align-middle" />
         </div>
       )}
 

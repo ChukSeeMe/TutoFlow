@@ -33,6 +33,10 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "teach-harbour-auth",
       storage: createJSONStorage(() => sessionStorage),
+      // skipHydration keeps the store at its default values during SSR and the
+      // initial client render so both produce identical HTML (no hydration mismatch).
+      // Rehydration is triggered manually inside <Providers> after mount.
+      skipHydration: true,
       partialize: (state) => ({
         accessToken: state.accessToken,
         role: state.role,

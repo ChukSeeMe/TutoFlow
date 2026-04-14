@@ -27,8 +27,6 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    environment:
-      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-tutorflow}:${POSTGRES_PASSWORD:-tutorflow_dev}@db:5432/${POSTGRES_DB:-tutorflow_db}
     ports:
       - "8000:8000"
     depends_on:

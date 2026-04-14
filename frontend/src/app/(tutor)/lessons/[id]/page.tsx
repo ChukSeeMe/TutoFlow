@@ -110,7 +110,7 @@ export default function LessonPlanPage() {
               <span className="text-xs text-gray-500 capitalize">{plan.difficulty_level}</span>
               <span className="text-xs text-gray-500">{formatDate(plan.created_at)}</span>
               {plan.ai_generated && (
-                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full">AI generated</span>
+                <span className="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full">AI generated</span>
               )}
               {plan.tutor_approved ? (
                 <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -278,7 +278,7 @@ export default function LessonPlanPage() {
                             {q.difficulty && (
                               <span className={`text-xs px-1.5 py-0.5 rounded capitalize ${
                                 q.difficulty === "foundation" ? "bg-green-50 text-green-700" :
-                                q.difficulty === "extension" ? "bg-purple-50 text-purple-700" :
+                                q.difficulty === "extension" ? "bg-brand-50 text-brand-700" :
                                 "bg-blue-50 text-blue-700"
                               }`}>{q.difficulty}</span>
                             )}

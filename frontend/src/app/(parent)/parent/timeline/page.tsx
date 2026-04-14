@@ -50,8 +50,8 @@ function EventCard({ event }: { event: TimelineEvent }) {
     return (
       <div className="flex gap-4">
         <div className="flex flex-col items-center">
-          <div className="h-8 w-8 rounded-full bg-indigo-100 dark:bg-indigo-500/15 flex items-center justify-center flex-shrink-0">
-            <Clock className="h-4 w-4 text-indigo-600 dark:text-indigo-400" />
+          <div className="h-8 w-8 rounded-full bg-brand-100 dark:bg-brand-500/15 flex items-center justify-center flex-shrink-0">
+            <Clock className="h-4 w-4 text-brand-600 dark:text-brand-400" />
           </div>
           <div className="w-px flex-1 bg-gray-200 dark:bg-white/[0.06] mt-2" />
         </div>

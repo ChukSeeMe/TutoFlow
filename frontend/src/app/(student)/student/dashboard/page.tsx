@@ -12,7 +12,7 @@ const statusColour: Record<HomeworkStatus, string> = {
   set: "bg-blue-100 text-blue-700",
   in_progress: "bg-yellow-100 text-yellow-700",
   submitted: "bg-green-100 text-green-700",
-  marked: "bg-purple-100 text-purple-700",
+  marked: "bg-brand-100 text-brand-700",
   overdue: "bg-red-100 text-red-700",
 };
 
@@ -69,7 +69,7 @@ export default function StudentDashboard() {
             Welcome back{data.student_name ? `, ${data.student_name.split(" ")[0]}` : ""}!
           </h1>
           {data.year_group && (
-            <p className="text-indigo-300 text-sm mt-1">{data.year_group}</p>
+            <p className="text-brand-200 text-sm mt-1">{data.year_group}</p>
           )}
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function StudentDashboard() {
           <p className="text-xs text-gray-500 mt-0.5">Topics secure</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <div className="inline-flex p-2 rounded-lg bg-purple-50 text-purple-600 mb-2"><BookOpen className="h-4 w-4" /></div>
+          <div className="inline-flex p-2 rounded-lg bg-brand-50 text-brand-600 mb-2"><BookOpen className="h-4 w-4" /></div>
           <p className="text-xl font-bold text-gray-900">{data.total_topics_tracked}</p>
           <p className="text-xs text-gray-500 mt-0.5">Topics tracked</p>
         </div>

@@ -13,7 +13,7 @@ const STATUS_COLOUR: Record<string, string> = {
   set:         "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300",
   in_progress: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300",
   submitted:   "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
-  marked:      "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300",
+  marked:      "bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300",
   overdue:     "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
 };
 
@@ -132,7 +132,7 @@ export default function HomeworkPage() {
                       </span>
                     )}
                     {hw.ai_generated && hw.tutor_approved && (
-                      <span className="text-xs bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300 px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-brand-100 text-brand-700 dark:bg-brand-900/40 dark:text-brand-300 px-2 py-0.5 rounded-full">
                         AI generated
                       </span>
                     )}

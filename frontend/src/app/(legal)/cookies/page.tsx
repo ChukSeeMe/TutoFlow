@@ -67,7 +67,7 @@ export default function CookiePage() {
             },
             {
               label: "Analytics",
-              color: "bg-violet-500/10 border-violet-500/25 text-violet-700 dark:text-violet-400",
+              color: "bg-brand-500/10 border-brand-500/25 text-brand-700 dark:text-brand-400",
               desc: "Help us understand how users interact with the Platform using anonymised, aggregated data. We use privacy-preserving analytics that do not track you across other websites.",
               consent: "Opt-in consent required",
             },
@@ -116,7 +116,7 @@ export default function CookiePage() {
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
                       type === "Strictly Necessary" ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400" :
                       type === "Functional"         ? "bg-blue-500/10 text-blue-700 dark:text-blue-400" :
-                      "bg-violet-500/10 text-violet-700 dark:text-violet-400"
+                      "bg-brand-500/10 text-brand-700 dark:text-brand-400"
                     }`}>{type}</span>
                   </td>
                   <td className="px-4 py-3 text-[rgb(var(--text-secondary))]">{duration}</td>

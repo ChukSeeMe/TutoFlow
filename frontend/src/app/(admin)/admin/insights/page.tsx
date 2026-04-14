@@ -16,16 +16,16 @@ interface PlatformInsights {
 
 const SESSION_COLORS: Record<string, string> = {
   delivered:  "bg-green-500",
-  scheduled:  "bg-indigo-500",
+  scheduled:  "bg-brand-500",
   cancelled:  "bg-red-500",
   no_show:    "bg-amber-500",
 };
 
 const HW_COLORS: Record<string, string> = {
-  set:        "bg-indigo-500",
+  set:        "bg-brand-500",
   submitted:  "bg-green-500",
   overdue:    "bg-red-500",
-  marked:     "bg-violet-500",
+  marked:     "bg-brand-400",
 };
 
 function MiniBar({ value, max, color }: { value: number; max: number; color: string }) {
@@ -78,7 +78,7 @@ export default function AdminInsights() {
   if (isLoading || !data) {
     return (
       <div className="flex h-full items-center justify-center p-12">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-indigo-500 border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
       </div>
     );
   }
@@ -100,8 +100,8 @@ export default function AdminInsights() {
       {/* Daily activity charts */}
       <div className="mb-6 grid gap-4 md:grid-cols-3">
         {([
-          { label: "New Users",  field: "new_users" as const, color: "bg-indigo-500" },
-          { label: "Sessions",   field: "sessions"  as const, color: "bg-violet-500" },
+          { label: "New Users",  field: "new_users" as const, color: "bg-brand-500" },
+          { label: "Sessions",   field: "sessions"  as const, color: "bg-brand-400" },
           { label: "Lessons",    field: "lessons"   as const, color: "bg-cyan-500"   },
         ] as const).map(({ label, field, color }) => {
           const total = data.daily_activity.reduce((s, d) => s + d[field], 0);
@@ -168,7 +168,7 @@ export default function AdminInsights() {
           <div className="space-y-3">
             {([
               { label: "Lessons",   value: data.ai_usage.lessons,  color: "bg-cyan-500" },
-              { label: "Homework",  value: data.ai_usage.homework, color: "bg-violet-500" },
+              { label: "Homework",  value: data.ai_usage.homework, color: "bg-brand-400" },
               { label: "Reports",   value: data.ai_usage.reports,  color: "bg-pink-500" },
             ] as const).map(({ label, value, color }) => (
               <div key={label}>
