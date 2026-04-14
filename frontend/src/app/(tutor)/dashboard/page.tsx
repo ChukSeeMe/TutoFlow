@@ -372,56 +372,162 @@ function todayLabel() {
   });
 }
 
-// ── Welcome popup (first-time login) ─────────────────────────────────────────
+// ── Welcome guided tour (first-time login) ───────────────────────────────────
 
 const WELCOME_KEY = "th_welcome_seen_v1";
 
+const TOUR_STEPS = [
+  {
+    icon: Brain,
+    color: "from-violet-500 to-purple-600",
+    iconBg: "bg-violet-100",
+    iconColor: "text-violet-700",
+    tag: "Welcome",
+    title: "You've arrived at your tutoring command centre",
+    body: "Teach Harbour is built for UK tutors who want to spend more time teaching and less time on administration. Everything you need — lesson planning, progress tracking, parent communication — is right here.",
+    action: null,
+  },
+  {
+    icon: Users,
+    color: "from-blue-500 to-indigo-600",
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-700",
+    tag: "Step 1 of 5",
+    title: "Start by adding your students",
+    body: "Head to Students to create your first student profile. Set their year group, subjects, and link their parent or guardian. Each student gets a dedicated progress timeline from day one.",
+    action: { label: "Go to Students →", href: "/students" },
+  },
+  {
+    icon: CalendarCheck,
+    color: "from-emerald-500 to-teal-600",
+    iconBg: "bg-emerald-100",
+    iconColor: "text-emerald-700",
+    tag: "Step 2 of 5",
+    title: "Schedule and deliver sessions",
+    body: "Create sessions for each student. During the lesson, use the live Deliver mode to follow your lesson plan section by section, track engagement in real time, and capture observations — all without leaving the page.",
+    action: { label: "View Sessions →", href: "/sessions" },
+  },
+  {
+    icon: Brain,
+    color: "from-violet-500 to-fuchsia-600",
+    iconBg: "bg-violet-100",
+    iconColor: "text-violet-700",
+    tag: "Step 3 of 5",
+    title: "Let AI do the planning",
+    body: "Generate a fully structured, curriculum-aligned lesson plan in under 60 seconds. The AI streams content live as it writes — you see it building in real time. Every plan is yours to review and approve before use.",
+    action: { label: "Plan a Lesson →", href: "/lessons/new" },
+  },
+  {
+    icon: TrendingUp,
+    color: "from-amber-500 to-orange-500",
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-700",
+    tag: "Step 4 of 5",
+    title: "Track progress that actually means something",
+    body: "After each session the platform builds a mastery picture per topic. The Interventions panel flags students who may need extra support before problems compound. No spreadsheets needed.",
+    action: { label: "View Analytics →", href: "/analytics" },
+  },
+  {
+    icon: CheckCircle2,
+    color: "from-rose-500 to-pink-600",
+    iconBg: "bg-rose-100",
+    iconColor: "text-rose-700",
+    tag: "Step 5 of 5",
+    title: "Keep parents in the loop, professionally",
+    body: "Generate polished progress reports with a single click. Parents receive them via their own secure portal. Add parents to student profiles to activate the portal — they'll receive a welcome email with login details automatically.",
+    action: { label: "Manage Parents →", href: "/parents" },
+  },
+];
+
 function WelcomePopup({ onClose }: { onClose: () => void }) {
-  const steps = [
-    { icon: Users,        title: "Add your students",      desc: "Start by adding students and linking parents. Set up their year group and curriculum subjects." },
-    { icon: Brain,        title: "Plan with AI",            desc: "Generate lesson plans, homework, and quizzes in seconds. Every output is yours to review before use." },
-    { icon: TrendingUp,   title: "Track progress",          desc: "After each session, record notes and attendance. The system builds a progress picture automatically." },
-    { icon: CheckCircle2, title: "Communicate with parents", desc: "Generate and approve parent reports. Parents get their own secure portal to view updates." },
-  ];
+  const [step, setStep] = React.useState(0);
+  const current = TOUR_STEPS[step];
+  const isLast = step === TOUR_STEPS.length - 1;
+  const Icon = current.icon;
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <motion.div
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg"
-        initial={{ opacity: 0, scale: 0.93, y: 20 }}
+        key={step}
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95, y: 16 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 320, damping: 28 }}
+        transition={{ type: "spring", stiffness: 340, damping: 30 }}
       >
-        <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="h-10 w-10 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg,#7C3AED,#C026D3)" }}>
-              <Brain className="h-5 w-5 text-white" />
+        {/* Gradient header */}
+        <div className={`bg-gradient-to-br ${current.color} p-6 relative overflow-hidden`}>
+          {/* Decorative circles */}
+          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-white/10" />
+          <div className="absolute -right-2 top-8 h-16 w-16 rounded-full bg-white/10" />
+
+          <div className="relative">
+            <span className="inline-block text-xs font-bold text-white/70 uppercase tracking-widest mb-3">
+              {current.tag}
+            </span>
+            <div className={`h-12 w-12 rounded-2xl ${current.iconBg} flex items-center justify-center mb-4`}>
+              <Icon className={`h-6 w-6 ${current.iconColor}`} />
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-gray-900">Welcome to Teach Harbour</h2>
-              <p className="text-sm text-gray-500">Here&apos;s how to get the most out of your account</p>
-            </div>
+            <h2 className="text-xl font-bold text-white leading-snug">{current.title}</h2>
           </div>
         </div>
-        <div className="p-6 space-y-4">
-          {steps.map(({ icon: Icon, title, desc }, i) => (
-            <div key={i} className="flex gap-3">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 border border-brand-100">
-                <Icon className="h-4 w-4 text-brand-600" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{title}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{desc}</p>
-              </div>
-            </div>
-          ))}
+
+        {/* Body */}
+        <div className="p-6">
+          <p className="text-sm text-gray-600 leading-relaxed">{current.body}</p>
+
+          {current.action && (
+            <a
+              href={current.action.href}
+              onClick={onClose}
+              className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+            >
+              {current.action.label}
+            </a>
+          )}
         </div>
+
+        {/* Footer — progress + nav */}
         <div className="px-6 pb-6">
-          <button
-            onClick={onClose}
-            className="w-full py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors"
-          >
-            Get started
-          </button>
+          {/* Step dots */}
+          <div className="flex items-center justify-center gap-1.5 mb-4">
+            {TOUR_STEPS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setStep(i)}
+                className={`rounded-full transition-all ${
+                  i === step
+                    ? "w-6 h-2 bg-brand-600"
+                    : "w-2 h-2 bg-gray-200 hover:bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+
+          <div className="flex gap-3">
+            {step > 0 && (
+              <button
+                onClick={() => setStep(step - 1)}
+                className="flex-1 py-2.5 border border-gray-300 text-gray-600 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+              >
+                Back
+              </button>
+            )}
+            <button
+              onClick={isLast ? onClose : () => setStep(step + 1)}
+              className="flex-1 py-2.5 bg-brand-600 text-white text-sm font-semibold rounded-xl hover:bg-brand-700 transition-colors"
+            >
+              {isLast ? "Get started" : "Next →"}
+            </button>
+          </div>
+
+          {step === 0 && (
+            <button
+              onClick={onClose}
+              className="w-full mt-2 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Skip tour
+            </button>
+          )}
         </div>
       </motion.div>
     </div>

@@ -9,7 +9,7 @@ import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth";
 import type { AuthTokens } from "@/types";
 import Link from "next/link";
-import { Brain } from "lucide-react";
+import { Brain, GraduationCap, Users, BookOpen, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 
@@ -65,10 +65,46 @@ export default function LoginPage() {
 
   return (
     <div className={cn(
-      "min-h-screen flex items-center justify-center",
+      "min-h-screen flex flex-col",
       "bg-[rgb(237_239_248)] dark:bg-[#09090b]",
-      "px-4",
     )}>
+      {/* Top navigation bar */}
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-gray-200/60 dark:border-white/[0.06] bg-white/80 dark:bg-white/[0.03] backdrop-blur-sm">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="h-8 w-8 rounded-lg bg-brand-gradient flex items-center justify-center shadow-glow-sm">
+            <Brain className="h-4 w-4 text-white" />
+          </div>
+          <span className="text-sm font-bold text-gray-900 dark:text-zinc-100">Teach Harbour</span>
+        </Link>
+
+        <div className="flex items-center gap-1">
+          {[
+            { href: "/", icon: ArrowLeft, label: "Home" },
+            { href: "/#features", icon: BookOpen, label: "Features" },
+            { href: "/#portals", icon: Users, label: "Portals" },
+            { href: "/#how-it-works", icon: GraduationCap, label: "How it works" },
+          ].map(({ href, icon: Icon, label }) => (
+            <Link
+              key={label}
+              href={href}
+              className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-100 px-3 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.06] transition-colors"
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </Link>
+          ))}
+        </div>
+
+        <Link
+          href="/register"
+          className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline"
+        >
+          Create account →
+        </Link>
+      </nav>
+
+      {/* Login form centred below nav */}
+      <div className="flex flex-1 items-center justify-center px-4 py-10">
       <div className={cn(
         "w-full max-w-md rounded-2xl p-8",
         "bg-white dark:bg-white/[0.03]",
@@ -217,6 +253,7 @@ export default function LoginPage() {
           </Link>
         </p>
 
+      </div>
       </div>
     </div>
   );

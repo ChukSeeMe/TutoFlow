@@ -1,4 +1,6 @@
 from datetime import datetime, timezone
+from typing import AsyncGenerator
+import json
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.models.lesson import LessonPlan
@@ -189,3 +191,133 @@ Requirements:
     await db.commit()
     await db.refresh(plan)
     return plan
+
+
+def _sse(event_type: str, **kwargs: object) -> str:
+    """Format a single SSE data line."""
+    return f"data: {json.dumps({'type': event_type, **kwargs})}\n\n"
+
+
+async def stream_lesson_plan(
+    request: LessonGenerateRequest,
+    tutor_id: int,
+    db: AsyncSession,
+) -> AsyncGenerator[str, None]:
+    """
+    Stream a lesson plan generation as Server-Sent Events.
+
+    Yields SSE events:
+      {"type": "status", "message": "..."}  — progress label
+      {"type": "chunk",  "text": "..."}     — raw Claude token delta
+      {"type": "done",   "lesson_id": N}    — finished; lesson saved
+      {"type": "error",  "message": "..."}  — terminal error
+    """
+    try:
+        # ── 1. Load curriculum data ──────────────────────────────────────────
+        yield _sse("status", message="Loading curriculum data…")
+
+        topic_result = await db.execute(select(Topic).where(Topic.id == request.topic_id))
+        topic = topic_result.scalar_one_or_none()
+        if not topic:
+            yield _sse("error", message="Topic not found")
+            return
+
+        subject_result = await db.execute(select(Subject).where(Subject.id == topic.subject_id))
+        subject = subject_result.scalar_one_or_none()
+        if not subject:
+            yield _sse("error", message="Subject not found")
+            return
+
+        student_result = await db.execute(select(Student).where(Student.id == request.student_id))
+        student = student_result.scalar_one_or_none()
+        if not student:
+            yield _sse("error", message="Student not found")
+            return
+
+        year_group = student.year_group or "Year 10"
+        key_stage = student.key_stage.value if student.key_stage else "KS4"
+
+        # ── 2. Build prompt ──────────────────────────────────────────────────
+        yield _sse("status", message="Structuring lesson framework…")
+
+        user_prompt = lesson_plan_prompt(
+            subject=subject.name,
+            topic=topic.name,
+            year_group=year_group,
+            key_stage=key_stage,
+            lesson_type=request.lesson_type.value,
+            duration_minutes=request.duration_minutes,
+            difficulty_level=request.difficulty_level.value,
+            learning_objective=request.learning_objective,
+            send_context=request.send_context,
+            prior_knowledge=request.prior_knowledge,
+            additional_notes=request.additional_notes,
+        )
+
+        # ── 3. Stream Claude response ────────────────────────────────────────
+        yield _sse("status", message="Generating with AI…")
+
+        client = get_claude_client()
+        full_text = ""
+
+        system_block = [
+            {"type": "text", "text": LESSON_PLAN_SYSTEM, "cache_control": {"type": "ephemeral"}}
+        ]
+
+        async with client.messages.stream(
+            model=settings.ai_model,
+            max_tokens=settings.ai_max_tokens,
+            system=system_block,
+            messages=[{"role": "user", "content": user_prompt}],
+            extra_headers={"anthropic-beta": "prompt-caching-2024-07-31"},
+        ) as stream:
+            async for text in stream.text_stream:
+                full_text += text
+                yield _sse("chunk", text=text)
+
+        # ── 4. Parse + save ──────────────────────────────────────────────────
+        yield _sse("status", message="Validating and saving…")
+
+        try:
+            content = extract_json(full_text)
+            content = validate_lesson_plan(content)
+        except ValueError as e:
+            log.error("stream_lesson_plan_parse_error", error=str(e))
+            yield _sse("error", message="Could not parse lesson plan from AI. Please try again.")
+            return
+
+        image_url = await fetch_topic_image(topic.name, subject.name)
+        if image_url:
+            content["image_url"] = image_url
+
+        title = content.get("title", f"{topic.name} — {request.lesson_type.value.replace('_', ' ').title()}")
+
+        lesson_plan = LessonPlan(
+            tutor_id=tutor_id,
+            student_id=request.student_id,
+            topic_id=request.topic_id,
+            title=title,
+            lesson_type=request.lesson_type,
+            duration_minutes=request.duration_minutes,
+            difficulty_level=request.difficulty_level,
+            learning_objective=request.learning_objective,
+            content_json=content,
+            ai_generated=True,
+            tutor_approved=False,
+        )
+        try:
+            db.add(lesson_plan)
+            await db.commit()
+            await db.refresh(lesson_plan)
+        except Exception as db_err:
+            await db.rollback()
+            log.error("stream_lesson_plan_db_error", error=str(db_err))
+            yield _sse("error", message="Database error saving lesson plan. Please try again.")
+            return
+
+        log.info("stream_lesson_plan_done", lesson_id=lesson_plan.id, tutor_id=tutor_id)
+        yield _sse("done", lesson_id=lesson_plan.id, title=title)
+
+    except Exception as e:
+        log.error("stream_lesson_plan_unexpected", error=str(e))
+        yield _sse("error", message="An unexpected error occurred. Please try again.")

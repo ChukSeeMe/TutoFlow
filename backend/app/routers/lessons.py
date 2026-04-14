@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from slowapi import Limiter
@@ -13,7 +14,7 @@ from app.schemas.lesson import (
     LessonGenerateRequest, LessonPlanCreate, LessonPlanUpdate,
     LessonPlanResponse, LessonPlanSummary, LessonVisualResponse,
 )
-from app.services.lesson_service import generate_lesson_plan, generate_lesson_visual
+from app.services.lesson_service import generate_lesson_plan, generate_lesson_visual, stream_lesson_plan
 from app.core.dependencies import require_tutor
 from app.core.exceptions import NotFoundError, ForbiddenError
 
@@ -27,6 +28,31 @@ async def _get_tutor(user: User, db: AsyncSession) -> Tutor:
     if not tutor:
         raise ForbiddenError("Tutor profile not found")
     return tutor
+
+
+@router.post("/generate/stream")
+@limiter.limit("20/hour")
+async def generate_stream(
+    request: Request,
+    payload: LessonGenerateRequest,
+    current_user: User = Depends(require_tutor),
+    db: AsyncSession = Depends(get_db),
+):
+    """Stream lesson plan generation as Server-Sent Events."""
+    tutor = await _get_tutor(current_user, db)
+
+    async def event_stream():
+        async for chunk in stream_lesson_plan(payload, tutor.id, db):
+            yield chunk
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",  # disable nginx buffering
+        },
+    )
 
 
 @router.post("/generate", response_model=LessonPlanResponse, status_code=201)
