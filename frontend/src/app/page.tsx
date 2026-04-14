@@ -269,7 +269,7 @@ function NavThemeToggle() {
 }
 
 /** Single floating 3D-style icon around the dashboard */
-function FloatIcon({ emoji, floatLeft, floatTop, size, delay, dur, glow }: typeof FLOAT_ICONS[0]) {
+function FloatIcon({ emoji, floatLeft, floatTop, size, delay, dur, glow, isDark }: typeof FLOAT_ICONS[0] & { isDark?: boolean }) {
   return (
     <motion.div
       className="absolute z-20 flex items-center justify-center rounded-2xl pointer-events-none"
@@ -279,11 +279,13 @@ function FloatIcon({ emoji, floatLeft, floatTop, size, delay, dur, glow }: typeo
         width: size,
         height: size,
         fontSize: size * 0.48,
-        background: "rgba(255,255,255,0.055)",
+        background: isDark ? "rgba(255,255,255,0.055)" : "rgba(255,255,255,0.85)",
         backdropFilter: "blur(14px)",
         WebkitBackdropFilter: "blur(14px)",
-        border: "1px solid rgba(255,255,255,0.13)",
-        boxShadow: `0 0 28px -4px ${glow}, 0 4px 16px rgba(0,0,0,0.4)`,
+        border: isDark ? "1px solid rgba(255,255,255,0.13)" : "1px solid rgba(0,0,0,0.08)",
+        boxShadow: isDark
+          ? `0 0 28px -4px ${glow}, 0 4px 16px rgba(0,0,0,0.4)`
+          : `0 0 20px -4px ${glow}, 0 4px 12px rgba(0,0,0,0.10)`,
       }}
       animate={{ y: [0, -16, 0] }}
       transition={{ duration: dur, delay, repeat: Infinity, ease: "easeInOut" }}
@@ -293,59 +295,98 @@ function FloatIcon({ emoji, floatLeft, floatTop, size, delay, dur, glow }: typeo
   );
 }
 
-/** Full faux-dashboard browser mockup — floats on Y axis */
-function DashboardMockup() {
+/** Full faux-dashboard browser mockup — theme-aware, floats on Y axis */
+function DashboardMockup({ isDark }: { isDark: boolean }) {
+  // ── colour tokens ──────────────────────────────────────────────────────────
+  const chrome   = isDark ? "#0B0B1E"   : "#F3F4F6";
+  const appBg    = isDark ? "#090916"   : "#F0F2F8";
+  const sidebar  = isDark ? "#060612"   : "#FFFFFF";
+  const divider  = isDark ? "rgba(255,255,255,0.048)" : "rgba(0,0,0,0.07)";
+  const cardBg   = isDark ? "rgba(255,255,255,0.025)" : "#FFFFFF";
+  const cardBdr  = isDark ? "rgba(255,255,255,0.048)" : "rgba(0,0,0,0.08)";
+  const trackBg  = isDark ? "rgba(255,255,255,0.05)"  : "rgba(0,0,0,0.07)";
+  const urlBg    = isDark ? "rgba(255,255,255,0.05)"  : "rgba(0,0,0,0.06)";
+  const urlText  = isDark ? "#6b7280" : "#6b7280";
+  const brandTxt = isDark ? "Teach Harbour" : "Teach Harbour";
+  const titleTxt = isDark ? "#ffffff" : "#111827";
+  const subTxt   = isDark ? "#71717a" : "#6b7280";
+  const navActive= isDark ? { bg: "rgba(28,102,12,0.22)", text: "#86efac" }
+                          : { bg: "rgba(28,102,12,0.10)", text: "#16a34a" };
+  const navInact = isDark ? "#52525b" : "#9ca3af";
+  const headName = isDark ? "#e4e4e7" : "#111827";
+  const headRole = isDark ? "#52525b" : "#9ca3af";
+  const metricVal: Record<string, string> = isDark
+    ? { Students: "text-brand-400", Sessions: "text-fuchsia-400", Reports: "text-emerald-400" }
+    : { Students: "text-brand-600", Sessions: "text-fuchsia-600", Reports: "text-emerald-600" };
+  const metricSub = isDark ? "#52525b" : "#9ca3af";
+  const metricLbl = isDark ? "#52525b" : "#6b7280";
+  const sectionHd = isDark ? "#d4d4d8" : "#374151";
+  const studentNm = isDark ? "#d4d4d8" : "#374151";
+  const sessionTx = isDark ? "#d4d4d8" : "#374151";
+  const sessionTm = isDark ? "#52525b" : "#9ca3af";
+  const sessionRw = isDark ? "rgba(255,255,255,0.025)" : "rgba(0,0,0,0.03)";
+  const windowBdr = isDark ? "rgba(28,102,12,0.28)"    : "rgba(28,102,12,0.20)";
+  const windowShd = isDark
+    ? ["0 40px 130px -20px rgba(0,0,0,0.95)", "0 0 0 1px rgba(255,255,255,0.04)", "0 0 80px -20px rgba(28,102,12,0.35)", "inset 0 1px 0 rgba(255,255,255,0.08)"].join(", ")
+    : ["0 24px 80px -16px rgba(0,0,0,0.18)", "0 0 0 1px rgba(0,0,0,0.06)", "0 0 60px -16px rgba(28,102,12,0.18)", "inset 0 1px 0 rgba(255,255,255,0.80)"].join(", ");
+
   return (
     <div className="relative mx-auto max-w-5xl" style={{ overflow: "visible" }}>
       {/* Floating 3D icons around the mockup */}
-      {FLOAT_ICONS.map(({ key, ...fi }) => <FloatIcon key={key} {...fi} />)}
+      {FLOAT_ICONS.map(({ key, ...fi }) => <FloatIcon key={key} {...fi} isDark={isDark} />)}
 
       {/* Glow pool underneath */}
       <div
         className="pointer-events-none absolute -bottom-14 left-1/2 h-48 w-3/4 -translate-x-1/2 rounded-full blur-3xl"
-        style={{ background: "radial-gradient(ellipse, rgba(28,102,12,0.28) 0%, transparent 70%)" }}
+        style={{ background: "radial-gradient(ellipse, rgba(28,102,12,0.22) 0%, transparent 70%)" }}
       />
 
-      {/* Y-axis continuous float wrapper */}
+      {/* Y-axis continuous float */}
       <motion.div
         animate={{ y: [0, -20, 0] }}
         transition={{ duration: 5.8, repeat: Infinity, ease: "easeInOut" }}
         style={{ willChange: "transform" }}
       >
-        {/* Browser chrome + window — dark-surface keeps all inner text white */}
+        {/* Browser chrome */}
         <div
-          className="relative overflow-hidden rounded-2xl dark-surface"
-          style={{
-            border: "1px solid rgba(28,102,12,0.28)",
-            boxShadow: [
-              "0 40px 130px -20px rgba(0,0,0,0.95)",
-              "0 0 0 1px rgba(255,255,255,0.04)",
-              "0 0 80px -20px rgba(28,102,12,0.35)",
-              "inset 0 1px 0 rgba(255,255,255,0.08)",
-            ].join(", "),
-          }}
+          className="relative overflow-hidden rounded-2xl"
+          style={{ border: `1px solid ${windowBdr}`, boxShadow: windowShd }}
         >
           {/* Traffic-light bar */}
-          <div className="flex items-center gap-2 border-b border-white/[0.055] bg-[#0B0B1E] px-4 py-3">
+          <div
+            className="flex items-center gap-2 px-4 py-3"
+            style={{ background: chrome, borderBottom: `1px solid ${divider}` }}
+          >
             {(["bg-red-500/75", "bg-yellow-500/75", "bg-green-500/75"] as const).map((c, i) => (
               <span key={i} className={`h-3 w-3 rounded-full ${c}`} />
             ))}
-            <div className="mx-auto flex items-center gap-2 rounded-md bg-white/[0.05] px-4 py-1 text-xs text-gray-500">
+            <div
+              className="mx-auto flex items-center gap-2 rounded-md px-4 py-1 text-xs"
+              style={{ background: urlBg, color: urlText }}
+            >
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
               app.teachharbour.co.uk/dashboard
             </div>
           </div>
 
           {/* App content */}
-          <div className="relative flex h-72 w-full overflow-hidden bg-[#090916] md:h-[430px]">
-
+          <div
+            className="relative flex h-72 w-full overflow-hidden md:h-[430px]"
+            style={{ background: appBg }}
+          >
             {/* Sidebar */}
-            <div className="hidden w-44 flex-shrink-0 flex-col border-r border-white/[0.048] bg-[#060612] md:flex">
-              <div className="flex items-center gap-2 border-b border-white/[0.048] px-4 py-3">
+            <div
+              className="hidden w-44 flex-shrink-0 flex-col md:flex"
+              style={{ background: sidebar, borderRight: `1px solid ${divider}` }}
+            >
+              <div
+                className="flex items-center gap-2 px-4 py-3"
+                style={{ borderBottom: `1px solid ${divider}` }}
+              >
                 <div className="flex h-5 w-5 items-center justify-center rounded-md" style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>
                   <Brain className="h-3 w-3 text-white" />
                 </div>
-                <span className="text-[11px] font-bold text-white">Teach Harbour</span>
+                <span className="text-[11px] font-bold" style={{ color: titleTxt }}>{brandTxt}</span>
               </div>
 
               <nav className="flex-1 space-y-0.5 px-2 py-3">
@@ -359,7 +400,11 @@ function DashboardMockup() {
                 ].map(({ label, active }, i) => (
                   <motion.div
                     key={label}
-                    className={`rounded-lg px-3 py-1.5 text-[10px] font-medium ${active ? "bg-brand-600/22 text-brand-300" : "text-zinc-600"}`}
+                    className="rounded-lg px-3 py-1.5 text-[10px] font-medium"
+                    style={{
+                      background: active ? navActive.bg : "transparent",
+                      color:      active ? navActive.text : navInact,
+                    }}
                     initial={{ x: -10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.5 + i * 0.055 }}
@@ -369,13 +414,13 @@ function DashboardMockup() {
                 ))}
               </nav>
 
-              <div className="border-t border-white/[0.048] p-3">
+              <div className="p-3" style={{ borderTop: `1px solid ${divider}` }}>
                 <div className="flex items-center gap-2">
                   <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[9px] font-bold text-white"
                     style={{ background: "linear-gradient(135deg,#1c660c,#27a81b)" }}>SM</div>
                   <div>
-                    <p className="text-[10px] font-semibold text-zinc-200">Sarah M.</p>
-                    <p className="text-[9px] text-zinc-600">Tutor</p>
+                    <p className="text-[10px] font-semibold" style={{ color: headName }}>Sarah M.</p>
+                    <p className="text-[9px]" style={{ color: headRole }}>Tutor</p>
                   </div>
                 </div>
               </div>
@@ -385,10 +430,17 @@ function DashboardMockup() {
             <div className="flex flex-1 flex-col overflow-hidden p-4 md:p-5">
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-bold text-white">Good morning, Sarah 👋</p>
-                  <p className="text-[10px] text-zinc-500">3 sessions today · 2 homework to review</p>
+                  <p className="text-sm font-bold" style={{ color: titleTxt }}>Good morning, Sarah 👋</p>
+                  <p className="text-[10px]" style={{ color: subTxt }}>3 sessions today · 2 homework to review</p>
                 </div>
-                <div className="flex items-center gap-1.5 rounded-full border border-brand-500/28 bg-brand-500/10 px-3 py-1 text-[10px] font-medium text-brand-300">
+                <div
+                  className="flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-medium"
+                  style={{
+                    border: "1px solid rgba(28,102,12,0.28)",
+                    background: "rgba(28,102,12,0.10)",
+                    color: isDark ? "#86efac" : "#16a34a",
+                  }}
+                >
                   <Sparkles className="h-3 w-3" /> AI ready
                 </div>
               </div>
@@ -396,22 +448,23 @@ function DashboardMockup() {
               {/* Metric cards */}
               <div className="mb-4 grid grid-cols-3 gap-2 md:gap-3">
                 {[
-                  { label: "Students", value: "12", sub: "+2 this term",  c: "text-brand-400",  d: "bg-brand-500"  },
-                  { label: "Sessions", value: "47", sub: "This term",     c: "text-fuchsia-400", d: "bg-fuchsia-500" },
-                  { label: "Reports",  value: "8",  sub: "Ready to send", c: "text-emerald-400", d: "bg-emerald-500" },
-                ].map(({ label, value, sub, c, d }, i) => (
+                  { label: "Students", value: "12", sub: "+2 this term",  d: "bg-brand-500"   },
+                  { label: "Sessions", value: "47", sub: "This term",     d: "bg-fuchsia-500" },
+                  { label: "Reports",  value: "8",  sub: "Ready to send", d: "bg-emerald-500" },
+                ].map(({ label, value, sub, d }, i) => (
                   <motion.div
                     key={label}
-                    className="rounded-xl border border-white/[0.048] bg-white/[0.025] p-3"
+                    className="rounded-xl p-3"
+                    style={{ background: cardBg, border: `1px solid ${cardBdr}` }}
                     initial={{ y: 10, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.62 + i * 0.08 }}
                   >
-                    <div className="flex items-center gap-1.5 text-[9px] font-medium text-zinc-500">
+                    <div className="flex items-center gap-1.5 text-[9px] font-medium" style={{ color: metricLbl }}>
                       <span className={`h-1.5 w-1.5 rounded-full ${d}`} />{label}
                     </div>
-                    <p className={`mt-1 text-xl font-bold ${c}`}>{value}</p>
-                    <p className="text-[9px] text-zinc-600">{sub}</p>
+                    <p className={`mt-1 text-xl font-bold ${metricVal[label]}`}>{value}</p>
+                    <p className="text-[9px]" style={{ color: metricSub }}>{sub}</p>
                   </motion.div>
                 ))}
               </div>
@@ -419,11 +472,14 @@ function DashboardMockup() {
               {/* Bottom row */}
               <div className="grid min-h-0 flex-1 grid-cols-2 gap-3">
                 {/* Students list */}
-                <div className="flex flex-col overflow-hidden rounded-xl border border-white/[0.048] bg-white/[0.025] p-3">
-                  <p className="mb-2 text-[10px] font-semibold text-zinc-300">My students</p>
+                <div
+                  className="flex flex-col overflow-hidden rounded-xl p-3"
+                  style={{ background: cardBg, border: `1px solid ${cardBdr}` }}
+                >
+                  <p className="mb-2 text-[10px] font-semibold" style={{ color: sectionHd }}>My students</p>
                   <div className="flex-1 space-y-2 overflow-hidden">
                     {[
-                      { name: "Amara J.", age: "Y9",  pct: 82, c: "bg-brand-500"  },
+                      { name: "Amara J.", age: "Y9",  pct: 82, c: "bg-brand-500"   },
                       { name: "Leo K.",   age: "Y11", pct: 65, c: "bg-fuchsia-500" },
                       { name: "Priya S.", age: "Y7",  pct: 91, c: "bg-emerald-500" },
                       { name: "Daniel O.",age: "Y10", pct: 48, c: "bg-amber-500"   },
@@ -440,10 +496,10 @@ function DashboardMockup() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="mb-0.5 flex items-center justify-between">
-                            <span className="truncate text-[9px] font-medium text-zinc-300">{name}</span>
-                            <span className="ml-1 shrink-0 text-[9px] text-zinc-500">{age} · {pct}%</span>
+                            <span className="truncate text-[9px] font-medium" style={{ color: studentNm }}>{name}</span>
+                            <span className="ml-1 shrink-0 text-[9px]" style={{ color: sessionTm }}>{age} · {pct}%</span>
                           </div>
-                          <div className="h-1 w-full rounded-full bg-white/[0.05]">
+                          <div className="h-1 w-full rounded-full" style={{ background: trackBg }}>
                             <motion.div
                               className={`h-1 rounded-full ${c}`}
                               initial={{ width: 0 }}
@@ -458,23 +514,27 @@ function DashboardMockup() {
                 </div>
 
                 {/* Upcoming sessions */}
-                <div className="flex flex-col gap-2 overflow-hidden rounded-xl border border-white/[0.048] bg-white/[0.025] p-3">
-                  <p className="text-[10px] font-semibold text-zinc-300">Upcoming sessions</p>
+                <div
+                  className="flex flex-col gap-2 overflow-hidden rounded-xl p-3"
+                  style={{ background: cardBg, border: `1px solid ${cardBdr}` }}
+                >
+                  <p className="text-[10px] font-semibold" style={{ color: sectionHd }}>Upcoming sessions</p>
                   {[
-                    { name: "Amara J.", sub: "Maths",   time: "2:00 PM", c: "bg-brand-500"  },
+                    { name: "Amara J.", sub: "Maths",   time: "2:00 PM", c: "bg-brand-500"   },
                     { name: "Leo K.",   sub: "Physics",  time: "4:30 PM", c: "bg-fuchsia-500" },
                     { name: "Priya S.", sub: "English",  time: "6:00 PM", c: "bg-emerald-500" },
                   ].map(({ name, sub, time, c }, i) => (
                     <motion.div
                       key={name}
-                      className="flex items-center gap-2 rounded-lg bg-white/[0.025] px-2 py-1.5"
+                      className="flex items-center gap-2 rounded-lg px-2 py-1.5"
+                      style={{ background: sessionRw }}
                       initial={{ x: 8, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: 0.87 + i * 0.06 }}
                     >
                       <span className={`h-2 w-2 shrink-0 rounded-full ${c}`} />
-                      <span className="flex-1 truncate text-[9px] text-zinc-300">{name} — {sub}</span>
-                      <span className="shrink-0 text-[9px] text-zinc-500">{time}</span>
+                      <span className="flex-1 truncate text-[9px]" style={{ color: sessionTx }}>{name} — {sub}</span>
+                      <span className="shrink-0 text-[9px]" style={{ color: sessionTm }}>{time}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1140,7 +1200,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0,  scale: 1 }}
           transition={{ duration: 1.0, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
-          <DashboardMockup />
+          <DashboardMockup isDark={isDark} />
         </motion.div>
       </section>
 
