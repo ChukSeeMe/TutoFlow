@@ -82,6 +82,7 @@ jobs:
         env:
           NEXT_PUBLIC_API_URL: /api/backend
           NODE_ENV: production
+          BACKEND_INTERNAL_URL: https://tutorflow-backend.whitesea-c505a8c9.uksouth.azurecontainerapps.io
         run: npm run build
 
       - name: Build and push frontend image
