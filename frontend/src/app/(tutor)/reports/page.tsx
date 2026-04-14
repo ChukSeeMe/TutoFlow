@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { reportsApi, studentsApi } from "@/lib/api";
 import type { Report, Student } from "@/types";
 import { formatDate } from "@/lib/utils";
-import { FileText, Plus, CheckCircle, Download, Loader2 } from "lucide-react";
+import { FileText, Plus, CheckCircle, Download, Loader2, AlertCircle } from "lucide-react";
 
 function GenerateReportModal({
   students,
@@ -97,6 +97,8 @@ export default function ReportsPage() {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [approvingId, setApprovingId] = useState<number | null>(null);
+  const [approveErrors, setApproveErrors] = useState<Record<number, string>>({});
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
   const [finalTexts, setFinalTexts] = useState<Record<number, string>>({});
 
   const { data: reports = [], isLoading } = useQuery<Report[]>({
@@ -112,21 +114,42 @@ export default function ReportsPage() {
   const studentMap = Object.fromEntries(students.map((s) => [s.id, s]));
 
   async function approveReport(report: Report) {
-    const finalText = finalTexts[report.id] ?? report.ai_draft ?? "";
-    await reportsApi.approve(report.id, finalText);
-    queryClient.invalidateQueries({ queryKey: ["reports"] });
-    setApprovingId(null);
+    setApprovingId(report.id);
+    setApproveErrors((prev) => { const n = { ...prev }; delete n[report.id]; return n; });
+    try {
+      const finalText = finalTexts[report.id] ?? report.ai_draft ?? "";
+      await reportsApi.approve(report.id, finalText);
+      await queryClient.invalidateQueries({ queryKey: ["reports"] });
+    } catch (err: unknown) {
+      const msg =
+        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ??
+        "Approval failed — please try again.";
+      setApproveErrors((prev) => ({ ...prev, [report.id]: msg }));
+    } finally {
+      setApprovingId(null);
+    }
   }
 
   async function downloadPdf(reportId: number) {
-    const res = await reportsApi.downloadPdf(reportId);
-    const blob = new Blob([res.data as BlobPart], { type: res.headers["content-type"] });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `report_${reportId}.pdf`;
-    a.click();
-    URL.revokeObjectURL(url);
+    setDownloadingId(reportId);
+    try {
+      const res = await reportsApi.downloadPdf(reportId);
+      const blob = res.data instanceof Blob
+        ? res.data
+        : new Blob([res.data as BlobPart], { type: res.headers?.["content-type"] ?? "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `report_${reportId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      // ignore — browser will show its own error
+    } finally {
+      setDownloadingId(null);
+    }
   }
 
   return (
@@ -178,9 +201,13 @@ export default function ReportsPage() {
                       </span>
                       <button
                         onClick={() => downloadPdf(report.id)}
-                        className="flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-200"
+                        disabled={downloadingId === report.id}
+                        className="flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg hover:bg-gray-200 disabled:opacity-60"
                       >
-                        <Download className="h-3 w-3" /> Download
+                        {downloadingId === report.id
+                          ? <Loader2 className="h-3 w-3 animate-spin" />
+                          : <Download className="h-3 w-3" />}
+                        {downloadingId === report.id ? "Downloading..." : "Download PDF"}
                       </button>
                     </>
                   ) : (
@@ -192,23 +219,26 @@ export default function ReportsPage() {
               {/* AI draft for review */}
               {!report.tutor_approved && report.ai_draft && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-2">AI Draft — review and edit before approving:</p>
+                  <p className="text-xs font-medium text-gray-500 mb-2">Draft — review and edit before approving:</p>
                   <textarea
                     defaultValue={report.ai_draft}
                     onChange={(e) => setFinalTexts((prev) => ({ ...prev, [report.id]: e.target.value }))}
                     rows={6}
                     className="w-full border border-gray-200 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none"
                   />
+                  {approveErrors[report.id] && (
+                    <div className="mt-2 flex items-center gap-2 text-red-600 text-xs">
+                      <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
+                      {approveErrors[report.id]}
+                    </div>
+                  )}
                   <button
-                    onClick={() => {
-                      setApprovingId(report.id);
-                      approveReport(report);
-                    }}
+                    onClick={() => approveReport(report)}
                     disabled={isApproving}
                     className="mt-3 flex items-center gap-2 bg-green-600 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-green-700 disabled:opacity-60"
                   >
-                    <CheckCircle className="h-4 w-4" />
-                    {isApproving ? "Approving..." : "Approve & Generate PDF"}
+                    {isApproving ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
+                    {isApproving ? "Approving..." : "Approve & Save as PDF"}
                   </button>
                 </div>
               )}

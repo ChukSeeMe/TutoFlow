@@ -9,7 +9,7 @@ import {
 import type { StudentDetail, ProgressRecord, StudentAnalytics, ObservationNote, LessonSession, HomeworkTask } from "@/types";
 import { formatDate, formatDatetime, masteryLabel, masteryColour, priorityColour, attendancePercent, getInitials } from "@/lib/utils";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, AlertTriangle, Target, ClipboardList, Trash2, Loader2 } from "lucide-react";
+import { ArrowLeft, BookOpen, AlertTriangle, Target, ClipboardList, Trash2, Loader2, CalendarX, Star } from "lucide-react";
 
 export default function StudentProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -66,6 +66,12 @@ export default function StudentProfilePage() {
 
   const flaggedNotes = observations.filter((n) => n.is_flagged);
   const recentSessions = sessions.slice(0, 5);
+
+  // Missed / no-show sessions
+  const missedSessions = sessions.filter(
+    (s) => s.attendance_status === "absent" || s.status === "no_show"
+  );
+  const recentMissed = missedSessions.slice(0, 3);
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
@@ -170,17 +176,42 @@ export default function StudentProfilePage() {
                 <p className="text-2xl font-bold text-gray-900">{analytics.total_sessions}</p>
                 <p className="text-xs text-gray-500 mt-0.5">Sessions</p>
               </div>
-              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-                <p className="text-2xl font-bold text-green-700">
+              <div className={`bg-white rounded-xl border p-4 text-center ${analytics.attendance_rate < 0.8 ? "border-red-200 bg-red-50" : "border-gray-200"}`}>
+                <p className={`text-2xl font-bold ${analytics.attendance_rate < 0.8 ? "text-red-600" : "text-green-700"}`}>
                   {attendancePercent(analytics.attendance_rate)}
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">Attendance</p>
+                {analytics.attendance_rate < 0.8 && (
+                  <p className="text-[10px] text-red-500 mt-0.5 font-medium">Below 80% target</p>
+                )}
+              </div>
+              <div className={`bg-white rounded-xl border p-4 text-center ${missedSessions.length > 0 ? "border-orange-200" : "border-gray-200"}`}>
+                <p className={`text-2xl font-bold ${missedSessions.length > 0 ? "text-orange-600" : "text-gray-900"}`}>
+                  {missedSessions.length}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">Missed Sessions</p>
+                {missedSessions.length > 0 && (
+                  <p className="text-[10px] text-orange-500 mt-0.5 font-medium">Needs follow-up</p>
+                )}
               </div>
               <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
                 <p className="text-2xl font-bold text-brand-700">
                   {analytics.average_quiz_score ? `${analytics.average_quiz_score}%` : "—"}
                 </p>
                 <p className="text-xs text-gray-500 mt-0.5">Avg Quiz Score</p>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
+                <p className="text-2xl font-bold text-gray-900">
+                  {analytics.average_engagement ? `${analytics.average_engagement.toFixed(1)}/5` : "—"}
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">Avg Engagement</p>
+              </div>
+              <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
+                <p className="text-2xl font-bold text-gray-900">
+                  {analytics.topics_secure}
+                  <span className="text-sm text-gray-400 ml-1">secure</span>
+                </p>
+                <p className="text-xs text-gray-500 mt-0.5">{analytics.topics_needs_reteach} need reteach</p>
               </div>
             </div>
           )}
@@ -241,6 +272,47 @@ export default function StudentProfilePage() {
             </div>
           )}
 
+          {/* Missed sessions */}
+          {missedSessions.length > 0 && (
+            <div className="bg-white rounded-xl border border-orange-200">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-orange-100 bg-orange-50 rounded-t-xl">
+                <h2 className="font-semibold text-orange-800 flex items-center gap-2">
+                  <CalendarX className="h-4 w-4 text-orange-600" /> Missed Sessions
+                  <span className="ml-1 text-xs font-normal bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full">
+                    {missedSessions.length} total
+                  </span>
+                </h2>
+                <Link href={`/sessions?student=${studentId}`} className="text-xs text-orange-600 hover:underline">
+                  All sessions
+                </Link>
+              </div>
+              <div className="divide-y divide-orange-50">
+                {recentMissed.map((s) => (
+                  <Link
+                    key={s.id}
+                    href={`/sessions/${s.id}`}
+                    className="flex items-center justify-between px-5 py-3 hover:bg-orange-50 transition-colors"
+                  >
+                    <div>
+                      <p className="text-sm text-gray-800">{formatDatetime(s.scheduled_at)}</p>
+                      <p className="text-xs text-gray-400 capitalize">{s.status.replace(/_/g, " ")}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700 font-medium">
+                        {s.attendance_status === "absent" ? "Absent" : "No show"}
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+                {missedSessions.length > 3 && (
+                  <p className="px-5 py-2 text-xs text-orange-500">
+                    + {missedSessions.length - 3} more missed session{missedSessions.length - 3 !== 1 ? "s" : ""}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Recent sessions */}
           <div className="bg-white rounded-xl border border-gray-200">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -263,18 +335,21 @@ export default function StudentProfilePage() {
                 >
                   <div>
                     <p className="text-sm text-gray-800">{formatDatetime(s.scheduled_at)}</p>
-                    <p className="text-xs text-gray-400">{s.status}</p>
+                    <p className="text-xs text-gray-400 capitalize">{s.status.replace(/_/g, " ")}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={`text-xs px-2 py-0.5 rounded-full ${
                       s.attendance_status === "present" ? "bg-green-100 text-green-700" :
                       s.attendance_status === "absent" ? "bg-red-100 text-red-700" :
+                      s.attendance_status === "late" ? "bg-amber-100 text-amber-700" :
                       "bg-gray-100 text-gray-600"
                     }`}>
                       {s.attendance_status}
                     </span>
                     {s.engagement_score && (
-                      <span className="text-xs text-gray-400">Eng: {s.engagement_score}/5</span>
+                      <span className="text-xs text-gray-400 flex items-center gap-0.5">
+                        <Star className="h-3 w-3" />{s.engagement_score}/5
+                      </span>
                     )}
                   </div>
                 </Link>

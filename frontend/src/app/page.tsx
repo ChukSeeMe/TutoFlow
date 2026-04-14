@@ -86,7 +86,7 @@ const FEATURES = [
 
 const STEPS = [
   { icon: GraduationCap, step: "01", title: "Set up your students",   desc: "Add students, link parents, and configure subjects aligned to the UK curriculum in minutes." },
-  { icon: Brain,         step: "02", title: "Plan with AI assistance", desc: "Generate lesson plans and homework with Claude AI — every suggestion awaits your approval before use." },
+  { icon: Brain,         step: "02", title: "Plan with AI assistance", desc: "Generate lesson plans and homework with Tutor Harbour AI — every suggestion awaits your approval before use." },
   { icon: TrendingUp,    step: "03", title: "Track and communicate",   desc: "Monitor progress, run assessments, and send polished reports to parents automatically." },
 ];
 
@@ -1202,7 +1202,7 @@ export default function Home() {
             { icon: Shield,        label: "GDPR Compliant"    },
             { icon: GraduationCap, label: "UK Curriculum"     },
             { icon: Lock,          label: "Data Encrypted"    },
-            { icon: Cpu,           label: "Claude AI Powered" },
+            { icon: Cpu,           label: "Tutor Harbour AI" },
             { icon: Zap,           label: "Real-time Sync"    },
           ].map(({ icon: Icon, label }, i) => (
             <motion.div

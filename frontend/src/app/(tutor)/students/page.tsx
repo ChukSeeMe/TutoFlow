@@ -1,12 +1,18 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { studentsApi } from "@/lib/api";
+import { studentsApi, analyticsApi } from "@/lib/api";
 import type { Student } from "@/types";
 import Link from "next/link";
-import { UserPlus, Search, ChevronRight } from "lucide-react";
+import { UserPlus, Search, ChevronRight, AlertTriangle, CalendarX } from "lucide-react";
 import { useState } from "react";
 import { getInitials } from "@/lib/utils";
+
+interface InterventionFlag {
+  student_id: number;
+  flag_type: string;
+  priority: string;
+}
 
 export default function StudentsPage() {
   const [search, setSearch] = useState("");
@@ -15,6 +21,18 @@ export default function StudentsPage() {
     queryKey: ["students"],
     queryFn: () => studentsApi.list().then((r) => r.data),
   });
+
+  const { data: interventions } = useQuery<{ flags: InterventionFlag[] }>({
+    queryKey: ["interventions-dashboard"],
+    queryFn: () => analyticsApi.interventionsDashboard().then((r) => r.data),
+  });
+
+  // Build a map: student_id → set of flag types
+  const flagMap = new Map<number, Set<string>>();
+  for (const flag of interventions?.flags ?? []) {
+    if (!flagMap.has(flag.student_id)) flagMap.set(flag.student_id, new Set());
+    flagMap.get(flag.student_id)!.add(flag.flag_type);
+  }
 
   const filtered = students.filter(
     (s) =>
@@ -70,32 +88,53 @@ export default function StudentsPage() {
             )}
           </div>
         )}
-        {filtered.map((student) => (
-          <Link
-            key={student.id}
-            href={`/students/${student.id}`}
-            className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors"
-          >
-            {/* Avatar */}
-            <div className="h-10 w-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-semibold text-sm flex-shrink-0">
-              {getInitials(student.full_name)}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-gray-900 truncate">{student.full_name}</p>
-              <p className="text-sm text-gray-500">
-                {[student.year_group, student.key_stage, student.ability_band]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              {!student.is_active && (
-                <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inactive</span>
-              )}
-              <ChevronRight className="h-4 w-4 text-gray-400" />
-            </div>
-          </Link>
-        ))}
+        {filtered.map((student) => {
+          const flags = flagMap.get(student.id);
+          const hasMissed = flags?.has("attendance");
+          const hasEngagement = flags?.has("engagement");
+          const hasReteach = flags?.has("reteach");
+          return (
+            <Link
+              key={student.id}
+              href={`/students/${student.id}`}
+              className="flex items-center gap-4 px-5 py-4 hover:bg-gray-50 transition-colors"
+            >
+              {/* Avatar */}
+              <div className="h-10 w-10 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-semibold text-sm flex-shrink-0">
+                {getInitials(student.full_name)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-gray-900 truncate">{student.full_name}</p>
+                <p className="text-sm text-gray-500">
+                  {[student.year_group, student.key_stage, student.ability_band]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                {hasMissed && (
+                  <span className="flex items-center gap-1 text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">
+                    <CalendarX className="h-3 w-3" /> Missed sessions
+                  </span>
+                )}
+                {hasEngagement && (
+                  <span className="flex items-center gap-1 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">
+                    <AlertTriangle className="h-3 w-3" /> Low engagement
+                  </span>
+                )}
+                {hasReteach && (
+                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+                    Needs reteach
+                  </span>
+                )}
+                {!student.is_active && (
+                  <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">Inactive</span>
+                )}
+                <ChevronRight className="h-4 w-4 text-gray-400 ml-1" />
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
