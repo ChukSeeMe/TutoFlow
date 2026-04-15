@@ -22,6 +22,10 @@ const schema = z.object({
     .regex(/[A-Z]/, "Must include an uppercase letter")
     .regex(/[0-9]/, "Must include a number"),
   confirmPassword: z.string(),
+  acceptTerms: z.literal(true, {
+    errorMap: () => ({ message: "You must accept the Terms of Use and Privacy Policy to continue" }),
+  }),
+  marketingOptIn: z.boolean().optional(),
 }).refine((d) => d.password === d.confirmPassword, {
   message: "Passwords do not match",
   path: ["confirmPassword"],
@@ -133,6 +137,39 @@ export default function RegisterPage() {
             {errors.confirmPassword && (
               <p className="text-red-500 dark:text-red-400 text-xs mt-1">{errors.confirmPassword.message}</p>
             )}
+          </div>
+
+          {/* Legal consent */}
+          <div className="space-y-3 pt-1">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                {...register("acceptTerms")}
+                className="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-600 focus:ring-brand-500 accent-brand-600"
+              />
+              <span className="text-xs text-gray-600 dark:text-zinc-400 leading-relaxed">
+                I agree to the{" "}
+                <Link href="/terms" target="_blank" className="text-brand-600 dark:text-brand-400 hover:underline font-medium">Terms of Use</Link>
+                {" "}and{" "}
+                <Link href="/privacy" target="_blank" className="text-brand-600 dark:text-brand-400 hover:underline font-medium">Privacy Policy</Link>
+                , including the processing of my personal data as described therein.{" "}
+                <span className="text-red-500">*</span>
+              </span>
+            </label>
+            {errors.acceptTerms && (
+              <p className="text-red-500 dark:text-red-400 text-xs -mt-1 pl-7">{errors.acceptTerms.message}</p>
+            )}
+
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                {...register("marketingOptIn")}
+                className="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-600 focus:ring-brand-500 accent-brand-600"
+              />
+              <span className="text-xs text-gray-600 dark:text-zinc-400 leading-relaxed">
+                I&apos;d like to receive product updates, tips, and occasional offers by email. I can unsubscribe at any time. (Optional)
+              </span>
+            </label>
           </div>
 
           {apiError && (

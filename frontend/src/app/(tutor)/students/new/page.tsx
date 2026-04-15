@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { studentsApi } from "@/lib/api";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 const schema = z.object({
   first_name: z.string().min(1, "Required"),
@@ -21,6 +21,9 @@ const schema = z.object({
   preferred_scaffolds: z.string().optional(),
   literacy_notes: z.string().optional(),
   communication_preferences: z.string().optional(),
+  parentalConsent: z.literal(true, {
+    errorMap: () => ({ message: "You must confirm parental/guardian consent before adding this student" }),
+  }),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -145,6 +148,34 @@ export default function NewStudentPage() {
               />
             </div>
           ))}
+        </div>
+
+        {/* Parental consent acknowledgment */}
+        <div className="bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/25 rounded-xl p-5">
+          <div className="flex items-start gap-3 mb-3">
+            <ShieldCheck className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-300">Parental / Guardian Consent</p>
+              <p className="text-xs text-amber-700 dark:text-amber-400 mt-0.5 leading-relaxed">
+                Under UK GDPR, you must obtain consent from a parent or guardian before adding a student under 18 to the platform.
+                Student data is stored securely and only shared with linked parents at your direction.{" "}
+                <Link href="/privacy#section-4" target="_blank" className="underline">Privacy Policy §4</Link>.
+              </p>
+            </div>
+          </div>
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              {...register("parentalConsent")}
+              className="mt-0.5 h-4 w-4 flex-shrink-0 rounded border-amber-300 text-brand-600 focus:ring-brand-500 accent-brand-600"
+            />
+            <span className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed font-medium">
+              I confirm that I have obtained appropriate parental or guardian consent to add this student&apos;s data to Teach Harbour, or that the student is 18 or over and has consented themselves. <span className="text-red-500">*</span>
+            </span>
+          </label>
+          {errors.parentalConsent && (
+            <p className="text-red-600 dark:text-red-400 text-xs mt-2 pl-7">{errors.parentalConsent.message}</p>
+          )}
         </div>
 
         {apiError && (

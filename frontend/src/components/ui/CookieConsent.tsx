@@ -184,9 +184,9 @@ export function CookieConsent() {
                 </p>
                 <p className="mt-0.5 text-xs text-gray-500 dark:text-zinc-400 leading-relaxed">
                   We use cookies to keep you signed in and improve your experience.{" "}
-                  <Link href="/cookies" className="text-brand-600 dark:text-brand-400 hover:underline">
-                    Cookie policy
-                  </Link>
+                  <Link href="/cookies" className="text-brand-600 dark:text-brand-400 hover:underline">Cookie policy</Link>
+                  {" · "}
+                  <Link href="/privacy" className="text-brand-600 dark:text-brand-400 hover:underline">Privacy policy</Link>
                 </p>
               </div>
               <button
