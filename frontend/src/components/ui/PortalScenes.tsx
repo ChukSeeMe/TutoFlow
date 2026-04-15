@@ -291,7 +291,7 @@ export function ParentReviewScene({ className }: { className?: string }) {
 }
 
 
-// ── Tutor: Planning Scene ────────────────────────────────────────────────────
+// ── Tutor: Dashboard Preview Scene ───────────────────────────────────────────
 
 export function TutorPlanningScene({ className }: { className?: string }) {
   return (
@@ -302,82 +302,156 @@ export function TutorPlanningScene({ className }: { className?: string }) {
       aria-hidden="true"
     >
       <defs>
+        {/* Base background */}
         <linearGradient id="tp-bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%"   stopColor="#0d0726" />
-          <stop offset="100%" stopColor="#120a30" />
+          <stop offset="0%"   stopColor="#070712" />
+          <stop offset="100%" stopColor="#0c0c1e" />
         </linearGradient>
-        <radialGradient id="tp-glow" cx="35%" cy="65%" r="55%">
-          <stop offset="0%"   stopColor="#1c660c" stopOpacity="0.3" />
+        {/* Subtle brand glow — bottom-left */}
+        <radialGradient id="tp-g1" cx="20%" cy="90%" r="55%">
+          <stop offset="0%"   stopColor="#1c660c" stopOpacity="0.22" />
           <stop offset="100%" stopColor="#1c660c" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="tp-glow2" cx="75%" cy="35%" r="45%">
-          <stop offset="0%"   stopColor="#27a81b" stopOpacity="0.2" />
+        {/* Accent glow — top-right */}
+        <radialGradient id="tp-g2" cx="90%" cy="15%" r="45%">
+          <stop offset="0%"   stopColor="#27a81b" stopOpacity="0.14" />
           <stop offset="100%" stopColor="#27a81b" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="tp-amber" cx="50%" cy="80%" r="40%">
-          <stop offset="0%"   stopColor="#f59e0b" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
-        </radialGradient>
+        {/* Card surface */}
+        <linearGradient id="tp-card" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"   stopColor="#ffffff" stopOpacity="0.055" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0.025" />
+        </linearGradient>
+        {/* Progress track */}
+        <linearGradient id="tp-track" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#27a81b" />
+          <stop offset="100%" stopColor="#10b981" />
+        </linearGradient>
+        <linearGradient id="tp-track2" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#a78bfa" />
+          <stop offset="100%" stopColor="#818cf8" />
+        </linearGradient>
+        <linearGradient id="tp-track3" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#10b981" />
+          <stop offset="100%" stopColor="#34d399" />
+        </linearGradient>
+        <linearGradient id="tp-track4" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#fbbf24" />
+        </linearGradient>
       </defs>
 
-      {/* Background */}
+      {/* ── Background ────────────────────────────────────────────────────── */}
       <rect width="224" height="130" fill="url(#tp-bg)" />
-      <ellipse cx="80"  cy="85"  rx="110" ry="80"  fill="url(#tp-glow)"  />
-      <ellipse cx="168" cy="45"  rx="90"  ry="70"  fill="url(#tp-glow2)" />
-      <ellipse cx="112" cy="110" rx="80"  ry="50"  fill="url(#tp-amber)" />
+      <ellipse cx="44"  cy="117" rx="100" ry="65"  fill="url(#tp-g1)" />
+      <ellipse cx="202" cy="20"  rx="80"  ry="55"  fill="url(#tp-g2)" />
 
-      {/* Desk surface */}
-      <rect x="0" y="96" width="224" height="34" fill="#0a0820" />
-      <rect x="0" y="94" width="224" height="4"  fill="#150f35" />
+      {/* Subtle dot grid */}
+      {Array.from({ length: 6 }, (_, row) =>
+        Array.from({ length: 10 }, (_, col) => (
+          <circle
+            key={`grid-${row}-${col}`}
+            cx={14 + col * 22}
+            cy={12 + row * 22}
+            r="0.7"
+            fill="white"
+            opacity="0.04"
+          />
+        ))
+      )}
 
-      {/* ── Book stack (left) ──────────────────────────────────────────── */}
-      <rect x="8"  y="82" width="34" height="7"  rx="1.5" fill="#27a81b" />
-      <rect x="8"  y="74" width="30" height="8"  rx="1.5" fill="#1c660c" />
-      <rect x="10" y="66" width="27" height="8"  rx="1.5" fill="#155209" />
-      <rect x="8"  y="82" width="3.5" height="7" rx="1"   fill="#3ec436" />
-      <rect x="8"  y="74" width="3"   height="8" rx="1"   fill="#1c660c" />
+      {/* ── Top header strip ──────────────────────────────────────────────── */}
+      <rect x="0" y="0" width="224" height="20" fill="#ffffff" fillOpacity="0.025" />
+      <rect x="0" y="19" width="224" height="0.75" fill="#ffffff" fillOpacity="0.07" />
+      {/* Brand dot + label */}
+      <rect x="9" y="6.5" width="7" height="7" rx="2"
+        fill="#1c660c" />
+      <rect x="20" y="8"  width="28" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.5"  />
+      <rect x="20" y="12" width="16" height="1.5" rx="0.75"  fill="#ffffff" fillOpacity="0.2"  />
+      {/* AI ready pill — top right */}
+      <rect x="175" y="5" width="42" height="11" rx="5.5"
+        fill="#27a81b" fillOpacity="0.15"
+        stroke="#27a81b" strokeWidth="0.75" strokeOpacity="0.5" />
+      <circle cx="183" cy="10.5" r="2" fill="#27a81b" opacity="0.9" />
+      <rect x="187" y="8.5" width="22" height="2.5" rx="1.25" fill="#27a81b" opacity="0.7" />
 
-      {/* ── Laptop/screen (center) ─────────────────────────────────────── */}
-      <rect x="62" y="52" width="80" height="50" rx="5" fill="#090d1a" stroke="#1a2745" strokeWidth="1.5" />
-      {/* Screen content */}
-      <rect x="68" y="58" width="40" height="2.5" rx="1" fill="#1c660c" opacity="0.8" />
-      <rect x="68" y="64" width="55" height="2"   rx="1" fill="#818cf8" opacity="0.5" />
-      <rect x="68" y="70" width="30" height="2"   rx="1" fill="#38bdf8" opacity="0.6" />
-      <rect x="68" y="76" width="48" height="2"   rx="1" fill="#818cf8" opacity="0.55" />
-      <rect x="68" y="82" width="35" height="2"   rx="1" fill="#1c660c" opacity="0.5" />
-      <rect x="68" y="88" width="52" height="2"   rx="1" fill="#818cf8" opacity="0.45" />
-      {/* Screen top glow */}
-      <rect x="62" y="52" width="80" height="5" rx="5" fill="#1c660c" opacity="0.08" />
-      {/* Laptop base */}
-      <rect x="58" y="102" width="88" height="5" rx="2.5" fill="#10103a" />
+      {/* ── Three metric cards (row) ───────────────────────────────────────── */}
+      {/* Card 1 — Students */}
+      <rect x="8"  y="27" width="60" height="36" rx="5" fill="url(#tp-card)" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.08" />
+      <circle cx="16" cy="35" r="3.5" fill="#27a81b" fillOpacity="0.25" />
+      <circle cx="16" cy="35" r="1.5" fill="#27a81b" opacity="0.9" />
+      <rect x="23" y="33" width="22" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.35" />
+      <rect x="12" y="43" width="16" height="7"   rx="2"    fill="#27a81b"  fillOpacity="0.0" />
+      <rect x="12" y="43" width="10" height="5.5" rx="1.25" fill="#27a81b"  opacity="0.9"  />
+      <rect x="24" y="44" width="24" height="2.5" rx="1.25" fill="#ffffff"  fillOpacity="0.18" />
+      <rect x="12" y="52" width="30" height="2"   rx="1"    fill="#ffffff"  fillOpacity="0.1"  />
 
-      {/* ── Coffee mug (right of laptop) ──────────────────────────────── */}
-      <rect x="150" y="85"  width="14" height="12" rx="3" fill="#14122e" />
-      <rect x="150" y="85"  width="14" height="3"  rx="2" fill="#201c50" />
-      <path d="M164 88 Q170 88 170 92 Q170 96 164 96" stroke="#14122e" strokeWidth="2" fill="none" />
-      {/* Steam */}
-      <path d="M154 83 Q155 78 154 73" stroke="#1c660c" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.5" />
-      <path d="M158 82 Q159 77 158 72" stroke="#1c660c" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.35" />
+      {/* Card 2 — Sessions */}
+      <rect x="82" y="27" width="60" height="36" rx="5" fill="url(#tp-card)" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.08" />
+      <circle cx="90" cy="35" r="3.5" fill="#818cf8" fillOpacity="0.25" />
+      <circle cx="90" cy="35" r="1.5" fill="#818cf8" opacity="0.9" />
+      <rect x="97" y="33" width="22" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.35" />
+      <rect x="86" y="43" width="10" height="5.5" rx="1.25" fill="#818cf8" opacity="0.85" />
+      <rect x="98" y="44" width="28" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.18" />
+      <rect x="86" y="52" width="24" height="2"   rx="1"    fill="#ffffff" fillOpacity="0.1"  />
 
-      {/* ── Tutor figure (left-center) ─────────────────────────────────── */}
-      <ellipse cx="45" cy="63" rx="13" ry="14" fill="#0f0d28" />
-      <ellipse cx="45" cy="52" rx="13" ry="6"  fill="#1a1845" />
-      <rect x="40" y="75"  width="10" height="7"  rx="3" fill="#0f0d28" />
-      <rect x="28" y="80"  width="34" height="22" rx="8" fill="#0c0a20" />
-      <rect x="54" y="86"  width="38" height="8"  rx="4" fill="#0c0a20" />
+      {/* Card 3 — Reports */}
+      <rect x="156" y="27" width="60" height="36" rx="5" fill="url(#tp-card)" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.08" />
+      <circle cx="164" cy="35" r="3.5" fill="#10b981" fillOpacity="0.25" />
+      <circle cx="164" cy="35" r="1.5" fill="#10b981" opacity="0.9" />
+      <rect x="171" y="33" width="22" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.35" />
+      <rect x="160" y="43" width="10" height="5.5" rx="1.25" fill="#10b981" opacity="0.85" />
+      <rect x="172" y="44" width="20" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.18" />
+      <rect x="160" y="52" width="26" height="2"   rx="1"    fill="#ffffff" fillOpacity="0.1"  />
 
-      {/* ── Floating brain/AI icon (top-right) ────────────────────────── */}
-      <circle cx="194" cy="30" r="18" fill="#1c660c" fillOpacity="0.1" stroke="#1c660c" strokeWidth="1.5" strokeOpacity="0.4" />
-      {/* Simplified brain shape */}
-      <path d="M187 28 Q185 22 190 20 Q194 18 196 22 Q200 18 204 22 Q208 24 206 29 Q208 34 204 36 Q200 38 196 36 Q192 38 188 35 Q185 32 187 28Z"
-        fill="none" stroke="#a5b4fc" strokeWidth="1.5" strokeLinejoin="round" opacity="0.8" />
-      <path d="M196 22 L196 36" stroke="#a5b4fc" strokeWidth="1" opacity="0.5" />
-      <path d="M191 25 Q194 27 191 30" stroke="#a5b4fc" strokeWidth="1" fill="none" opacity="0.5" />
-      <path d="M201 25 Q198 27 201 30" stroke="#a5b4fc" strokeWidth="1" fill="none" opacity="0.5" />
+      {/* ── Student progress panel ────────────────────────────────────────── */}
+      <rect x="8" y="71" width="130" height="52" rx="5" fill="url(#tp-card)" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.08" />
+      {/* Panel title */}
+      <rect x="14" y="77" width="40" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.45" />
+      <rect x="58" y="77" width="20" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.12" />
 
-      {/* Sparkle dots */}
-      {[[20,15],[40,10],[160,12],[210,55],[205,80],[15,95]].map(([x,y],i) => (
-        <circle key={`sp${i}`} cx={x} cy={y} r="1" fill="white" opacity={0.2 + i*0.04} />
+      {/* Student rows */}
+      {[
+        { y: 86,  pct: 82, color: "url(#tp-track)",  w: 74 },
+        { y: 97,  pct: 65, color: "url(#tp-track2)", w: 58 },
+        { y: 108, pct: 91, color: "url(#tp-track3)", w: 82 },
+        { y: 119, pct: 48, color: "url(#tp-track4)", w: 43 },
+      ].map(({ y, color, w }, i) => (
+        <g key={`row-${i}`}>
+          {/* Avatar dot */}
+          <circle cx="18" cy={y + 1.5} r="4" fill={["#27a81b","#a78bfa","#10b981","#f59e0b"][i]} fillOpacity="0.3" />
+          <circle cx="18" cy={y + 1.5} r="2" fill={["#27a81b","#a78bfa","#10b981","#f59e0b"][i]} opacity="0.9" />
+          {/* Name line */}
+          <rect x="26" cy={y} y={y - 0.5} width={[20,18,22,17][i]} height="2" rx="1" fill="#ffffff" fillOpacity="0.35" />
+          {/* Year tag */}
+          <rect x={50 + [0,2,0,3][i]} y={y - 0.5} width="10" height="2" rx="1" fill="#ffffff" fillOpacity="0.15" />
+          {/* Progress track bg */}
+          <rect x="26" y={y + 4} width="90" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.07" />
+          {/* Progress fill */}
+          <rect x="26" y={y + 4} width={w} height="2.5" rx="1.25" fill={color} opacity="0.85" />
+        </g>
+      ))}
+
+      {/* ── Upcoming sessions panel ───────────────────────────────────────── */}
+      <rect x="146" y="71" width="70" height="52" rx="5" fill="url(#tp-card)" stroke="#ffffff" strokeWidth="0.75" strokeOpacity="0.08" />
+      {/* Panel title */}
+      <rect x="152" y="77" width="38" height="2.5" rx="1.25" fill="#ffffff" fillOpacity="0.45" />
+
+      {/* Session rows */}
+      {[
+        { y: 87,  color: "#27a81b"  },
+        { y: 100, color: "#818cf8"  },
+        { y: 113, color: "#10b981"  },
+      ].map(({ y, color }, i) => (
+        <g key={`sess-${i}`}>
+          <rect x="152" y={y} width="58" height="9" rx="3"
+            fill="#ffffff" fillOpacity="0.04"
+            stroke="#ffffff" strokeWidth="0.5" strokeOpacity="0.07" />
+          <circle cx="158" cy={y + 4.5} r="2.5" fill={color} opacity="0.25" />
+          <circle cx="158" cy={y + 4.5} r="1.2" fill={color} opacity="0.9" />
+          <rect x="163" y={y + 2} width={[24,20,22][i]} height="2" rx="1" fill="#ffffff" fillOpacity="0.4"  />
+          <rect x="163" y={y + 5.5} width={[16,18,14][i]} height="1.5" rx="0.75" fill="#ffffff" fillOpacity="0.18" />
+        </g>
       ))}
     </svg>
   );
